@@ -12,4 +12,5 @@ process.on(['SIGTERM', 'SIGINT', 'SIGKILL'], async () => {
 module.exports = (async () => {
   await initialise()
   server = await createServer()
+  await server.start()
 })()
