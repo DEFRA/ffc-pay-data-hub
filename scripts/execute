@@ -1,0 +1,2 @@
+#!/bin/sh
+docker exec -it ffc-pay-data-hub-development node app

@@ -1,0 +1,25 @@
+# This override file should be used when running this service in isolation
+# to provide dependencies and expose ports for local testing
+
+services:
+  ffc-pay-data-hub:
+    build:
+      target: development
+    image: ffc-pay-data-hub-development
+    container_name: ffc-pay-data-hub-development
+    ports:
+      - "9270:9229"
+    volumes:
+      - ./app:/home/node/app
+      - ./package.json:/home/node/package.json
+
+  ffc-pay-event-store-azurite:
+    volumes:
+      - azurite_data:/data
+    ports:
+      - "10070:10000"
+      - "10071:10001"
+      - "10072:10002"
+
+volumes:
+  azurite_data:

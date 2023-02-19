@@ -1,0 +1,20 @@
+services:
+  ffc-pay-data-hub:
+    build:
+      context: .
+      target: production
+    image: ffc-pay-data-hub
+    container_name: ffc-pay-data-hub
+    environment:
+      APPINSIGHTS_CLOUDROLE: ffc-pay-data-hub-local
+      APPINSIGHTS_CONNECTIONSTRING: ${APPINSIGHTS_CONNECTIONSTRING}
+      AZURE_STORAGE_USE_CONNECTION_STRING: "true"
+      AZURE_STORAGE_CONNECTION_STRING: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://ffc-pay-event-store-azurite:10000/devstoreaccount1;TableEndpoint=http://ffc-pay-event-store-azurite:10002/devstoreaccount1;
+      AZURE_STORAGE_ACCOUNT: devstoreaccount1
+      AZURE_STORAGE_CREATE_ENTITIES: "true"
+
+  ffc-pay-event-store-azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:3.17.1
+    command: "azurite --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0 --loose"
+    labels:
+      com.docker.compose.pay.role: ffc-pay-event-store-azurite

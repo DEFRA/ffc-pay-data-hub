@@ -1,0 +1,3 @@
+services:
+  ffc-pay-data-hub:
+    command: npm run start:debug
