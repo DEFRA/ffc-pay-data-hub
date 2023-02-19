@@ -25,7 +25,8 @@
     "applicationinsights": "2.3.5",
     "hapi-pino": "11.0.1",
     "joi": "17.7.1",
-    "log-timestamp": "0.3.0"
+    "log-timestamp": "0.3.0",
+    "moment": "2.29.4"
   },
   "devDependencies": {
     "blipp": "4.0.2",
