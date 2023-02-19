@@ -4,15 +4,15 @@ const { convertToPence } = require('../../currency-convert')
 const { getClient, odata } = require('../../storage')
 
 const getEventsByFrn = async (frn) => {
-  const events = await getEvents()
+  const events = await getEvents(frn)
   const groupedEvents = groupEventsByFrn(events)
   const orderedEvents = orderGroupedEvents(groupedEvents)
   return sanitiseEvents(orderedEvents)
 }
 
-const getEvents = async () => {
+const getEvents = async (frn) => {
   const client = getClient(PAYMENT_EVENT)
-  const eventResults = client.listEntities({ queryOptions: { filter: odata`category eq 'frn'` } })
+  const eventResults = client.listEntities({ queryOptions: { filter: odata`PartitionKey eq ${frn.toString()} and category eq 'frn'` } })
   const events = []
   for await (const event of eventResults) {
     event.data = JSON.parse(event.data)
@@ -23,17 +23,16 @@ const getEvents = async () => {
 
 const groupEventsByFrn = (events) => {
   return [...events.reduce((x, y) => {
-    // group by correlation key, so create key representing the combination
-    // exclude account code as past requests vary based on ledger
-    const key = `${y.partitionKey}-${y.rowKey.split('|')[0]}`
+    const correlationId = y.rowKey.split('|')[0]
+    const key = `${y.partitionKey}-${correlationId}`
 
     // if key doesn't exist then first instance so create new group
     const item = x.get(key) || Object.assign({}, {
       frn: y.partitionKey,
-      correlationId: y.correlationId,
-      schemeId: y.events[0].data.schemeId,
-      agreementNumber: y.events[0].data.agreementNumber,
-      marketingYear: y.events[0].data.marketingYear,
+      correlationId,
+      schemeId: y.data.schemeId,
+      agreementNumber: y.data.agreementNumber,
+      marketingYear: y.data.marketingYear,
       events: []
     })
     item.events.push(y)
