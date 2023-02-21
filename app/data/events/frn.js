@@ -83,7 +83,10 @@ const sanitiseEvents = (events) => {
     lastUpdated: moment(group.events[group.events.length - 1].time).format('DD/MM/YYYY HH:mm:ss'),
     events: group.events.map(event => ({
       ...event,
-      value: event.type === 'uk.gov.defra.ffc.pay.payment.extracted' ? convertToPence(event.data.value) : event.data.value,
+      data: {
+        ...event.data,
+        value: event.type === 'uk.gov.defra.ffc.pay.payment.extracted' ? convertToPence(event.data.value) : event.data.value
+      },
       status: getEventName(event.type)
     }))
   }))
