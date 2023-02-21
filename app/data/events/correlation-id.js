@@ -44,13 +44,32 @@ const groupEventsByFrn = (events) => {
 const orderGroupedEvents = (events) => {
   return events.map(group => {
     const sortedEvents = group.events.sort((a, b) => {
-      return new Date(a.time) - new Date(b.time)
+      return getEventOrder(a.type) - getEventOrder(b.type)
     })
     return {
       ...group,
       events: sortedEvents
     }
   })
+}
+
+const getEventOrder = (event) => {
+  const eventOrder = {
+    'uk.gov.defra.ffc.pay.payment.extracted': 1,
+    'uk.gov.defra.ffc.pay.payment.enriched': 2,
+    'uk.gov.defra.ffc.pay.payment.paused.debt': 3,
+    'uk.gov.defra.ffc.pay.payment.debt.attached': 4,
+    'uk.gov.defra.ffc.pay.payment.paused.ledger': 5,
+    'uk.gov.defra.ffc.pay.payment.ledger.assigned': 6,
+    'uk.gov.defra.ffc.pay.payment.ledger.quality-check.pending': 7,
+    'uk.gov.defra.ffc.pay.payment.ledger.quality-check.failed': 8,
+    'uk.gov.defra.ffc.pay.payment.ledger.quality-check.passed': 9,
+    'uk.gov.defra.ffc.pay.payment.processed': 10,
+    'uk.gov.defra.ffc.pay.payment.submitted': 11,
+    'uk.gov.defra.ffc.pay.payment.acknowledged': 12,
+    'uk.gov.defra.ffc.pay.payment.settled': 13
+  }
+  return eventOrder[event.type]
 }
 
 const sanitiseEvents = (events) => {
@@ -81,48 +100,48 @@ const getScheme = (schemeId) => {
 const getStatus = (events) => {
   const eventMap = {
     'uk.gov.defra.ffc.pay.payment.extracted': {
-      category: 'In progress',
-      detail: 'Extracted from batch'
+      category: 'Waiting',
+      detail: 'Waiting for enrichment'
     },
     'uk.gov.defra.ffc.pay.payment.enriched': {
-      category: 'In progress',
-      detail: 'Enriched'
+      category: 'Waiting',
+      detail: 'Waiting for processing'
     },
     'uk.gov.defra.ffc.pay.payment.paused.debt': {
       category: 'Waiting',
       detail: 'Waiting for debt data'
     },
     'uk.gov.defra.ffc.pay.payment.debt.attached': {
-      category: 'In progress',
-      detail: 'Debt data attached'
+      category: 'Waiting',
+      detail: 'Waiting for ledger assignment'
     },
     'uk.gov.defra.ffc.pay.payment.paused.ledger': {
       category: 'Waiting',
-      detail: 'Ledger assignment'
+      detail: 'Waiting for ledger assignment'
     },
     'uk.gov.defra.ffc.pay.payment.ledger.assigned': {
       category: 'In progress',
-      detail: 'Ledger assigned'
+      detail: 'Waiting for ledger quality check'
     },
     'uk.gov.defra.ffc.pay.payment.ledger.quality-check.pending': {
       category: 'Waiting',
-      detail: 'Ledger assignment'
+      detail: 'Waiting for ledger quality check'
     },
     'uk.gov.defra.ffc.pay.payment.ledger.quality-check.failed': {
       category: 'Waiting',
-      detail: 'Ledger correction'
+      detail: 'Waiting for ledger correction'
     },
     'uk.gov.defra.ffc.pay.payment.ledger.quality-check.passed': {
       category: 'In progress',
-      detail: 'Ledger confirmed'
+      detail: 'Waiting for final state calculation'
     },
     'uk.gov.defra.ffc.pay.payment.processed': {
       category: 'In progress',
-      detail: 'Final state calculated'
+      detail: 'Waiting for submission to D365'
     },
     'uk.gov.defra.ffc.pay.payment.submitted': {
       category: 'In progress',
-      detail: 'Submitted to D365'
+      detail: 'Waiting for acknowledgement from D365'
     },
     'uk.gov.defra.ffc.pay.payment.acknowledged': {
       category: 'Completed',
