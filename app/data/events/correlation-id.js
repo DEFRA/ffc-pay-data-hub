@@ -47,6 +47,7 @@ const orderGroupedEvents = (events) => {
     const sortedEvents = group.events.sort((a, b) => {
       return getEventOrder(a.type) - getEventOrder(b.type)
     })
+    sortedEvents[sortedEvents.length - 1].lastEvent = true
     return {
       ...group,
       events: sortedEvents
@@ -93,8 +94,10 @@ const sanitiseEvents = (events) => {
 
 const addPendingEvents = (events) => {
   events.forEach(group => {
-    const pendingEvents = Object.keys(eventMap).filter(event => event.default && !events.some(e => e.events.some(e => e.type === event)))
-    group.events = group.events.concat(pendingEvents.map(event => ({ status: event })))
+    const pendingEvents = Object.entries(eventMap).map((event) => ({ type: event[0], ...event[1] })).filter(event => event.default && !events.some(e => e.events.some(e => e.type === event.type)))
+    group.events = group.events.concat(pendingEvents.map(event => ({
+      status: getEvent(event.type)
+    })))
   })
   return events
 }
@@ -170,7 +173,6 @@ const getStatus = (events) => {
 
 const eventMap = {
   'uk.gov.defra.ffc.pay.payment.extracted': {
-    default: true,
     category: 'In progress',
     detail: 'Extracted from batch'
   },
