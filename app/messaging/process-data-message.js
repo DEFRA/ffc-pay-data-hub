@@ -12,7 +12,7 @@ const processDataMessage = async (message, receiver) => {
     console.log('Data request received:', util.inspect(body, false, null, true))
     const key = getKey(category, value)
     const cachedResponse = await getCachedResponse(cacheConfig.cache, body, key)
-    const response = cachedResponse ?? await getData(category, value)// TODO: GET DATA await calculatePaymentRates(code, landCovers, calculateDate)
+    const response = cachedResponse ?? { data: await getData(category, value) }
 
     if (!cachedResponse) {
       await setCachedResponse(cacheConfig.cache, key, body, response)
