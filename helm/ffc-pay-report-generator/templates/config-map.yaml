@@ -2,6 +2,26 @@
 {{- define "ffc-pay-data-hub.config-map" -}}
 data:
   NODE_ENV: {{ quote .Values.environment }}
-  PORT: {{ quote .Values.container.port }}
   APPINSIGHTS_CLOUDROLE: {{ quote .Values.name }}
+  MESSAGE_QUEUE_HOST: {{ quote .Values.container.messageQueueHost }}
+  {{- if and (.Values.environmentCode) (not .Values.pr) }}
+  DATA_TOPIC_ADDRESS: {{ .Values.container.dataTopicAddress }}-{{ .Values.environmentCode }}
+  DATA_QUEUE_ADDRESS: {{ .Values.container.dataQueueAddress }}-{{ .Values.environmentCode }}
+  {{ else }}
+  DATA_TOPIC_ADDRESS: {{ quote .Values.container.dataTopicAddress }}
+  DATA_QUEUE_ADDRESS: {{ quote .Values.container.dataQueueAddress }}
+  {{- end }}
+  DATA_SUBSCRIPTION_ADDRESS: {{ quote .Values.container.dataSubscriptionAddress }}
+  AZURE_STORAGE_CONNECTION_STRING: {{ quote .Values.container.azureStorageConnectionString }}
+  AZURE_STORAGE_USE_CONNECTION_STRING: {{ quote .Values.container.azureStorageUseConnectionString }}
+  AZURE_STORAGE_ACCOUNT_NAME: {{ quote .Values.container.azureStorageAccountName }}
+  {{- if .Values.container.redisHostname }}
+  REDIS_HOSTNAME: {{ quote .Values.container.redisHostname }}
+  {{- end }}
+  REDIS_PORT: {{ quote .Values.container.redisPort }}
+  {{- if .Values.pr }}
+  REDIS_PARTITION: {{ .Values.container.redisPartition }}-{{ .Values.pr }}
+  {{ else }}
+  REDIS_PARTITION: {{ quote .Values.container.redisPartition }}
+  {{- end }}
 {{- end -}}

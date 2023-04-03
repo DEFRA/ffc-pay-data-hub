@@ -1,7 +1,5 @@
-const { getEventsByFrn } = require('./events')
-const { getEventsByCorrelationId } = require('./events')
+const { getData } = require('./get-data')
 
 module.exports = {
-  getEventsByFrn,
-  getEventsByCorrelationId
+  getData
 }

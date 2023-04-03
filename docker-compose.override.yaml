@@ -8,7 +8,6 @@ services:
     image: ffc-pay-data-hub-development
     container_name: ffc-pay-data-hub-development
     ports:
-      - "3009:3009"
       - "9280:9229"
     volumes:
       - ./app:/home/node/app
@@ -22,5 +21,13 @@ services:
       - "10071:10001"
       - "10072:10002"
 
+  ffc-pay-data-hub-redis:
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6391:6379"
+    command: redis-server --dir /data --save 5 1
+
 volumes:
   azurite_data:
+  redis_data:
