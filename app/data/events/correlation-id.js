@@ -107,7 +107,10 @@ const getScheme = (schemeId) => {
     1: 'SFI',
     2: 'SFI Pilot',
     3: 'Lump Sums',
-    4: 'Vet Visits'
+    4: 'Vet Visits',
+    5: 'CS',
+    6: 'BPS',
+    7: 'FDMR'
   }
   return schemeMap[schemeId]
 }
