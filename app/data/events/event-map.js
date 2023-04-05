@@ -1,57 +1,78 @@
+const {
+  PAYMENT_EXTRACTED,
+  PAYMENT_ENRICHED,
+  PAYMENT_PAUSED_DEBT,
+  PAYMENT_DEBT_ATTACHED,
+  PAYMENT_PAUSED_LEDGER,
+  PAYMENT_LEDGER_ASSIGNED,
+  PAYMENT_PAUSED_QUALITY_CHECK,
+  PAYMENT_QUALITY_CHECK_FAILED,
+  PAYMENT_QUALITY_CHECK_PASSED,
+  PAYMENT_RESET,
+  PAYMENT_PROCESSED,
+  PAYMENT_SUBMITTED,
+  PAYMENT_ACKNOWLEDGED,
+  PAYMENT_SETTLED
+} = require('../../constants/events')
+
 module.exports = {
-  'uk.gov.defra.ffc.pay.payment.extracted': {
+  [PAYMENT_EXTRACTED]: {
     category: 'In progress',
     detail: 'Extracted from batch'
   },
-  'uk.gov.defra.ffc.pay.payment.enriched': {
+  [PAYMENT_ENRICHED]: {
     default: true,
     category: 'In progress',
     detail: 'Enriched'
   },
-  'uk.gov.defra.ffc.pay.payment.paused.debt': {
+  [PAYMENT_PAUSED_DEBT]: {
     category: 'Waiting',
     detail: 'Waiting for debt data'
   },
-  'uk.gov.defra.ffc.pay.payment.debt.attached': {
+  [PAYMENT_DEBT_ATTACHED]: {
     category: 'In progress',
     detail: 'Debt data attached'
   },
-  'uk.gov.defra.ffc.pay.payment.paused.ledger': {
+  [PAYMENT_PAUSED_LEDGER]: {
     category: 'Waiting',
     detail: 'Ledger assignment'
   },
-  'uk.gov.defra.ffc.pay.payment.ledger.assigned': {
+  [PAYMENT_LEDGER_ASSIGNED]: {
     category: 'In progress',
     detail: 'Ledger assigned'
   },
-  'uk.gov.defra.ffc.pay.payment.ledger.quality-check.pending': {
+  [PAYMENT_PAUSED_QUALITY_CHECK]: {
     category: 'Waiting',
     detail: 'Ledger assignment'
   },
-  'uk.gov.defra.ffc.pay.payment.ledger.quality-check.failed': {
+  [PAYMENT_QUALITY_CHECK_FAILED]: {
     category: 'Waiting',
     detail: 'Ledger correction'
   },
-  'uk.gov.defra.ffc.pay.payment.ledger.quality-check.passed': {
+  [PAYMENT_QUALITY_CHECK_PASSED]: {
     category: 'In progress',
     detail: 'Ledger confirmed'
   },
-  'uk.gov.defra.ffc.pay.payment.processed': {
+  [PAYMENT_RESET]: {
+    category: 'In progress',
+    detail: 'Reset to be recalculated'
+  },
+  [PAYMENT_PROCESSED]: {
     default: true,
     category: 'In progress',
     detail: 'Final state calculated'
   },
-  'uk.gov.defra.ffc.pay.payment.submitted': {
+  [PAYMENT_SUBMITTED]: {
     default: true,
     category: 'In progress',
     detail: 'Submitted to D365'
   },
-  'uk.gov.defra.ffc.pay.payment.acknowledged': {
+  [PAYMENT_ACKNOWLEDGED]: {
     default: true,
     category: 'Completed',
     detail: 'Acknowledged by D365'
   },
-  'uk.gov.defra.ffc.pay.payment.settled': {
+  [PAYMENT_SETTLED]: {
     default: true,
     category: 'Completed',
     detail: 'Settled by D365'
