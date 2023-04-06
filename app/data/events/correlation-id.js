@@ -2,7 +2,7 @@ const { CORRELATION_ID } = require('../../constants/categories')
 const { addPendingEvents } = require('./add-pending-events')
 const { getEvents } = require('./get-events')
 const { groupEventsByCorrelationId } = require('./group-events-by-correlation-id')
-const { orderGroupedEvents } = require('./order-grouped-frn-events')
+const { orderGroupedEvents } = require('./order-grouped-correlation-id-events')
 const { sanitiseEvents } = require('./sanitise-events')
 
 const getEventsByCorrelationId = async (correlationId) => {

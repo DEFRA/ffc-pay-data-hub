@@ -18,7 +18,8 @@ const sanitiseEvents = (events) => {
         ...event.data,
         value: event.type === PAYMENT_EXTRACTED ? convertToPence(event.data.value) : event.data.value
       },
-      status: getEventName(event.type)
+      status: getEventName(event.type),
+      timestamp: moment(event.time).format(DATE)
     }))
   }))
 }
