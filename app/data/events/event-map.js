@@ -15,66 +15,84 @@ const {
   PAYMENT_SETTLED
 } = require('../../constants/events')
 
+const { IN_PROGRESS, WAITING, COMPLETED } = require('../../constants/states')
+const {
+  PAYMENT_EXTRACTED_STATUS,
+  PAYMENT_ENRICHED_STATUS,
+  PAYMENT_PAUSED_DEBT_STATUS,
+  PAYMENT_DEBT_ATTACHED_STATUS,
+  PAYMENT_PAUSED_LEDGER_STATUS,
+  PAYMENT_LEDGER_ASSIGNED_STATUS,
+  PAYMENT_PAUSED_QUALITY_CHECK_STATUS,
+  PAYMENT_QUALITY_CHECK_FAILED_STATUS,
+  PAYMENT_QUALITY_CHECK_PASSED_STATUS,
+  PAYMENT_RESET_STATUS,
+  PAYMENT_PROCESSED_STATUS,
+  PAYMENT_SUBMITTED_STATUS,
+  PAYMENT_ACKNOWLEDGED_STATUS,
+  PAYMENT_SETTLED_STATUS
+} = require('../../constants/statuses')
+
 module.exports = {
   [PAYMENT_EXTRACTED]: {
-    category: 'In progress',
-    detail: 'Extracted from batch'
+    state: IN_PROGRESS,
+    detail: PAYMENT_EXTRACTED_STATUS
   },
   [PAYMENT_ENRICHED]: {
     default: true,
-    category: 'In progress',
-    detail: 'Enriched'
+    state: IN_PROGRESS,
+    detail: PAYMENT_ENRICHED_STATUS
   },
   [PAYMENT_PAUSED_DEBT]: {
-    category: 'Waiting',
-    detail: 'Waiting for debt data'
+    state: WAITING,
+    detail: PAYMENT_PAUSED_DEBT_STATUS
   },
   [PAYMENT_DEBT_ATTACHED]: {
-    category: 'In progress',
-    detail: 'Debt data attached'
+    state: IN_PROGRESS,
+    detail: PAYMENT_DEBT_ATTACHED_STATUS
   },
   [PAYMENT_PAUSED_LEDGER]: {
-    category: 'Waiting',
-    detail: 'Ledger assignment'
+    state: WAITING,
+    detail: PAYMENT_PAUSED_LEDGER_STATUS
   },
   [PAYMENT_LEDGER_ASSIGNED]: {
-    category: 'In progress',
-    detail: 'Ledger assigned'
+    state: IN_PROGRESS,
+    detail: PAYMENT_LEDGER_ASSIGNED_STATUS
   },
   [PAYMENT_PAUSED_QUALITY_CHECK]: {
-    category: 'Waiting',
-    detail: 'Ledger assignment'
+    state: WAITING,
+    detail: PAYMENT_PAUSED_QUALITY_CHECK_STATUS
   },
   [PAYMENT_QUALITY_CHECK_FAILED]: {
-    category: 'Waiting',
-    detail: 'Ledger correction'
+    state: WAITING,
+    detail: PAYMENT_QUALITY_CHECK_FAILED_STATUS
   },
   [PAYMENT_QUALITY_CHECK_PASSED]: {
-    category: 'In progress',
-    detail: 'Ledger confirmed'
+    state: IN_PROGRESS,
+    detail: PAYMENT_QUALITY_CHECK_PASSED_STATUS
   },
   [PAYMENT_RESET]: {
-    category: 'In progress',
-    detail: 'Reset to be recalculated'
+    state: IN_PROGRESS,
+    detail: PAYMENT_RESET_STATUS
   },
   [PAYMENT_PROCESSED]: {
     default: true,
-    category: 'In progress',
-    detail: 'Final state calculated'
+    state: IN_PROGRESS,
+    detail: PAYMENT_PROCESSED_STATUS
   },
   [PAYMENT_SUBMITTED]: {
     default: true,
-    category: 'In progress',
-    detail: 'Submitted to D365'
+    state: IN_PROGRESS,
+    detail: PAYMENT_SUBMITTED_STATUS
   },
   [PAYMENT_ACKNOWLEDGED]: {
     default: true,
-    category: 'Completed',
-    detail: 'Acknowledged by D365'
+    state: COMPLETED,
+    detail: PAYMENT_ACKNOWLEDGED_STATUS
   },
   [PAYMENT_SETTLED]: {
     default: true,
-    category: 'Completed',
-    detail: 'Settled by D365'
+    state: COMPLETED,
+    detail: PAYMENT_SETTLED_STATUS
   }
 }
