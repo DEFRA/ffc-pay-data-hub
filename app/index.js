@@ -1,17 +1,17 @@
 require('./insights').setup()
 require('log-timestamp')
 const { initialise } = require('./storage')
-const { start, stop } = require('./messaging')
-const cache = require('./cache')
+const { start: startMessaging, stop: stopMessaging } = require('./messaging')
+const { start: startCache, stop: stopCache } = require('./cache')
 
 process.on(['SIGTERM', 'SIGINT'], async () => {
-  await cache.stop()
-  await stop()
+  await stopCache()
+  await stopMessaging()
   process.exit(0)
 })
 
 module.exports = (async () => {
-  await cache.start()
+  await startCache()
   await initialise()
-  await start()
+  await startMessaging()
 })()
