@@ -9,4 +9,6 @@ const createMessage = (body, type, options) => {
   }
 }
 
-module.exports = createMessage
+module.exports = {
+  createMessage
+}

@@ -1,8 +1,9 @@
+const util = require('util')
 const { cacheConfig, messageConfig } = require('../config')
 const { getCachedResponse, setCachedResponse } = require('../cache')
-const sendMessage = require('./send-message')
-const util = require('util')
+const { sendMessage } = require('./send-message')
 const { getData } = require('../data')
+const { getCacheKey } = require('./get-cache-key')
 
 const processDataMessage = async (message, receiver) => {
   try {
@@ -10,7 +11,7 @@ const processDataMessage = async (message, receiver) => {
     const { category, value } = body
 
     console.log('Data request received:', util.inspect(body, false, null, true))
-    const key = getKey(category, value)
+    const key = getCacheKey(category, value)
     const cachedResponse = await getCachedResponse(cacheConfig.cache, body, key)
     const response = cachedResponse ?? { data: await getData(category, value) }
 
@@ -27,8 +28,6 @@ const processDataMessage = async (message, receiver) => {
   }
 }
 
-const getKey = (category, value) => {
-  return `${category}:${value}`
+module.exports = {
+  processDataMessage
 }
-
-module.exports = processDataMessage
