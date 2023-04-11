@@ -1,5 +1,6 @@
 const { isDeepStrictEqual } = require('util')
-const { get, update } = require('./base')
+const { get } = require('./get')
+const { update } = require('./update')
 const getRequestIndex = require('./get-request-index')
 
 const getCachedResponse = async (cache, request, key) => {

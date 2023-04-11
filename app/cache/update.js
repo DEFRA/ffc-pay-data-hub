@@ -1,5 +1,6 @@
-const hoek = require('hoek')
-const { get, set } = require('./base')
+const hoek = require('@hapi/hoek')
+const { get } = require('./get')
+const { set } = require('./set')
 
 const update = async (cache, key, cacheData) => {
   const existing = await get(cache, key)
