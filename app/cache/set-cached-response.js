@@ -1,6 +1,6 @@
 const { get } = require('./get')
 const { update } = require('./update')
-const getRequestIndex = require('./get-request-index')
+const { getRequestIndex } = require('./get-request-index')
 
 const setCachedResponse = async (cacheName, key, request, response) => {
   const cacheData = await get(cacheName, key)
