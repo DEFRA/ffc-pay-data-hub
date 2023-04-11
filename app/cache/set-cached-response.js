@@ -14,4 +14,6 @@ const setCachedResponse = async (cacheName, key, request, response) => {
   await update(cacheName, key, cacheData)
 }
 
-module.exports = setCachedResponse
+module.exports = {
+  setCachedResponse
+}

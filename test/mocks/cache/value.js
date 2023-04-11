@@ -1,5 +1,9 @@
+const { CATEGORY } = require('./category')
+
 const value = {
-  request: {},
+  request: {
+    category: CATEGORY
+  },
   response: {}
 }
 

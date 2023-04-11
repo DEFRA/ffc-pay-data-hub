@@ -1,7 +1,7 @@
 const { isDeepStrictEqual } = require('util')
 const { get } = require('./get')
 const { update } = require('./update')
-const getRequestIndex = require('./get-request-index')
+const { getRequestIndex } = require('./get-request-index')
 
 const getCachedResponse = async (cache, request, key) => {
   const cacheData = await get(cache, key)
@@ -25,4 +25,6 @@ const getCachedResponse = async (cache, request, key) => {
   return response
 }
 
-module.exports = getCachedResponse
+module.exports = {
+  getCachedResponse
+}
