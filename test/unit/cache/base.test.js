@@ -1,31 +1,60 @@
-jest.mock('redis')
+const mockOn = jest.fn()
+const mockConnect = jest.fn()
+const mockDisconnect = jest.fn()
 const mockClient = {
-  on: jest.fn(),
-  connect: jest.fn(),
-  disconnect: jest.fn()
+  on: mockOn,
+  connect: mockConnect,
+  disconnect: mockDisconnect
 }
-const mockRedis = require('redis', () => {
+jest.mock('redis', () => {
   return {
     createClient: jest.fn().mockImplementation(() => {
       return mockClient
     })
   }
 })
+const mockRedis = require('redis')
 
-const { start, stop, client } = require('../../../app/cache/base')
+const { start, stop } = require('../../../app/cache/base')
 
 describe('cache', () => {
-  describe('start', () => {
-    test('should create client once on start', async () => {
-      await start()
-      expect(mockRedis.createClient).toHaveBeenCalledTimes(1)
-    })
+  beforeEach(() => {
+    jest.clearAllMocks()
   })
 
-  describe('stop', () => {
-    test('should disconnect once on stop', async () => {
-      await stop()
-      expect(client.disconnect).toHaveBeenCalledTimes(1)
-    })
+  test('should create client once on start', async () => {
+    await start()
+    expect(mockRedis.createClient).toHaveBeenCalledTimes(1)
+  })
+
+  test('should connect once on start', async () => {
+    await start()
+    expect(mockConnect).toHaveBeenCalledTimes(1)
+  })
+
+  test('should setup error listener on start', async () => {
+    await start()
+    expect(mockOn).toHaveBeenCalledWith('error', expect.any(Function))
+  })
+
+  test('should setup reconnecting listener on start', async () => {
+    await start()
+    expect(mockOn).toHaveBeenCalledWith('reconnecting', expect.any(Function))
+  })
+
+  test('should setup ready listener on start', async () => {
+    await start()
+    expect(mockOn).toHaveBeenCalledWith('ready', expect.any(Function))
+  })
+
+  test('should only setup three listeners on start', async () => {
+    await start()
+    expect(mockOn).toHaveBeenCalledTimes(3)
+  })
+
+  test('should disconnect once on stop', async () => {
+    await start()
+    await stop()
+    expect(mockDisconnect).toHaveBeenCalledTimes(1)
   })
 })
