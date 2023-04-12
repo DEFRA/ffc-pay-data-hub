@@ -20,7 +20,7 @@ const { createMessage: mockCreateMessage } = require('../../../app/messaging/cre
 const { BODY } = require('../../mocks/messaging/body')
 const { TYPE } = require('../../../app/constants/type')
 const { SESSION_ID } = require('../../mocks/messaging/session-id')
-const { MESSAGE } = require('../../mocks/messaging/message')
+const { RESPONSE_MESSAGE } = require('../../mocks/messaging/message')
 
 const { sendMessage } = require('../../../app/messaging/send-message')
 
@@ -30,7 +30,7 @@ let config
 describe('send message', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockCreateMessage.mockReturnValue(MESSAGE)
+    mockCreateMessage.mockReturnValue(RESPONSE_MESSAGE)
     options = { sessionId: SESSION_ID }
     config = {}
   })
@@ -47,7 +47,7 @@ describe('send message', () => {
 
   test('should send message', async () => {
     await sendMessage(BODY, TYPE, config, options)
-    expect(mockSendMessage).toHaveBeenCalledWith(MESSAGE)
+    expect(mockSendMessage).toHaveBeenCalledWith(RESPONSE_MESSAGE)
   })
 
   test('should close connection', async () => {

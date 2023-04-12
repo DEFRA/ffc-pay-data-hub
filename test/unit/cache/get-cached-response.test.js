@@ -9,7 +9,7 @@ const { getRequestIndex: mockGetRequestIndex } = require('../../../app/cache/get
 
 const { NAME } = require('../../mocks/cache/name')
 const { KEY } = require('../../mocks/cache/key')
-const { REQUEST } = require('../../mocks/cache/request')
+const { REQUEST } = require('../../mocks/request')
 const { RESPONSE } = require('../../mocks/cache/response')
 const { DATA } = require('../../mocks/cache/data')
 

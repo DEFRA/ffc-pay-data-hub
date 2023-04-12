@@ -1,4 +1,4 @@
-const { REQUEST } = require('./request')
+const { REQUEST } = require('../request')
 const { RESPONSE } = require('./response')
 
 const value = {

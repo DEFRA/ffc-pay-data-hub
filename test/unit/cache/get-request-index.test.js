@@ -1,5 +1,5 @@
 const { DATA } = require('../../mocks/cache/data')
-const { REQUEST } = require('../../mocks/cache/request')
+const { REQUEST } = require('../../mocks/request')
 
 const { getRequestIndex } = require('../../../app/cache/get-request-index')
 
