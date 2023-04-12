@@ -2,9 +2,9 @@ jest.mock('../../../app/data/events')
 const { getEventsByFrn: mockGetEventsByFrn, getEventsByCorrelationId: mockGetEventsByCorrelationId } = require('../../../app/data/events')
 
 const { FRN: FRN_CATEGORY } = require('../../../app/constants/categories')
-const { FRN: FRN_VALUE } = require('../../mocks/frn')
+const { FRN: FRN_VALUE } = require('../../mocks/values/frn')
 const { CORRELATION_ID: CORRELATION_ID_CATEGORY } = require('../../../app/constants/categories')
-const { CORRELATION_ID: CORRELATION_ID_VALUE } = require('../../mocks/correlation-id')
+const { CORRELATION_ID: CORRELATION_ID_VALUE } = require('../../mocks/values/correlation-id')
 
 const { getData } = require('../../../app/data/get-data')
 
