@@ -1,10 +1,9 @@
-const { CATEGORY } = require('./category')
+const { REQUEST } = require('./request')
+const { RESPONSE } = require('./response')
 
 const value = {
-  request: {
-    category: CATEGORY
-  },
-  response: {}
+  request: REQUEST,
+  response: RESPONSE
 }
 
 module.exports = {

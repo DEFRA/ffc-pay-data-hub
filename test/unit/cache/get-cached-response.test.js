@@ -7,15 +7,16 @@ const { update: mockUpdate } = require('../../../app/cache/update')
 jest.mock('../../../app/cache/get-request-index')
 const { getRequestIndex: mockGetRequestIndex } = require('../../../app/cache/get-request-index')
 
+const { VALUE } = require('../../mocks/cache/value')
 const { NAME } = require('../../mocks/cache/name')
 const { KEY } = require('../../mocks/cache/key')
-const { DATA } = require('../../mocks/cache/data')
 const { REQUEST } = require('../../mocks/cache/request')
 const { RESPONSE } = require('../../mocks/cache/response')
+const { DATA } = require('../../mocks/cache/data')
 
-const { setCachedResponse } = require('../../../app/cache/set-cached-response')
+const { getCachedResponse } = require('../../../app/cache/get-cached-response')
 
-describe('set cached response', () => {
+describe('get cached response', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockGet.mockResolvedValue(DATA)
@@ -23,23 +24,29 @@ describe('set cached response', () => {
   })
 
   test('should get existing item from cache name and key', async () => {
-    await setCachedResponse(NAME, KEY, REQUEST, RESPONSE)
+    await getCachedResponse(NAME, REQUEST, KEY)
     expect(mockGet).toHaveBeenCalledWith(NAME, KEY)
   })
 
   test('should check if request already exists in cache', async () => {
-    await setCachedResponse(NAME, KEY, REQUEST, RESPONSE)
+    await getCachedResponse(NAME, REQUEST, KEY)
     expect(mockGetRequestIndex).toHaveBeenCalledWith(DATA, REQUEST)
   })
 
-  test('should update existing request in cache if already exists', async () => {
-    await setCachedResponse(NAME, KEY, REQUEST, RESPONSE)
-    expect(mockUpdate).toHaveBeenCalledWith(NAME, KEY, DATA)
+  test('should return cached response if exists', async () => {
+    const response = await getCachedResponse(NAME, REQUEST, KEY)
+    expect(response).toEqual(RESPONSE)
+  })
+
+  test('should return undefined if no cached response exists', async () => {
+    mockGetRequestIndex.mockReturnValue(-1)
+    const response = await getCachedResponse(NAME, REQUEST, KEY)
+    expect(response).toBeUndefined()
   })
 
   test('should add new request to cache if does not exist', async () => {
-    mockGetRequestIndex.mockReturnValue(-1)
-    await setCachedResponse(NAME, KEY, REQUEST, RESPONSE)
-    expect(mockUpdate).toHaveBeenCalledWith(NAME, KEY, DATA)
+    mockGet.mockResolvedValue({})
+    await getCachedResponse(NAME, REQUEST, KEY)
+    expect(mockUpdate).toHaveBeenCalledWith(NAME, KEY, { requests: [{ request: REQUEST }] })
   })
 })
