@@ -9,7 +9,7 @@ data:
   DATA_QUEUE_ADDRESS: {{ .Values.container.dataQueueAddress }}-{{ .Values.environmentCode }}
   {{ else }}
   DATA_TOPIC_ADDRESS: {{ quote .Values.container.dataTopicAddress }}
-  DATA_QUEUE_ADDRESS: {{ quote .Values.container.dataQueueAddress }}
+  DATARESPONSE_QUEUE_ADDRESS: {{ quote .Values.container.dataResponseQueueAddress }}
   {{- end }}
   DATA_SUBSCRIPTION_ADDRESS: {{ quote .Values.container.dataSubscriptionAddress }}
   AZURE_STORAGE_CONNECTION_STRING: {{ quote .Values.container.azureStorageConnectionString }}

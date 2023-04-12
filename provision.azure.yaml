@@ -2,5 +2,5 @@ resources:
   topics:
     - name: data
   queues:
-    - name: data
+    - name: dataResponse
       enableSessions: true

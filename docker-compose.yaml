@@ -17,7 +17,7 @@ services:
       MESSAGE_QUEUE_USER: ${MESSAGE_QUEUE_USER}
       DATA_TOPIC_ADDRESS: ${DATA_TOPIC_ADDRESS:-ffc-pay-data-request}${MESSAGE_QUEUE_SUFFIX}
       DATA_SUBSCRIPTION_ADDRESS: ${DATA_SUBSCRIPTION_ADDRESS:-ffc-pay-data-hub}${MESSAGE_QUEUE_SUFFIX}
-      DATA_QUEUE_ADDRESS: ${DATA_QUEUE_ADDRESS:-ffc-pay-data-request-response}${MESSAGE_QUEUE_SUFFIX}
+      DATARESPONSE_QUEUE_ADDRESS: ${DATARESPONSE_QUEUE_ADDRESS:-ffc-pay-data-request-response}${MESSAGE_QUEUE_SUFFIX}
       REDIS_HOSTNAME: ffc-pay-data-hub-redis
     depends_on:
       - ffc-pay-event-store-azurite
