@@ -1,3 +1,3 @@
 module.exports = {
-  CATEGORY: 'correlationId'
+  CATEGORY: 'frn'
 }

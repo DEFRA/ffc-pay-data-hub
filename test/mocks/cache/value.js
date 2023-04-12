@@ -1,5 +1,5 @@
 const { REQUEST } = require('../request')
-const { RESPONSE } = require('./response')
+const { RESPONSE } = require('../values/response')
 
 const value = {
   request: REQUEST,
