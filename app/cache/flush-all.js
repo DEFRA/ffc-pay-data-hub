@@ -1,6 +1,7 @@
-const { client } = require('./base')
+const { getClient } = require('./base')
 
 const flushAll = async () => {
+  const client = getClient()
   await client.flushAll()
 }
 

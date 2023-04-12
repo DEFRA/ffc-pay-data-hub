@@ -14,8 +14,10 @@ const stop = async () => {
   await client.disconnect()
 }
 
+const getClient = () => client
+
 module.exports = {
   start,
   stop,
-  client
+  getClient
 }

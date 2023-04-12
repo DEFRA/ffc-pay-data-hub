@@ -3,9 +3,8 @@ const mockClient = {
   expire: jest.fn()
 }
 
-jest.mock('../../../app/cache/base', () => {
-  return { client: mockClient }
-})
+jest.mock('../../../app/cache/base')
+const { getClient: mockGetClient } = require('../../../app/cache/base')
 
 jest.mock('../../../app/cache/get-full-key')
 const { getFullKey: mockGetFullKey } = require('../../../app/cache/get-full-key')
@@ -21,6 +20,7 @@ const { set } = require('../../../app/cache/set')
 describe('cache set', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockGetClient.mockReturnValue(mockClient)
     mockGetFullKey.mockReturnValue(PREFIX)
   })
 

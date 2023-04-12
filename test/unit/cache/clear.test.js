@@ -2,9 +2,8 @@ const mockClient = {
   del: jest.fn()
 }
 
-jest.mock('../../../app/cache/base', () => {
-  return { client: mockClient }
-})
+jest.mock('../../../app/cache/base')
+const { getClient: mockGetClient } = require('../../../app/cache/base')
 
 jest.mock('../../../app/cache/get-full-key')
 const { getFullKey: mockGetFullKey } = require('../../../app/cache/get-full-key')
@@ -18,6 +17,7 @@ const { clear } = require('../../../app/cache/clear')
 describe('cache clear', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockGetClient.mockReturnValue(mockClient)
     mockGetFullKey.mockReturnValue(PREFIX)
   })
 
