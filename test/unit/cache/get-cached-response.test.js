@@ -7,7 +7,6 @@ const { update: mockUpdate } = require('../../../app/cache/update')
 jest.mock('../../../app/cache/get-request-index')
 const { getRequestIndex: mockGetRequestIndex } = require('../../../app/cache/get-request-index')
 
-const { VALUE } = require('../../mocks/cache/value')
 const { NAME } = require('../../mocks/cache/name')
 const { KEY } = require('../../mocks/cache/key')
 const { REQUEST } = require('../../mocks/cache/request')
