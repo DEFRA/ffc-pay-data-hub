@@ -1,3 +1,5 @@
+const { PARTITION_KEY } = require('../values/partition-key')
+const { ROW_KEY } = require('../values/row-key')
 const { SPEC_VERSION } = require('../values/spec-version')
 const { TYPE } = require('../values/type')
 const { SOURCE } = require('../values/source')
@@ -17,6 +19,8 @@ const { AGREEMENT_NUMBER } = require('../values/agreement-number')
 const { VALUE } = require('../values/value')
 
 module.exports = {
+  partitionKey: PARTITION_KEY,
+  rowKey: ROW_KEY,
   specversion: SPEC_VERSION,
   type: TYPE,
   source: SOURCE,
