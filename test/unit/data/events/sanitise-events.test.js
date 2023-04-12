@@ -56,4 +56,14 @@ describe('sanitise events', () => {
     const result = sanitiseEvents([groupedEvent])
     expect(result[0].lastUpdated).toBe('30/03/2023 00:00')
   })
+
+  test('should include all events in group', () => {
+    const result = sanitiseEvents([groupedEvent])
+    expect(result[0].events).toHaveLength(4)
+  })
+
+  test('should include all event properties', () => {
+    const result = sanitiseEvents([groupedEvent])
+    expect(result[0].events[0]).toMatchObject(enriched)
+  })
 })

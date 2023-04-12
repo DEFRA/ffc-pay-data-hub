@@ -1,9 +1,9 @@
 const moment = require('moment')
 const { convertToPence } = require('../../currency-convert')
 const { PAYMENT_EXTRACTED } = require('../../constants/events')
+const { DATE } = require('../../constants/date-format')
 const schemeNames = require('../../constants/scheme-names')
 const eventDetails = require('../../constants/event-details')
-const { DATE } = require('../../constants/date-format')
 
 const sanitiseEvents = (events) => {
   return events.map(group => ({
