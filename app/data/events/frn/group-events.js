@@ -3,7 +3,6 @@ const groupEventsByFrn = (events) => {
     const correlationId = y.rowKey.split('|')[0]
     const key = `${y.partitionKey}-${correlationId}`
 
-    // if key doesn't exist then first instance so create new group
     const item = x.get(key) || Object.assign({}, {
       frn: y.partitionKey,
       correlationId,
