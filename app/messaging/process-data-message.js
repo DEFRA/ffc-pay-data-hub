@@ -4,13 +4,18 @@ const { getCachedResponse, setCachedResponse, getCacheKey } = require('../cache'
 const { sendMessage } = require('./send-message')
 const { getData } = require('../data')
 const { TYPE } = require('../constants/type')
+const { validateMessage } = require('./validate-message')
+const { VALIDATION } = require('../constants/errors')
 
 const processDataMessage = async (message, receiver) => {
   try {
+    console.log('Data request received:', util.inspect(message.body, false, null, true))
+
+    validateMessage(message)
+
     const { body, messageId } = message
     const { category, value } = body
 
-    console.log('Data request received:', util.inspect(body, false, null, true))
     const key = getCacheKey(category, value)
     const cachedResponse = await getCachedResponse(cacheConfig.cache, body, key)
     const response = cachedResponse ?? { data: await getData(category, value) }
@@ -23,8 +28,12 @@ const processDataMessage = async (message, receiver) => {
     await receiver.completeMessage(message)
     console.log('Data request completed:', util.inspect(response, false, null, true))
   } catch (err) {
-    console.error('Unable to process data message:', err)
-    await receiver.abandonMessage(message)
+    console.error('Unable to process data request:', err)
+    if (err.category === VALIDATION) {
+      await receiver.deadLetterMessage(message)
+    } else {
+      await receiver.abandonMessage(message)
+    }
   }
 }
 
