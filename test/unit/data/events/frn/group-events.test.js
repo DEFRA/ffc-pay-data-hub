@@ -3,10 +3,9 @@ const processed = require('../../../../mocks/events/processed')
 const submitted = require('../../../../mocks/events/submitted')
 const acknowledged = require('../../../../mocks/events/acknowledged')
 const { PARTITION_KEY } = require('../../../../mocks/values/partition-key')
+const { ROW_KEY } = require('../../../../mocks/values/row-key')
 
 const { groupEventsByFrn } = require('../../../../../app/data/events/frn/group-events')
-const { CORRELATION_ID } = require('../../../../mocks/values/correlation-id')
-const {ROW_KEY} = require('../../../../mocks/values/row-key')
 
 let events
 
@@ -25,5 +24,28 @@ describe('group events by FRN', () => {
     expect(groupedEvents[0].correlationId).toBe(ROW_KEY.split('|')[0])
   })
 
-  
+  test('should include scheme id in group', () => {
+    const groupedEvents = groupEventsByFrn(events)
+    expect(groupedEvents[0].schemeId).toBe(enriched.data.schemeId)
+  })
+
+  test('should include payment request number in group', () => {
+    const groupedEvents = groupEventsByFrn(events)
+    expect(groupedEvents[0].paymentRequestNumber).toBe(enriched.data.paymentRequestNumber)
+  })
+
+  test('should include agreement number in group', () => {
+    const groupedEvents = groupEventsByFrn(events)
+    expect(groupedEvents[0].agreementNumber).toBe(enriched.data.agreementNumber)
+  })
+
+  test('should include marketing year in group', () => {
+    const groupedEvents = groupEventsByFrn(events)
+    expect(groupedEvents[0].marketingYear).toBe(enriched.data.marketingYear)
+  })
+
+  test('should include events in group', () => {
+    const groupedEvents = groupEventsByFrn(events)
+    expect(groupedEvents[0].events).toEqual(events)
+  })
 })
