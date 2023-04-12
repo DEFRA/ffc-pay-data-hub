@@ -4,6 +4,7 @@ const { getCachedResponse, setCachedResponse } = require('../cache')
 const { sendMessage } = require('./send-message')
 const { getData } = require('../data')
 const { getCacheKey } = require('./get-cache-key')
+const { TYPE } = require('../constants/type')
 
 const processDataMessage = async (message, receiver) => {
   try {
@@ -19,7 +20,7 @@ const processDataMessage = async (message, receiver) => {
       await setCachedResponse(cacheConfig.cache, key, body, response)
     }
 
-    await sendMessage(response, 'uk.gov.defra.ffc.pay.data.response', messageConfig.dataQueue, { sessionId: messageId })
+    await sendMessage(response, TYPE, messageConfig.dataQueue, { sessionId: messageId })
     await receiver.completeMessage(message)
     console.log('Data request completed:', util.inspect(response, false, null, true))
   } catch (err) {
