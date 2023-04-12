@@ -1,9 +1,8 @@
 const util = require('util')
 const { cacheConfig, messageConfig } = require('../config')
-const { getCachedResponse, setCachedResponse } = require('../cache')
+const { getCachedResponse, setCachedResponse, getCacheKey } = require('../cache')
 const { sendMessage } = require('./send-message')
 const { getData } = require('../data')
-const { getCacheKey } = require('./get-cache-key')
 const { TYPE } = require('../constants/type')
 
 const processDataMessage = async (message, receiver) => {
