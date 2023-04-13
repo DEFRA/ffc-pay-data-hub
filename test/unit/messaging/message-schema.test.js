@@ -1,5 +1,6 @@
-const schema = require('../../../app/messaging/message-schema')
 const { REQUEST_MESSAGE } = require('../../mocks/messaging/message')
+
+const schema = require('../../../app/messaging/message-schema')
 
 let message
 
@@ -17,13 +18,13 @@ describe('message schema', () => {
     expect(schema.validate(message).error).toBeDefined()
   })
 
-  test('should not validate a message with a missing category', () => {
-    delete message.body.category
+  test('should not validate a message with an invalid category', () => {
+    message.body.category = 'invalid'
     expect(schema.validate(message).error).toBeDefined()
   })
 
-  test('should not validate a message with an invalid category', () => {
-    message.body.category = 'invalid'
+  test('should not validate a message with a missing category', () => {
+    delete message.body.category
     expect(schema.validate(message).error).toBeDefined()
   })
 

@@ -21,7 +21,7 @@ describe('cache set', () => {
     expect(mockGet).toHaveBeenCalledWith(NAME, KEY)
   })
 
-  test('should set value as is if no existing item', async () => {
+  test('should set value as is if no value exists', async () => {
     await update(NAME, KEY, VALUE)
     expect(mockSet).toHaveBeenCalledWith(NAME, KEY, VALUE)
   })
