@@ -6,7 +6,7 @@ const { getCacheKey } = require('./get-cache-key')
 module.exports = {
   start,
   stop,
-  getCacheKey,
   getCachedResponse,
-  setCachedResponse
+  setCachedResponse,
+  getCacheKey
 }

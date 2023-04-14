@@ -1,5 +1,5 @@
-const { cacheConfig } = require('../config')
 const { createClient } = require('redis')
+const { cacheConfig } = require('../config')
 let client
 
 const start = async () => {
