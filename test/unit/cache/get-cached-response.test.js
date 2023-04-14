@@ -22,7 +22,7 @@ describe('get cached response', () => {
     mockGetRequestIndex.mockReturnValue(0)
   })
 
-  test('should get existing item from cache name and key', async () => {
+  test('should get from cache with name and key', async () => {
     await getCachedResponse(NAME, REQUEST, KEY)
     expect(mockGet).toHaveBeenCalledWith(NAME, KEY)
   })

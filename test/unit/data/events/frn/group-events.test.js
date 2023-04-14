@@ -1,9 +1,9 @@
+const { PARTITION_KEY } = require('../../../../mocks/values/partition-key')
+const { ROW_KEY } = require('../../../../mocks/values/row-key')
 const enriched = require('../../../../mocks/events/enriched')
 const processed = require('../../../../mocks/events/processed')
 const submitted = require('../../../../mocks/events/submitted')
 const acknowledged = require('../../../../mocks/events/acknowledged')
-const { PARTITION_KEY } = require('../../../../mocks/values/partition-key')
-const { ROW_KEY } = require('../../../../mocks/values/row-key')
 
 const { groupEventsByFrn } = require('../../../../../app/data/events/frn/group-events-by-frn')
 

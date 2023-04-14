@@ -23,7 +23,7 @@ describe('cache get', () => {
     mockClient.get.mockResolvedValue(VALUE_STRING)
   })
 
-  test('should get full key from cache name and key', async () => {
+  test('should get full key from cache with name and key', async () => {
     await get(NAME, KEY)
     expect(mockGetFullKey).toHaveBeenCalledWith(NAME, KEY)
   })

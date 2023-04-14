@@ -13,6 +13,7 @@ jest.mock('redis', () => {
     })
   }
 })
+
 const mockRedis = require('redis')
 
 const { start, stop } = require('../../../app/cache/base')

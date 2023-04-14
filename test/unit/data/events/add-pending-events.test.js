@@ -19,7 +19,7 @@ describe('add pending events', () => {
     expect(result[0].events).toHaveLength(4)
   })
 
-  test('should add enrichment event if no enrichment event', () => {
+  test('should add enrichment event if no enrichment event exists', () => {
     const result = addPendingEvents([groupedEvent])
     expect(result[0].events[0].status.name).toBe(PAYMENT_ENRICHED_NAME)
   })
@@ -30,7 +30,7 @@ describe('add pending events', () => {
     expect(result[0].events).toHaveLength(4)
   })
 
-  test('should add processed event if no processed event', () => {
+  test('should add processed event if no processed event exists', () => {
     const result = addPendingEvents([groupedEvent])
     expect(result[0].events[1].status.name).toBe(PAYMENT_PROCESSED_NAME)
   })
@@ -41,7 +41,7 @@ describe('add pending events', () => {
     expect(result[0].events).toHaveLength(4)
   })
 
-  test('should add submitted event if no submitted event', () => {
+  test('should add submitted event if no submitted event exists', () => {
     const result = addPendingEvents([groupedEvent])
     expect(result[0].events[2].status.name).toBe(PAYMENT_SUBMITTED_NAME)
   })
@@ -52,7 +52,7 @@ describe('add pending events', () => {
     expect(result[0].events).toHaveLength(4)
   })
 
-  test('should add acknowledged event if no acknowledged event', () => {
+  test('should add acknowledged event if no acknowledged event exists', () => {
     const result = addPendingEvents([groupedEvent])
     expect(result[0].events[3].status.name).toBe(PAYMENT_ACKNOWLEDGED_NAME)
   })

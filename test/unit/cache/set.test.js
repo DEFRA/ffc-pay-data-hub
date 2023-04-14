@@ -13,6 +13,7 @@ const { PREFIX } = require('../../mocks/cache/prefix')
 const { NAME } = require('../../mocks/cache/name')
 const { KEY } = require('../../mocks/cache/key')
 const { VALUE, VALUE_STRING } = require('../../mocks/cache/value')
+const { cacheConfig } = require('../../../app/config')
 
 const { cacheConfig } = require('../../../app/config')
 
