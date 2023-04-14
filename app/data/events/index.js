@@ -1,5 +1,5 @@
-const { getEventsByFrn } = require('./frn')
-const { getEventsByCorrelationId } = require('./correlation-id')
+const { getEventsByFrn } = require('./frn/get-events-by-frn')
+const { getEventsByCorrelationId } = require('./correlation-id/get-events-by-correlation-id')
 
 module.exports = {
   getEventsByFrn,

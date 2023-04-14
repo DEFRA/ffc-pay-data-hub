@@ -1,8 +1,8 @@
-const { FRN } = require('../../constants/categories')
-const { getEvents } = require('./get-events')
+const { FRN } = require('../../../constants/categories')
+const { getEvents } = require('../get-events')
 const { groupEventsByFrn } = require('./group-events-by-frn')
-const { orderGroupedEvents } = require('./order-grouped-frn-events')
-const { sanitiseEvents } = require('./sanitise-events')
+const { orderGroupedEvents } = require('./order-grouped-events')
+const { sanitiseEvents } = require('../sanitise-events')
 
 const getEventsByFrn = async (frn) => {
   const events = await getEvents(frn, FRN)

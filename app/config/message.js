@@ -33,7 +33,7 @@ const config = {
     type: 'subscription'
   },
   dataQueue: {
-    address: process.env.DATA_QUEUE_ADDRESS
+    address: process.env.DATARESPONSE_QUEUE_ADDRESS
   }
 }
 

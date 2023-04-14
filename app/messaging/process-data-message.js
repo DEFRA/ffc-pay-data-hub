@@ -1,16 +1,22 @@
-const { cacheConfig, messageConfig } = require('../config')
-const { getCachedResponse, setCachedResponse } = require('../cache')
-const sendMessage = require('./send-message')
 const util = require('util')
+const { validateMessage } = require('./validate-message')
+const { getCachedResponse, setCachedResponse, getCacheKey } = require('../cache')
+const { cacheConfig, messageConfig } = require('../config')
 const { getData } = require('../data')
+const { sendMessage } = require('./send-message')
+const { TYPE } = require('../constants/type')
+const { VALIDATION } = require('../constants/errors')
 
 const processDataMessage = async (message, receiver) => {
   try {
+    console.log('Data request received:', util.inspect(message.body, false, null, true))
+
+    validateMessage(message)
+
     const { body, messageId } = message
     const { category, value } = body
 
-    console.log('Data request received:', util.inspect(body, false, null, true))
-    const key = getKey(category, value)
+    const key = getCacheKey(category, value)
     const cachedResponse = await getCachedResponse(cacheConfig.cache, body, key)
     const response = cachedResponse ?? { data: await getData(category, value) }
 
@@ -18,17 +24,19 @@ const processDataMessage = async (message, receiver) => {
       await setCachedResponse(cacheConfig.cache, key, body, response)
     }
 
-    await sendMessage(response, 'uk.gov.defra.ffc.pay.data.response', messageConfig.dataQueue, { sessionId: messageId })
+    await sendMessage(response, TYPE, messageConfig.dataQueue, { sessionId: messageId })
     await receiver.completeMessage(message)
     console.log('Data request completed:', util.inspect(response, false, null, true))
   } catch (err) {
-    console.error('Unable to process data message:', err)
-    await receiver.abandonMessage(message)
+    console.error('Unable to process data request:', err)
+    if (err.category === VALIDATION) {
+      await receiver.deadLetterMessage(message)
+    } else {
+      await receiver.abandonMessage(message)
+    }
   }
 }
 
-const getKey = (category, value) => {
-  return `${category}:${value}`
+module.exports = {
+  processDataMessage
 }
-
-module.exports = processDataMessage

@@ -1,5 +1,6 @@
-const { get, update } = require('./base')
-const getRequestIndex = require('./get-request-index')
+const { get } = require('./get')
+const { getRequestIndex } = require('./get-request-index')
+const { update } = require('./update')
 
 const setCachedResponse = async (cacheName, key, request, response) => {
   const cacheData = await get(cacheName, key)
@@ -13,4 +14,6 @@ const setCachedResponse = async (cacheName, key, request, response) => {
   await update(cacheName, key, cacheData)
 }
 
-module.exports = setCachedResponse
+module.exports = {
+  setCachedResponse
+}

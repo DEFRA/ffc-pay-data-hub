@@ -5,9 +5,9 @@ const { getEventsByCorrelationId } = require('./events')
 const getData = async (category, value) => {
   switch (category) {
     case FRN:
-      return await getEventsByFrn(value)
+      return getEventsByFrn(value)
     case CORRELATION_ID:
-      return await getEventsByCorrelationId(value)
+      return getEventsByCorrelationId(value)
     default:
       throw new Error(`Unknown category: ${category}`)
   }

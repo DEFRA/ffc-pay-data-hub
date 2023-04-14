@@ -8,8 +8,8 @@ const schema = Joi.object({
   }),
   password: Joi.string().allow(''),
   partition: Joi.string().default('ffc-pay-data-hub'),
-  ttl: Joi.number().default(1000 * 30), // 30 seconds
-  cache: Joi.string().default('payments-frn')
+  ttl: Joi.number().default(30),
+  cache: Joi.string().default('payments')
 })
 
 const config = {

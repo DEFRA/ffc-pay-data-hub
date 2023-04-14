@@ -1,6 +1,7 @@
 const { isDeepStrictEqual } = require('util')
-const { get, update } = require('./base')
-const getRequestIndex = require('./get-request-index')
+const { get } = require('./get')
+const { update } = require('./update')
+const { getRequestIndex } = require('./get-request-index')
 
 const getCachedResponse = async (cache, request, key) => {
   const cacheData = await get(cache, key)
@@ -19,9 +20,11 @@ const getCachedResponse = async (cache, request, key) => {
   // find cache entry for request
   const requestIndex = getRequestIndex(cacheData, request)
 
-  const response = cacheData.requests[requestIndex].response
+  const response = cacheData.requests[requestIndex]?.response
   console.log(response ? 'Using cached value' : 'No cached value available')
   return response
 }
 
-module.exports = getCachedResponse
+module.exports = {
+  getCachedResponse
+}
