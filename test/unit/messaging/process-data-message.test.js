@@ -11,12 +11,14 @@ jest.mock('../../../app/data')
 const { getData: mockGetData } = require('../../../app/data')
 
 const { cacheConfig, messageConfig } = require('../../../app/config')
+
 const { REQUEST_MESSAGE } = require('../../mocks/messaging/message')
 const { CATEGORY } = require('../../mocks/values/category')
 const { REQUEST_VALUE } = require('../../mocks/cache/request-value')
 const { REQUEST } = require('../../mocks/request')
 const { RESPONSE } = require('../../mocks/values/response')
 const { KEY } = require('../../mocks/cache/key')
+
 const { TYPE } = require('../../../app/constants/type')
 const { VALIDATION } = require('../../../app/constants/errors')
 
