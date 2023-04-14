@@ -1,8 +1,8 @@
 jest.mock('../../../../../app/data/events/get-events')
 const { getEvents: mockGetEvents } = require('../../../../../app/data/events/get-events')
 
-jest.mock('../../../../../app/data/events/frn/group-events')
-const { groupEventsByFrn: mockGroupEventsByFrn } = require('../../../../../app/data/events/frn/group-events')
+jest.mock('../../../../../app/data/events/frn/group-events-by-frn')
+const { groupEventsByFrn: mockGroupEventsByFrn } = require('../../../../../app/data/events/frn/group-events-by-frn')
 
 jest.mock('../../../../../app/data/events/frn/order-grouped-events')
 const { orderGroupedEvents: mockOrderGroupedEvents } = require('../../../../../app/data/events/frn/order-grouped-events')

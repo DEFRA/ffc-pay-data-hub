@@ -30,6 +30,7 @@ const {
   PAYMENT_ACKNOWLEDGED_NAME,
   PAYMENT_SETTLED_NAME
 } = require('./names')
+
 const {
   PAYMENT_EXTRACTED_STATUS,
   PAYMENT_ENRICHED_STATUS,
@@ -46,6 +47,7 @@ const {
   PAYMENT_ACKNOWLEDGED_STATUS,
   PAYMENT_SETTLED_STATUS
 } = require('./statuses')
+
 const { IN_PROGRESS, WAITING, COMPLETED } = require('./states')
 
 module.exports = {

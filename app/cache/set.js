@@ -1,5 +1,5 @@
-const { getClient } = require('./base')
 const { getFullKey } = require('./get-full-key')
+const { getClient } = require('./base')
 const { cacheConfig } = require('../config')
 
 const set = async (cache, key, value) => {

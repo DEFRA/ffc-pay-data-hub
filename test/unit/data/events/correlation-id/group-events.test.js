@@ -4,7 +4,7 @@ const submitted = require('../../../../mocks/events/submitted')
 const acknowledged = require('../../../../mocks/events/acknowledged')
 const { PARTITION_KEY } = require('../../../../mocks/values/partition-key')
 
-const { groupEventsByCorrelationId } = require('../../../../../app/data/events/correlation-id/group-events')
+const { groupEventsByCorrelationId } = require('../../../../../app/data/events/correlation-id/group-events-by-correlation-id')
 
 let events
 

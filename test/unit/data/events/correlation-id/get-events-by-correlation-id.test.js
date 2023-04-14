@@ -1,8 +1,8 @@
 jest.mock('../../../../../app/data/events/get-events')
 const { getEvents: mockGetEvents } = require('../../../../../app/data/events/get-events')
 
-jest.mock('../../../../../app/data/events/correlation-id/group-events')
-const { groupEventsByCorrelationId: mockGroupEventsByCorrelationId } = require('../../../../../app/data/events/correlation-id/group-events')
+jest.mock('../../../../../app/data/events/correlation-id/group-events-by-correlation-id')
+const { groupEventsByCorrelationId: mockGroupEventsByCorrelationId } = require('../../../../../app/data/events/correlation-id/group-events-by-correlation-id')
 
 jest.mock('../../../../../app/data/events/correlation-id/order-grouped-events')
 const { orderGroupedEvents: mockOrderGroupedEvents } = require('../../../../../app/data/events/correlation-id/order-grouped-events')
