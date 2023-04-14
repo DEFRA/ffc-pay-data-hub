@@ -14,6 +14,7 @@ const {
   PAYMENT_ACKNOWLEDGED,
   PAYMENT_SETTLED
 } = require('./events')
+
 const {
   PAYMENT_EXTRACTED_NAME,
   PAYMENT_ENRICHED_NAME,
