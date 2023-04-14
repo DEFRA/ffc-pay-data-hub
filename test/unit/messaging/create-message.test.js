@@ -1,9 +1,10 @@
 const { BODY } = require('../../mocks/messaging/body')
+const { SESSION_ID } = require('../../mocks/messaging/session-id')
+
 const { TYPE } = require('../../../app/constants/type')
 const { SOURCE } = require('../../../app/constants/source')
 
 const { createMessage } = require('../../../app/messaging/create-message')
-const { SESSION_ID } = require('../../mocks/messaging/session-id')
 
 describe('create message', () => {
   test('should create message with body as body', () => {

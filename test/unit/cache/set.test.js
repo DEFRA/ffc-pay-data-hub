@@ -9,11 +9,12 @@ const { getClient: mockGetClient } = require('../../../app/cache/base')
 jest.mock('../../../app/cache/get-full-key')
 const { getFullKey: mockGetFullKey } = require('../../../app/cache/get-full-key')
 
-const { cacheConfig } = require('../../../app/config')
 const { PREFIX } = require('../../mocks/cache/prefix')
 const { NAME } = require('../../mocks/cache/name')
 const { KEY } = require('../../mocks/cache/key')
 const { VALUE, VALUE_STRING } = require('../../mocks/cache/value')
+
+const { cacheConfig } = require('../../../app/config')
 
 const { set } = require('../../../app/cache/set')
 

@@ -9,15 +9,16 @@ const mockTableClient = {
 
 const { PARTITION_KEY } = require('../../../mocks/values/partition-key')
 const { CATEGORY } = require('../../../mocks/values/category')
+
 const { PAYMENT_EVENT } = require('../../../../app/constants/event-types')
 
 const { stringifyEventData } = require('../../../helpers/stringify-event-data')
 
+const { getEvents } = require('../../../../app/data/events/get-events')
+
 let extractedEvent
 let enrichedEvent
 let events
-
-const { getEvents } = require('../../../../app/data/events/get-events')
 
 describe('get events', () => {
   beforeEach(() => {
