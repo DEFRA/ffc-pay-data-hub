@@ -3,7 +3,6 @@ const { SESSION_ID } = require('../../mocks/messaging/session-id')
 
 const { TYPE } = require('../../../app/constants/type')
 const { SOURCE } = require('../../../app/constants/source')
-const { SESSION_ID } = require('../../mocks/messaging/session-id')
 
 const { createMessage } = require('../../../app/messaging/create-message')
 
