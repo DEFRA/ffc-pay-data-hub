@@ -2,6 +2,7 @@ jest.mock('../../../app/messaging/message-schema')
 const mockSchema = require('../../../app/messaging/message-schema')
 
 const { VALIDATION } = require('../../../app/constants/errors')
+
 const { REQUEST_MESSAGE } = require('../../mocks/messaging/message')
 
 const { validateMessage } = require('../../../app/messaging/validate-message')
