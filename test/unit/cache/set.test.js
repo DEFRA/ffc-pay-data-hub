@@ -25,7 +25,7 @@ describe('cache set', () => {
     mockGetFullKey.mockReturnValue(PREFIX)
   })
 
-  test('should get full key from cache name and key', async () => {
+  test('should get full key from cache with name and key', async () => {
     await set(NAME, KEY, VALUE)
     expect(mockGetFullKey).toHaveBeenCalledWith(NAME, KEY)
   })
