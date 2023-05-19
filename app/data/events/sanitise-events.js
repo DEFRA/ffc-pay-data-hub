@@ -4,7 +4,7 @@ const { PAYMENT_EXTRACTED } = require('../../constants/events')
 const { DATE } = require('../../constants/date-format')
 const schemeNames = require('../../constants/scheme-names')
 const eventDetails = require('../../constants/event-details')
-
+// this makes the data easier for payweb to consume
 const sanitiseEvents = (events) => {
   return events.map(group => ({
     ...group,
