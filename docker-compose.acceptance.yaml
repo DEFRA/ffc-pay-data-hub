@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  ffc-pay-data-hub:
+      build: 
+        target: development
+      image: ffc-pay-data-hub-development
+      volumes:
+        - ./app:/home/node/app
+        - ./package.json:/home/node/package.json
+  
+  ffc-pay-data-hub-test-runner:
+    build:
+      context: .
+      target: development
+    depends_on:
+      - ffc-pay-data-hub
+    image: ffc-pay-data-hub-development
+    command: npm run test:acceptance
+    volumes:
+      - ./test-output:/home/node/test-output
+      - ./test:/home/node/test
+  
