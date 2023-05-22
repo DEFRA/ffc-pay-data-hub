@@ -5,7 +5,7 @@ const groupEventsByScheme = (events) => {
     const item = x.get(key) || Object.assign({}, {
       // what properties for each group
       // this is each scheme
-      schemeId: y.schemeId,
+      schemeId: y.partitionKey,
       events: []
     })
     item.events.push(y)
