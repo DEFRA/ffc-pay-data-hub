@@ -65,4 +65,12 @@ describe('get events', () => {
     const result = getTotalSchemeValues(groupedEvents)
     expect(result[0].totalValue).toBe(100000)
   })
+
+  test('totalValue shold be 0 when there is a value of 0', async () => {
+    groupedEvents[0].events.pop()
+    groupedEvents[0].events.pop()
+    groupedEvents[0].events[0].data.value = 0
+    const result = getTotalSchemeValues(groupedEvents)
+    expect(result[0].totalValue).toBe(0)
+  })
 })
