@@ -1,6 +1,7 @@
-const { FRN, CORRELATION_ID } = require('../constants/categories')
+const { FRN, CORRELATION_ID, SCHEME_ID } = require('../constants/categories')
 const { getEventsByFrn } = require('./events')
 const { getEventsByCorrelationId } = require('./events')
+const { getEventsBySchemeId } = require('./events')
 
 const getData = async (category, value) => {
   switch (category) {
@@ -8,6 +9,8 @@ const getData = async (category, value) => {
       return getEventsByFrn(value)
     case CORRELATION_ID:
       return getEventsByCorrelationId(value)
+    case SCHEME_ID:
+      return getEventsBySchemeId(value)
     default:
       throw new Error(`Unknown category: ${category}`)
   }
