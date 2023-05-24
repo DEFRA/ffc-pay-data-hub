@@ -4,7 +4,7 @@ const processed = require('../../../../mocks/events/processed')
 const submitted = require('../../../../mocks/events/submitted')
 const acknowledged = require('../../../../mocks/events/acknowledged')
 
-const { groupEventsByScheme } = require('../../../../../app/data/events/scheme/group-events-by-scheme')
+const { groupEventsByScheme } = require('../../../../../app/data/events/scheme-id/group-events-by-scheme')
 
 let events
 let bpsEvents

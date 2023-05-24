@@ -10,11 +10,12 @@ const mockTableClient = {
 const { PARTITION_KEY } = require('../../../../mocks/values/partition-key')
 const { CATEGORY } = require('../../../../mocks/values/category')
 
+const { PAYMENT_SUBMITTED } = require('../../../../../app/constants/events')
 const { PAYMENT_EVENT } = require('../../../../../app/constants/event-types')
 
 const { stringifyEventData } = require('../../../../helpers/stringify-event-data')
 
-const { getSubmittedEvents } = require('../../../../../app/data/events/scheme/get-submitted-events')
+const { getSubmittedEvents } = require('../../../../../app/data/events/scheme-id/get-submitted-events')
 
 let extractedEvent
 let enrichedEvent
@@ -76,5 +77,21 @@ describe('get events', () => {
     mockListEntities.mockReturnValue([])
     const result = await getSubmittedEvents(PARTITION_KEY, CATEGORY)
     expect(result.length).toBe(0)
+  })
+
+  // can this be tested because we are mocking the response from table storage?
+  test('should only return events that are of type submitted', async () => {
+    const result = await getSubmittedEvents(PARTITION_KEY, CATEGORY)
+    result.forEach(event => {
+      expect(event.type).toBe(PAYMENT_SUBMITTED)
+    })
+  })
+
+  // Instead can we only test what search parms the query is called with?
+  // test that it is called with the correct type
+  test('should call mockListEntities with type of submitted ', async () => {
+    await getSubmittedEvents(PARTITION_KEY, CATEGORY)
+    // what is the mock0data doing and where does it come from
+    expect(mockTableClient.listEntities).toHaveBeenCalledWith({ queryOptions: { filter: mockOdata`THIS CAN BE ANYTHING AND IT WONT FAIL${PAYMENT_SUBMITTED}` } })
   })
 })
