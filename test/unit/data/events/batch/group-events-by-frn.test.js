@@ -6,7 +6,6 @@ const submitted = require('../../../../mocks/events/submitted')
 const acknowledged = require('../../../../mocks/events/acknowledged')
 
 const { groupEventsByFrn } = require('../../../../../app/data/events/batch/group-events-by-frn')
-const { BATCH } = require('../../../../mocks/values/batch')
 
 let events
 
