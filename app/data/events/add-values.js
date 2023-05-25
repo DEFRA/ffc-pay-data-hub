@@ -1,12 +1,12 @@
-const { toCurrencyString } = require('../../to-currency-string')
+const { convertToString } = require('../../currency')
 
 const addValues = (events) => {
   return events.map(event => ({
     ...event,
     originalValue: event.events[0]?.data.value,
-    originalValueText: toCurrencyString(event.events[0]?.data.value),
+    originalValueText: convertToString(event.events[0]?.data.value),
     currentValue: event.events[event.events.length - 1]?.data.value,
-    currentValueText: toCurrencyString(event.events[event.events.length - 1]?.data.value)
+    currentValueText: convertToString(event.events[event.events.length - 1]?.data.value)
   }))
 }
 

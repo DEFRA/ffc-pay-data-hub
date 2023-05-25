@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { convertToPence } = require('../../currency-convert')
+const { convertToPence } = require('../../currency')
 const { PAYMENT_EXTRACTED } = require('../../constants/events')
 const { DATE } = require('../../constants/date-format')
 const schemeNames = require('../../constants/scheme-names')
