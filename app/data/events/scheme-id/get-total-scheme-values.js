@@ -1,3 +1,4 @@
+const { convertToPounds } = require('../../../../app/currency-convert')
 const getTotalSchemeValues = (groupedEvents) => {
   // loop over grouped events and sum all values and return schemeId, total number of payments, total value
   return groupedEvents.map((eventsByScheme) => {
@@ -8,7 +9,7 @@ const getTotalSchemeValues = (groupedEvents) => {
     return {
       schemeId: eventsByScheme.schemeId,
       totalPaymentRequests: eventsByScheme.events.length,
-      totalValue
+      totalValue: convertToPounds(totalValue)
     }
   })
 }
