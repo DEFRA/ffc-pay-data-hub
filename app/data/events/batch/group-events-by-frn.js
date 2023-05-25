@@ -10,6 +10,7 @@ const groupEventsByFrn = (events) => {
       paymentRequestNumber: y.data.paymentRequestNumber,
       agreementNumber: y.data.agreementNumber,
       marketingYear: y.data.marketingYear,
+      currency: y.data.currency,
       events: []
     })
     item.events.push(y)
