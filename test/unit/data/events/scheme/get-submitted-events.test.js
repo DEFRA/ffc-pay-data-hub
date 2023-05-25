@@ -8,7 +8,6 @@ const mockTableClient = {
 }
 
 const { PARTITION_KEY } = require('../../../../mocks/values/partition-key')
-const { CATEGORY } = require('../../../../mocks/values/category')
 
 const { PAYMENT_SUBMITTED } = require('../../../../../app/constants/events')
 const { PAYMENT_EVENT } = require('../../../../../app/constants/event-types')
@@ -17,6 +16,7 @@ const { stringifyEventData } = require('../../../../helpers/stringify-event-data
 
 const { getSubmittedEvents } = require('../../../../../app/data/events/scheme-id/get-submitted-events')
 
+const category = 'schemeId'
 let extractedEvent
 let enrichedEvent
 let events
@@ -38,60 +38,49 @@ describe('get events', () => {
   })
 
   test('should get payment client', async () => {
-    await getSubmittedEvents(PARTITION_KEY, CATEGORY)
+    await getSubmittedEvents(PARTITION_KEY, category)
     expect(mockGetClient).toHaveBeenCalledTimes(1)
   })
 
   test('should get payment client once', async () => {
-    await getSubmittedEvents(PARTITION_KEY, CATEGORY)
+    await getSubmittedEvents(PARTITION_KEY, category)
     expect(mockGetClient).toHaveBeenCalledTimes(1)
   })
 
   test('should get payment client with payment event type', async () => {
-    await getSubmittedEvents(PARTITION_KEY, CATEGORY)
+    await getSubmittedEvents(PARTITION_KEY, category)
     expect(mockGetClient).toHaveBeenCalledWith(PAYMENT_EVENT)
   })
 
   test('should get payment events once', async () => {
-    await getSubmittedEvents(PARTITION_KEY, CATEGORY)
+    await getSubmittedEvents(PARTITION_KEY, category)
     expect(mockListEntities).toHaveBeenCalledTimes(1)
   })
 
   test('should get payment events with correlation id category', async () => {
-    await getSubmittedEvents(PARTITION_KEY, CATEGORY)
+    await getSubmittedEvents(PARTITION_KEY, category)
     expect(mockListEntities).toHaveBeenCalledWith({ queryOptions: { filter: mockOdata`category eq 'correlationId' and type eq 'uk.gov.defra.ffc.pay.payment.submitted'` } })
   })
 
   test('should return all payment events', async () => {
-    const result = await getSubmittedEvents(PARTITION_KEY, CATEGORY)
+    const result = await getSubmittedEvents(PARTITION_KEY, category)
     expect(result.length).toBe(2)
   })
 
   test('should convert event data to json', async () => {
-    const result = await getSubmittedEvents(PARTITION_KEY, CATEGORY)
+    const result = await getSubmittedEvents(PARTITION_KEY, category)
     expect(result[0].data).toEqual(extractedEvent.data)
     expect(result[1].data).toEqual(enrichedEvent.data)
   })
 
   test('should return an empty array if no events', async () => {
     mockListEntities.mockReturnValue([])
-    const result = await getSubmittedEvents(PARTITION_KEY, CATEGORY)
+    const result = await getSubmittedEvents(PARTITION_KEY, category)
     expect(result.length).toBe(0)
   })
 
-  // can this be tested because we are mocking the response from table storage?
-  test('should only return events that are of type submitted', async () => {
-    const result = await getSubmittedEvents(PARTITION_KEY, CATEGORY)
-    result.forEach(event => {
-      expect(event.type).toBe(PAYMENT_SUBMITTED)
-    })
-  })
-
-  // Instead can we only test what search parms the query is called with?
-  // test that it is called with the correct type
   test('should call mockListEntities with type of submitted ', async () => {
-    await getSubmittedEvents(PARTITION_KEY, CATEGORY)
-    // what is the mock0data doing and where does it come from
-    expect(mockTableClient.listEntities).toHaveBeenCalledWith({ queryOptions: { filter: mockOdata`THIS CAN BE ANYTHING AND IT WONT FAIL${PAYMENT_SUBMITTED}` } })
+    await getSubmittedEvents(PARTITION_KEY, category)
+    expect(mockTableClient.listEntities).toHaveBeenCalledWith({ queryOptions: { filter: mockOdata`category eq '${category}' and type eq '${PAYMENT_SUBMITTED}'` } })
   })
 })
