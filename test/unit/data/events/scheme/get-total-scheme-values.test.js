@@ -35,18 +35,18 @@ describe('get events', () => {
     expect(result.length).toBe(2)
   })
 
-  test('should return array of objects with schemeId, totalPaymentRequestsand totalValue', () => {
+  test('should return array of objects with schemeId, paymentRequests and value', () => {
     const result = getTotalSchemeValues(groupedEvents)
     expect(result[0]).toStrictEqual({
       schemeId: '5',
-      totalPaymentRequests: 3,
-      totalValue: 3000.00
+      paymentRequests: 3,
+      value: 300000
     })
   })
 
   test('total paymentRequests should equal number of events in each groupedEvent', () => {
     const result = getTotalSchemeValues(groupedEvents)
-    expect(result[0].totalPaymentRequests).toBe(groupedEvents[0].events.length)
+    expect(result[0].paymentRequests).toBe(groupedEvents[0].events.length)
   })
 
   test('schemeId should be equal to groupedEvents schemeId ', () => {
@@ -54,28 +54,28 @@ describe('get events', () => {
     expect(result[0].schemeId).toBe(groupedEvents[0].schemeId)
   })
 
-  test('totalValue should be equal to sum of events values when there are 3 events', () => {
+  test('value should be equal to sum of events values when there are 3 events', () => {
     const result = getTotalSchemeValues(groupedEvents)
-    expect(result[0].totalValue).toBe(3000.00)
+    expect(result[0].value).toBe(300000)
   })
 
-  test('totalValue should return in pounds', () => {
+  test('value should return in pounds', () => {
     const result = getTotalSchemeValues(groupedEvents)
-    expect(result[0].totalValue).toBe(3000.00)
+    expect(result[0].value).toBe(300000)
   })
 
-  test('totalValue should be equal to sum of events values when there is only one event', () => {
+  test('value should be equal to sum of events values when there is only one event', () => {
     groupedEvents[0].events.pop()
     groupedEvents[0].events.pop()
     const result = getTotalSchemeValues(groupedEvents)
-    expect(result[0].totalValue).toBe(1000.00)
+    expect(result[0].value).toBe(100000)
   })
 
-  test('totalValue shold be 0 when there is a value of 0', () => {
+  test('value shold be 0 when there is a value of 0', () => {
     groupedEvents[0].events.pop()
     groupedEvents[0].events.pop()
     groupedEvents[0].events[0].data.value = 0
     const result = getTotalSchemeValues(groupedEvents)
-    expect(result[0].totalValue).toBe(0)
+    expect(result[0].value).toBe(0)
   })
 })
