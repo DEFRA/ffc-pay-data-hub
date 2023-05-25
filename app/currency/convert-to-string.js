@@ -1,6 +1,6 @@
 const { convertToPounds } = require('./convert-to-pounds')
 
-const covertToString = (valueInPence) => {
+const convertToString = (valueInPence) => {
   if (!valueInPence) {
     return '£0.00'
   }
@@ -11,5 +11,5 @@ const covertToString = (valueInPence) => {
 }
 
 module.exports = {
-  covertToString
+  convertToString
 }
