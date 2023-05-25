@@ -1,7 +1,7 @@
 const { BATCH } = require('../../../constants/categories')
 const { getEvents } = require('../get-events')
 const { groupEventsByFrn } = require('./group-events-by-frn')
-const { orderGroupedEvents } = require('./order-grouped-events')
+const { orderGroupedEvents } = require('../order-grouped-events')
 const { sanitiseEvents } = require('../sanitise-events')
 
 const getEventsByBatch = async (batch) => {
