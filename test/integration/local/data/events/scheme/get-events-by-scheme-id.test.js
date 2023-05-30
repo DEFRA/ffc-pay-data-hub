@@ -1,6 +1,7 @@
+const { odata } = require('@azure/data-tables')
 const { FRN } = require('../../../../../mocks/values/frn')
 const { INVOICE_NUMBER } = require('../../../../../mocks/values/invoice-number')
-const { odata } = require('@azure/data-tables')
+const { BPS, CS, SFI } = require('../../../../../../app/constants/schemes')
 
 const { PAYMENT_EVENT, HOLD_EVENT, BATCH_EVENT, WARNING_EVENT } = require('../../../../../../app/constants/event-types')
 
@@ -13,9 +14,19 @@ let batchClient
 let warningClient
 
 let paymentSubmittedEvent
-// let holdEvent
-// let batchEvent
-// let warningEvent
+let paymentProcessedEvent
+let paymentEnrichedEvent
+let paymentExtractedEvent
+
+const formatAndAddEvent = async (tableClient, event, schemeId) => {
+  const formattedEvent = {
+    ...event,
+    partitionKey: schemeId.toString(),
+    rowKey: `${FRN}|${INVOICE_NUMBER}|157070221${Math.round(Math.random() * 10000)}`,
+    data: JSON.stringify(event.data)
+  }
+  await tableClient.createEntity(formattedEvent)
+}
 
 beforeAll(async () => {
   await initialiseTables()
@@ -37,9 +48,27 @@ beforeEach(async () => {
   warningClient.createTable()
 
   paymentSubmittedEvent = JSON.parse(JSON.stringify(require('../../../../../mocks/events/submitted')))
-  // holdEvent = JSON.parse(JSON.stringify(require('../../mocks/events/hold')))
-  // batchEvent = JSON.parse(JSON.stringify(require('../../mocks/events/batch')))
-  // warningEvent = JSON.parse(JSON.stringify(require('../../mocks/events/warning')))
+  paymentProcessedEvent = JSON.parse(JSON.stringify(require('../../../../../mocks/events/processed')))
+  paymentEnrichedEvent = JSON.parse(JSON.stringify(require('../../../../../mocks/events/enriched')))
+  paymentExtractedEvent = JSON.parse(JSON.stringify(require('../../../../../mocks/events/extracted')))
+
+  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, SFI)
+  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, SFI)
+  await formatAndAddEvent(paymentClient, paymentProcessedEvent, SFI)
+  await formatAndAddEvent(paymentClient, paymentEnrichedEvent, SFI)
+  await formatAndAddEvent(paymentClient, paymentExtractedEvent, SFI)
+
+  formatAndAddEvent(paymentClient, paymentSubmittedEvent, CS)
+  formatAndAddEvent(paymentClient, paymentSubmittedEvent, CS)
+  formatAndAddEvent(paymentClient, paymentProcessedEvent, CS)
+  formatAndAddEvent(paymentClient, paymentEnrichedEvent, CS)
+  formatAndAddEvent(paymentClient, paymentExtractedEvent, CS)
+
+  formatAndAddEvent(paymentClient, paymentSubmittedEvent, BPS)
+  formatAndAddEvent(paymentClient, paymentSubmittedEvent, BPS)
+  formatAndAddEvent(paymentClient, paymentProcessedEvent, BPS)
+  formatAndAddEvent(paymentClient, paymentEnrichedEvent, BPS)
+  formatAndAddEvent(paymentClient, paymentExtractedEvent, BPS)
 })
 
 const countAsyncIterator = async (iterator) => {
@@ -50,25 +79,13 @@ const countAsyncIterator = async (iterator) => {
   return count
 }
 
-const formatAndAddEvent = async (tableClient, event, schemeId) => {
-  const formattedEvent = {
-    ...event,
-    data: JSON.stringify(event.data),
-    partitionKey: schemeId,
-    rowKey: `${FRN}|${INVOICE_NUMBER}|157070221${Math.round(Math.random() * 10000)}`
-  }
-  await tableClient.createEntity(formattedEvent)
-}
-
 describe('get events by schemeId', () => {
   test('to aid development of putting data into tables', async () => {
-    await formatAndAddEvent(paymentClient, paymentSubmittedEvent, '1')
-    await formatAndAddEvent(paymentClient, paymentSubmittedEvent, '1')
     const results = paymentClient.listEntities({
       queryOptions: { filter: odata`PartitionKey eq '1'` }
     })
     const total = await countAsyncIterator(results)
-    expect(total).toBe(2)
+    expect(total).toBe(5)
   })
 })
 
