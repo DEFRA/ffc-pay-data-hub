@@ -1,11 +1,11 @@
-const { odata } = require('@azure/data-tables')
 const { FRN } = require('../../../../../mocks/values/frn')
 const { INVOICE_NUMBER } = require('../../../../../mocks/values/invoice-number')
 const { BPS, CS, SFI } = require('../../../../../../app/constants/schemes')
+const schemeNames = require('../../../../../../app/constants/scheme-names')
 
 const { PAYMENT_EVENT, HOLD_EVENT, BATCH_EVENT, WARNING_EVENT } = require('../../../../../../app/constants/event-types')
 
-// const { getEventsBySchemeId } = require('../../../../../../app/data/events/scheme-id/get-events-by-scheme-id')
+const { getEventsBySchemeId } = require('../../../../../../app/data/events/scheme-id/get-events-by-scheme-id')
 const { initialise: initialiseTables, getClient } = require('../../../../../../app/storage')
 
 let paymentClient
@@ -23,7 +23,8 @@ const formatAndAddEvent = async (tableClient, event, schemeId) => {
     ...event,
     partitionKey: schemeId.toString(),
     rowKey: `${FRN}|${INVOICE_NUMBER}|157070221${Math.round(Math.random() * 10000)}`,
-    data: JSON.stringify(event.data)
+    data: JSON.stringify(event.data),
+    category: 'schemeId'
   }
   await tableClient.createEntity(formattedEvent)
 }
@@ -58,36 +59,77 @@ beforeEach(async () => {
   await formatAndAddEvent(paymentClient, paymentEnrichedEvent, SFI)
   await formatAndAddEvent(paymentClient, paymentExtractedEvent, SFI)
 
-  formatAndAddEvent(paymentClient, paymentSubmittedEvent, CS)
-  formatAndAddEvent(paymentClient, paymentSubmittedEvent, CS)
-  formatAndAddEvent(paymentClient, paymentProcessedEvent, CS)
-  formatAndAddEvent(paymentClient, paymentEnrichedEvent, CS)
-  formatAndAddEvent(paymentClient, paymentExtractedEvent, CS)
+  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, CS)
+  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, CS)
+  await formatAndAddEvent(paymentClient, paymentProcessedEvent, CS)
+  await formatAndAddEvent(paymentClient, paymentEnrichedEvent, CS)
+  await formatAndAddEvent(paymentClient, paymentExtractedEvent, CS)
 
-  formatAndAddEvent(paymentClient, paymentSubmittedEvent, BPS)
-  formatAndAddEvent(paymentClient, paymentSubmittedEvent, BPS)
-  formatAndAddEvent(paymentClient, paymentProcessedEvent, BPS)
-  formatAndAddEvent(paymentClient, paymentEnrichedEvent, BPS)
-  formatAndAddEvent(paymentClient, paymentExtractedEvent, BPS)
+  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, BPS)
+  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, BPS)
+  await formatAndAddEvent(paymentClient, paymentProcessedEvent, BPS)
+  await formatAndAddEvent(paymentClient, paymentEnrichedEvent, BPS)
+  await formatAndAddEvent(paymentClient, paymentExtractedEvent, BPS)
 })
-
-const countAsyncIterator = async (iterator) => {
-  let count = 0
-  for await (const _ of iterator) { // eslint-disable-line no-unused-vars
-    count++
-  }
-  return count
-}
 
 describe('get events by schemeId', () => {
-  test('to aid development of putting data into tables', async () => {
-    const results = paymentClient.listEntities({
-      queryOptions: { filter: odata`PartitionKey eq '1'` }
-    })
-    const total = await countAsyncIterator(results)
-    expect(total).toBe(5)
+  test('should return data for SFI scheme only', async () => {
+    const result = await getEventsBySchemeId(SFI)
+    console.log(result)
+    expect(result[0].scheme).toBe(schemeNames[SFI])
+  })
+
+  test('should return total number of submitted payment request events for SFI scheme only', async () => {
+    const result = await getEventsBySchemeId(SFI)
+    expect(result[0].paymentRequests).toBe(2)
+  })
+
+  test('should return total value of payment requests for SFI scheme only', async () => {
+    const result = await getEventsBySchemeId(SFI)
+    expect(result[0].value).toBe(2000)
+  })
+
+  test('should return data for CS scheme only', async () => {
+    const result = await getEventsBySchemeId(CS)
+    console.log(result)
+    expect(result[1].scheme).toBe(schemeNames[CS])
+  })
+
+  test('should return total number of submitted payment request events for CS scheme only', async () => {
+    const result = await getEventsBySchemeId(CS)
+    expect(result[1].paymentRequests).toBe(2)
+  })
+
+  test('should return total value of payment requests for CS scheme only', async () => {
+    const result = await getEventsBySchemeId(CS)
+    expect(result[1].value).toBe(2000)
+  })
+
+  test('should return data for BPS scheme only', async () => {
+    const result = await getEventsBySchemeId(BPS)
+    console.log(result)
+    expect(result[2].scheme).toBe(schemeNames[BPS])
+  })
+
+  test('should return total number of submitted payment request events for BPS scheme only', async () => {
+    const result = await getEventsBySchemeId(BPS)
+    expect(result[2].paymentRequests).toBe(2)
+  })
+
+  test('should return total value of payment requests for BPS scheme only', async () => {
+    const result = await getEventsBySchemeId(BPS)
+    expect(result[2].value).toBe(2000)
+  })
+
+  test('should order scheme data by schemeId', async () => {
+    const result = await getEventsBySchemeId(BPS)
+    expect(result[0].scheme).toBe(schemeNames[SFI])
+    expect(result[1].scheme).toBe(schemeNames[CS])
+    expect(result[2].scheme).toBe(schemeNames[BPS])
+  })
+
+  test('should return all schemes present when any schemeId is given', async () => {
+    const result = await getEventsBySchemeId(CS)
+    expect(result.length).toBe(3)
   })
 })
-
-// bulk add some events - what shcemes? what types?
-// write the tests based on written code
