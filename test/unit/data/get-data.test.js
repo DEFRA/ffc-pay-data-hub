@@ -6,12 +6,10 @@ const { CORRELATION_ID: CORRELATION_ID_VALUE } = require('../../mocks/values/cor
 const { BATCH: BATCH_VALUE } = require('../../mocks/values/batch')
 const { SCHEME_ID: SCHEME_ID_VALUE } = require('../../mocks/values/scheme-id')
 
-
 const { FRN: FRN_CATEGORY } = require('../../../app/constants/categories')
 const { CORRELATION_ID: CORRELATION_ID_CATEGORY } = require('../../../app/constants/categories')
 const { BATCH: BATCH_CATEGORY } = require('../../../app/constants/categories')
-const {  SCHEME_ID: SCHEME_ID_CATEGORY } = require('../../../app/constants/categories')
-
+const { SCHEME_ID: SCHEME_ID_CATEGORY } = require('../../../app/constants/categories')
 
 const { getData } = require('../../../app/data/get-data')
 
@@ -35,9 +33,9 @@ describe('get data', () => {
     expect(mockGetEventsByBatch).toHaveBeenCalledWith(BATCH_VALUE)
   })
 
-  test('should get batch events for batch category', async () => {
-    await getData(BATCH_CATEGORY, BATCH_VALUE)
-    expect(mockGetEventsByBatch).toHaveBeenCalledWith(BATCH_VALUE)
+  test('should get schemeId events for schemeId category', async () => {
+    await getData(SCHEME_ID_CATEGORY, SCHEME_ID_VALUE)
+    expect(mockGetEventsByBatch).toHaveBeenCalledWith(SCHEME_ID_VALUE)
   })
 
   test('should throw an error for unknown category', async () => {
