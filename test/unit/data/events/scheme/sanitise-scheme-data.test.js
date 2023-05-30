@@ -1,5 +1,5 @@
-jest.mock('../../../../../app/currency-convert')
-const { convertToPounds } = require('../../../../../app/currency-convert')
+jest.mock('../../../../../app/currency')
+const { convertToPounds } = require('../../../../../app/currency')
 
 const schemeNames = require('../../../../../app/constants/scheme-names')
 const { sanitiseSchemeData } = require('../../../../../app/data/events/scheme-id/sanitise-scheme-data')

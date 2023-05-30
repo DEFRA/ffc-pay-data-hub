@@ -1,5 +1,5 @@
 const schemeNames = require('../../../constants/scheme-names')
-const { convertToPounds } = require('../../../currency-convert')
+const { convertToPounds } = require('../../../currency')
 // this makes the data easier for payweb to consume
 const sanitiseSchemeData = (schemeData) => {
   return schemeData.map(scheme => ({
