@@ -1,10 +1,8 @@
 const groupEventsByScheme = (events) => {
   return [...events.reduce((x, y) => {
-    const key = y.partitionKey // this is scheme
+    const key = y.partitionKey
 
     const item = x.get(key) || Object.assign({}, {
-      // what properties for each group
-      // this is each scheme
       schemeId: y.partitionKey,
       events: []
     })
