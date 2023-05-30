@@ -14,16 +14,19 @@ jest.mock('../../../../../app/data/events/add-values')
 const { addValues: mockAddValues } = require('../../../../../app/data/events/add-values')
 
 const { FRN: FRN_VALUE } = require('../../../../mocks/values/frn')
-const { FRN: FRN_CATEGORY } = require('../../../../../app/constants/categories')
 const enriched = require('../../../../mocks/events/enriched')
 const groupedEvent = require('../../../../mocks/events/grouped-event')
+
+const { FRN: FRN_CATEGORY } = require('../../../../../app/constants/categories')
 
 const { getEventsByFrn } = require('../../../../../app/data/events/frn/get-events-by-frn')
 
 describe('get events by frn', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+
     mockGetEvents.mockResolvedValue([enriched])
+
     mockGroupEventsByFrn.mockReturnValue(groupedEvent)
     mockOrderGroupedEvents.mockReturnValue(groupedEvent)
     mockSanitiseEvents.mockReturnValue(groupedEvent)

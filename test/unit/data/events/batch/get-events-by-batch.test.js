@@ -24,6 +24,7 @@ const { getEventsByBatch } = require('../../../../../app/data/events/batch/get-e
 describe('get events by batch', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+
     mockGetEvents.mockResolvedValue([enriched])
     mockGroupEventsByFrn.mockReturnValue(groupedEvent)
     mockOrderGroupedEvents.mockReturnValue(groupedEvent)

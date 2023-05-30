@@ -1,13 +1,13 @@
-const { 1: SFI } = require('../../../../app/constants/scheme-names')
-const { PAYMENT_ACKNOWLEDGED_STATUS, PAYMENT_ENRICHED_STATUS } = require('../../../../app/constants/statuses')
-const { PAYMENT_ACKNOWLEDGED_NAME, PAYMENT_ENRICHED_NAME } = require('../../../../app/constants/names')
-const { COMPLETED, IN_PROGRESS } = require('../../../../app/constants/states')
-
 const extracted = require('../../../mocks/events/extracted')
 const acknowledged = require('../../../mocks/events/acknowledged')
 const enriched = require('../../../mocks/events/enriched')
 const processed = require('../../../mocks/events/processed')
 const submitted = require('../../../mocks/events/submitted')
+
+const { 1: SFI } = require('../../../../app/constants/scheme-names')
+const { PAYMENT_ACKNOWLEDGED_STATUS, PAYMENT_ENRICHED_STATUS } = require('../../../../app/constants/statuses')
+const { PAYMENT_ACKNOWLEDGED_NAME, PAYMENT_ENRICHED_NAME } = require('../../../../app/constants/names')
+const { COMPLETED, IN_PROGRESS } = require('../../../../app/constants/states')
 
 const { sanitiseEvents } = require('../../../../app/data/events/sanitise-events')
 
