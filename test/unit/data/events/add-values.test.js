@@ -22,7 +22,7 @@ describe('add value to events', () => {
     expect(result).toHaveLength(0)
   })
 
-  test('should include all group level properties', () => {
+  test('should include all existing group level properties', () => {
     const result = addValues([groupedEvent])
     expect(result[0]).toMatchObject(groupedEvent)
   })
