@@ -1,8 +1,5 @@
 const { BPS, CS, SFI } = require('../../../../../app/constants/schemes')
-const enriched = require('../../../../mocks/events/enriched')
-const processed = require('../../../../mocks/events/processed')
 const submitted = require('../../../../mocks/events/submitted')
-const acknowledged = require('../../../../mocks/events/acknowledged')
 
 const { groupEventsByScheme } = require('../../../../../app/data/events/scheme-id/group-events-by-scheme')
 
@@ -21,28 +18,17 @@ describe('group events by FRN', () => {
       }
     })
 
-    events = [enriched, processed, submitted, acknowledged]
+    events = [submitted, submitted]
     bpsEvents = createEventsForScheme(BPS, events)
     csEvents = createEventsForScheme(CS, events)
     sfiEvents = createEventsForScheme(SFI, events)
     mixedSchemeEvents = [...bpsEvents, ...csEvents, ...sfiEvents]
   })
 
-  test('test1', () => {
-    console.log(mixedSchemeEvents)
-    const groupedEvents = groupEventsByScheme(mixedSchemeEvents)
-    console.log(groupedEvents)
-  })
-
   test('returned schemeId should be equal to partitionKey of all events in eventGroup', () => {
-    const groupedEvents = groupEventsByScheme(bpsEvents)
+    const groupedEvents = groupEventsByScheme(mixedSchemeEvents)
     groupedEvents.forEach(eventGroup => {
       eventGroup.events.forEach(event => expect(eventGroup.schemeId).toBe(event.partitionKey))
     })
   })
-
-  // test('should split events by schemeId', () => {
-  //   const groupedEvents = groupEventsByScheme(mixedSchemeEvents)
-  //   expect(groupedEvents[0].events).toEqual(bpsEvents)
-  // })
 })
