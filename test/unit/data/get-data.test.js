@@ -4,10 +4,14 @@ const { getEventsByFrn: mockGetEventsByFrn, getEventsByCorrelationId: mockGetEve
 const { FRN: FRN_VALUE } = require('../../mocks/values/frn')
 const { CORRELATION_ID: CORRELATION_ID_VALUE } = require('../../mocks/values/correlation-id')
 const { BATCH: BATCH_VALUE } = require('../../mocks/values/batch')
+const { SCHEME_ID: SCHEME_ID_VALUE } = require('../../mocks/values/scheme-id')
+
 
 const { FRN: FRN_CATEGORY } = require('../../../app/constants/categories')
 const { CORRELATION_ID: CORRELATION_ID_CATEGORY } = require('../../../app/constants/categories')
 const { BATCH: BATCH_CATEGORY } = require('../../../app/constants/categories')
+const {  SCHEME_ID: SCHEME_ID_CATEGORY } = require('../../../app/constants/categories')
+
 
 const { getData } = require('../../../app/data/get-data')
 
@@ -24,6 +28,11 @@ describe('get data', () => {
   test('should get correlation ID events for correlation ID category', async () => {
     await getData(CORRELATION_ID_CATEGORY, CORRELATION_ID_VALUE)
     expect(mockGetEventsByCorrelationId).toHaveBeenCalledWith(CORRELATION_ID_VALUE)
+  })
+
+  test('should get schemeId events for scheme category', async () => {
+    await getData(BATCH_CATEGORY, BATCH_VALUE)
+    expect(mockGetEventsByBatch).toHaveBeenCalledWith(BATCH_VALUE)
   })
 
   test('should get batch events for batch category', async () => {

@@ -10,11 +10,6 @@ const convertToPence = (valueInPounds) => {
   }
 }
 
-const convertToPounds = (valueInPence) => {
-  return valueInPence / 100
-}
-
 module.exports = {
-  convertToPence,
-  convertToPounds
+  convertToPence
 }
