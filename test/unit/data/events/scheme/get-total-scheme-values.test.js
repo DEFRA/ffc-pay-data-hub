@@ -59,11 +59,6 @@ describe('get events', () => {
     expect(result[0].value).toBe(300000)
   })
 
-  test('value should return in pounds', () => {
-    const result = getTotalSchemeValues(groupedEvents)
-    expect(result[0].value).toBe(300000)
-  })
-
   test('value should be equal to sum of events values when there is only one event', () => {
     groupedEvents[0].events.pop()
     groupedEvents[0].events.pop()
