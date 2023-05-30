@@ -1,6 +1,6 @@
-const { convertToPence } = require('../../app/currency-convert')
+const { convertToPence } = require('../../../app/currency/convert-to-pence')
 
-describe('convert currency', () => {
+describe('convert to pence', () => {
   test('converts 100 to pence', () => {
     const result = convertToPence(100)
     expect(result).toEqual(10000)

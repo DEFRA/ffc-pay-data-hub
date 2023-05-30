@@ -1,13 +1,13 @@
-const { 1: SFI } = require('../../../../app/constants/scheme-names')
-const { PAYMENT_ACKNOWLEDGED_STATUS, PAYMENT_ENRICHED_STATUS } = require('../../../../app/constants/statuses')
-const { PAYMENT_ACKNOWLEDGED_NAME, PAYMENT_ENRICHED_NAME } = require('../../../../app/constants/names')
-const { COMPLETED, IN_PROGRESS } = require('../../../../app/constants/states')
-
 const extracted = require('../../../mocks/events/extracted')
 const acknowledged = require('../../../mocks/events/acknowledged')
 const enriched = require('../../../mocks/events/enriched')
 const processed = require('../../../mocks/events/processed')
 const submitted = require('../../../mocks/events/submitted')
+
+const { 1: SFI } = require('../../../../app/constants/scheme-names')
+const { PAYMENT_ACKNOWLEDGED_STATUS, PAYMENT_ENRICHED_STATUS } = require('../../../../app/constants/statuses')
+const { PAYMENT_ACKNOWLEDGED_NAME, PAYMENT_ENRICHED_NAME } = require('../../../../app/constants/names')
+const { COMPLETED, IN_PROGRESS } = require('../../../../app/constants/states')
 
 const { sanitiseEvents } = require('../../../../app/data/events/sanitise-events')
 
@@ -54,9 +54,9 @@ describe('sanitise events', () => {
     expect(result[0].status.default).toBe(true)
   })
 
-  test('should add last updated as last event time formatted as string', () => {
+  test('should add last updated as last event time formatted as string in London timezone', () => {
     const result = sanitiseEvents([groupedEvent])
-    expect(result[0].lastUpdated).toBe('30/03/2023 00:00')
+    expect(result[0].lastUpdated).toBe('30/03/2023 01:00')
   })
 
   test('should include all events in group', () => {
@@ -101,8 +101,8 @@ describe('sanitise events', () => {
     expect(result[0].events[0].status.default).toBe(true)
   })
 
-  test('should add timestamp as event time formatted as string', () => {
+  test('should add timestamp as event time formatted as string in London timezone', () => {
     const result = sanitiseEvents([groupedEvent])
-    expect(result[0].events[0].timestamp).toBe('30/03/2023 00:00')
+    expect(result[0].events[0].timestamp).toBe('30/03/2023 01:00')
   })
 })

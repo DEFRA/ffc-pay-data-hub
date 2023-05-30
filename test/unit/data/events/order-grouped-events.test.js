@@ -1,15 +1,15 @@
-const acknowledged = require('../../../../mocks/events/acknowledged')
-const enriched = require('../../../../mocks/events/enriched')
-const processed = require('../../../../mocks/events/processed')
-const submitted = require('../../../../mocks/events/submitted')
+const acknowledged = require('../../../mocks/events/acknowledged')
+const enriched = require('../../../mocks/events/enriched')
+const processed = require('../../../mocks/events/processed')
+const submitted = require('../../../mocks/events/submitted')
 
-const { orderGroupedEvents } = require('../../../../../app/data/events/frn/order-grouped-events')
+const { orderGroupedEvents } = require('../../../../app/data/events/order-grouped-events')
 
 let groupedEvent
 
 describe('order grouped events', () => {
   beforeEach(() => {
-    groupedEvent = JSON.parse(JSON.stringify(require('../../../../mocks/events/grouped-event')))
+    groupedEvent = JSON.parse(JSON.stringify(require('../../../mocks/events/grouped-event')))
     groupedEvent.events = [acknowledged, processed, enriched, submitted]
   })
 
