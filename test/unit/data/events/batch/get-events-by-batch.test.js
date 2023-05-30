@@ -1,8 +1,8 @@
 jest.mock('../../../../../app/data/events/get-events')
 const { getEvents: mockGetEvents } = require('../../../../../app/data/events/get-events')
 
-jest.mock('../../../../../app/data/events/frn/group-events-by-frn')
-const { groupEventsByFrn: mockGroupEventsByFrn } = require('../../../../../app/data/events/frn/group-events-by-frn')
+jest.mock('../../../../../app/data/events/batch/group-events-by-frn')
+const { groupEventsByFrn: mockGroupEventsByFrn } = require('../../../../../app/data/events/batch/group-events-by-frn')
 
 jest.mock('../../../../../app/data/events/order-grouped-events')
 const { orderGroupedEvents: mockOrderGroupedEvents } = require('../../../../../app/data/events/order-grouped-events')
@@ -13,47 +13,46 @@ const { sanitiseEvents: mockSanitiseEvents } = require('../../../../../app/data/
 jest.mock('../../../../../app/data/events/add-values')
 const { addValues: mockAddValues } = require('../../../../../app/data/events/add-values')
 
-const { FRN: FRN_VALUE } = require('../../../../mocks/values/frn')
+const { BATCH: BATCH_VALUE } = require('../../../../mocks/values/batch')
 const enriched = require('../../../../mocks/events/enriched')
 const groupedEvent = require('../../../../mocks/events/grouped-event')
 
-const { FRN: FRN_CATEGORY } = require('../../../../../app/constants/categories')
+const { BATCH: BATCH_CATEGORY } = require('../../../../../app/constants/categories')
 
-const { getEventsByFrn } = require('../../../../../app/data/events/frn/get-events-by-frn')
+const { getEventsByBatch } = require('../../../../../app/data/events/batch/get-events-by-batch')
 
-describe('get events by frn', () => {
+describe('get events by batch', () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
     mockGetEvents.mockResolvedValue([enriched])
-
     mockGroupEventsByFrn.mockReturnValue(groupedEvent)
     mockOrderGroupedEvents.mockReturnValue(groupedEvent)
     mockSanitiseEvents.mockReturnValue(groupedEvent)
   })
 
-  test('should get events for FRN', async () => {
-    await getEventsByFrn(FRN_VALUE)
-    expect(mockGetEvents).toHaveBeenCalledWith(FRN_VALUE, FRN_CATEGORY)
+  test('should get events for batch', async () => {
+    await getEventsByBatch(BATCH_VALUE)
+    expect(mockGetEvents).toHaveBeenCalledWith(BATCH_VALUE, BATCH_CATEGORY)
   })
 
   test('should group events by FRN', async () => {
-    await getEventsByFrn(FRN_VALUE)
+    await getEventsByBatch(BATCH_VALUE)
     expect(mockGroupEventsByFrn).toHaveBeenCalledWith([enriched])
   })
 
   test('should order grouped events', async () => {
-    await getEventsByFrn(FRN_VALUE)
+    await getEventsByBatch(BATCH_VALUE)
     expect(mockOrderGroupedEvents).toHaveBeenCalledWith(groupedEvent)
   })
 
   test('should sanitise events', async () => {
-    await getEventsByFrn(FRN_VALUE)
+    await getEventsByBatch(BATCH_VALUE)
     expect(mockSanitiseEvents).toHaveBeenCalledWith(groupedEvent)
   })
 
   test('should add values to events', async () => {
-    await getEventsByFrn(FRN_VALUE)
+    await getEventsByBatch(BATCH_VALUE)
     expect(mockAddValues).toHaveBeenCalledWith(groupedEvent)
   })
 })

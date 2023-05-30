@@ -15,7 +15,7 @@
   },
   "author": "Defra",
   "contributors": [
-    "John Watson john.watson2@rpa.gov.uk"
+    "John Watson john.watson1@defra.gov.uk"
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
@@ -28,6 +28,7 @@
     "joi": "17.7.1",
     "log-timestamp": "0.3.0",
     "moment": "2.29.4",
+    "moment-timezone": "0.5.43",
     "redis": "4.6.5"
   },
   "devDependencies": {
