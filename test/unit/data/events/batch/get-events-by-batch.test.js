@@ -14,9 +14,10 @@ jest.mock('../../../../../app/data/events/add-values')
 const { addValues: mockAddValues } = require('../../../../../app/data/events/add-values')
 
 const { BATCH: BATCH_VALUE } = require('../../../../mocks/values/batch')
-const { BATCH: BATCH_CATEGORY } = require('../../../../../app/constants/categories')
 const enriched = require('../../../../mocks/events/enriched')
 const groupedEvent = require('../../../../mocks/events/grouped-event')
+
+const { BATCH: BATCH_CATEGORY } = require('../../../../../app/constants/categories')
 
 const { getEventsByBatch } = require('../../../../../app/data/events/batch/get-events-by-batch')
 
