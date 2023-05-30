@@ -1,9 +1,9 @@
 const moment = require('moment-timezone')
 const schemeNames = require('../../constants/scheme-names')
 const eventDetails = require('../../constants/event-details')
-const { PAYMENT_EXTRACTED } = require('../../constants/events')
-const { DATE } = require('../../constants/date-format')
 const { TIMEZONE } = require('../../constants/timezone')
+const { DATE } = require('../../constants/date-format')
+const { PAYMENT_EXTRACTED } = require('../../constants/events')
 const { convertToPence } = require('../../currency')
 
 const sanitiseEvents = (events) => {
