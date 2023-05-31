@@ -86,7 +86,7 @@ describe('get events by schemeId', () => {
 
   test('should return total value of payment requests for SFI scheme only', async () => {
     const result = await getEventsBySchemeId(SFI)
-    expect(result[0].value).toBe('2000.00')
+    expect(result[0].value).toBe('£2,000.00')
   })
 
   test('should return data for CS scheme only', async () => {
@@ -102,7 +102,7 @@ describe('get events by schemeId', () => {
 
   test('should return total value of payment requests for CS scheme only', async () => {
     const result = await getEventsBySchemeId(CS)
-    expect(result[1].value).toBe('2000.00')
+    expect(result[1].value).toBe('£2,000.00')
   })
 
   test('should return data for BPS scheme only', async () => {
@@ -118,7 +118,7 @@ describe('get events by schemeId', () => {
 
   test('should return total value of payment requests for BPS scheme only', async () => {
     const result = await getEventsBySchemeId(BPS)
-    expect(result[2].value).toBe('2000.00')
+    expect(result[2].value).toBe('£2,000.00')
   })
 
   test('should order scheme data by schemeId', async () => {

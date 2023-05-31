@@ -1,5 +1,5 @@
 jest.mock('../../../../../app/currency')
-const { convertToPounds } = require('../../../../../app/currency')
+const { convertToString } = require('../../../../../app/currency')
 
 const schemeNames = require('../../../../../app/constants/scheme-names')
 const { sanitiseSchemeData } = require('../../../../../app/data/events/scheme-id/sanitise-scheme-data')
@@ -23,6 +23,6 @@ describe('get events by frn', () => {
 
   test('should call convertToPounds with totalSchemeValues.value', async () => {
     sanitiseSchemeData([totalSchemeValues])
-    expect(convertToPounds).toBeCalledWith(totalSchemeValues.value)
+    expect(convertToString).toBeCalledWith(totalSchemeValues.value)
   })
 })
