@@ -13,7 +13,6 @@ const { getTotalSchemeValues: mockGetTotalSchemeValues } = require('../../../../
 jest.mock('../../../../../app/data/events/scheme-id/sanitise-scheme-data')
 const { sanitiseSchemeData: mockSanitiseSchemeData } = require('../../../../../app/data/events/scheme-id/sanitise-scheme-data')
 
-const { SCHEME_ID: SCHEME_ID_VALUE } = require('../../../../mocks/values/scheme-id')
 const { SCHEME_ID: SCHEME_ID_CATEGORY } = require('../../../../../app/constants/categories')
 const submitted = require('../../../../mocks/events/submitted')
 const groupedEvent = require('../../../../mocks/events/grouped-event')
@@ -31,28 +30,28 @@ describe('get events by frn', () => {
   })
 
   test('should get events for schemeId', async () => {
-    await getEventsBySchemeId(SCHEME_ID_VALUE)
+    await getEventsBySchemeId()
     console.log(mockGetSubmittedEvents.mockResolvedValue)
-    expect(mockGetSubmittedEvents).toHaveBeenCalledWith(SCHEME_ID_VALUE, SCHEME_ID_CATEGORY)
+    expect(mockGetSubmittedEvents).toHaveBeenCalledWith(SCHEME_ID_CATEGORY)
   })
 
   test('should group events by scheme', async () => {
-    await getEventsBySchemeId(SCHEME_ID_VALUE)
+    await getEventsBySchemeId()
     expect(mockGroupEventsByScheme).toHaveBeenCalledWith([submitted])
   })
 
   test('should get total values for scheme', async () => {
-    await getEventsBySchemeId(SCHEME_ID_VALUE)
+    await getEventsBySchemeId()
     expect(mockGetTotalSchemeValues).toHaveBeenCalledWith([groupedEvent])
   })
 
   test('should order grouped events', async () => {
-    await getEventsBySchemeId(SCHEME_ID_VALUE)
+    await getEventsBySchemeId()
     expect(mockOrderGroupedEventsByScheme).toHaveBeenCalledWith([totalSchemeValues])
   })
 
   test('should sanitise events', async () => {
-    await getEventsBySchemeId(SCHEME_ID_VALUE)
+    await getEventsBySchemeId()
     expect(mockSanitiseSchemeData).toHaveBeenCalledWith([totalSchemeValues])
   })
 })
