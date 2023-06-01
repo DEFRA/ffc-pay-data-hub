@@ -1,5 +1,5 @@
 jest.mock('../../../app/data/events')
-const { getEventsByFrn: mockGetEventsByFrn, getEventsByCorrelationId: mockGetEventsByCorrelationId, getEventsByBatch: mockGetEventsByBatch, getEventsBySchemeId: mockGetEventsBySchemeId } = require('../../../app/data/events')
+const { getEventsByFrn: mockGetEventsByFrn, getEventsByCorrelationId: mockGetEventsByCorrelationId, getEventsByBatch: mockGetEventsByBatch, getEventsByScheme: mockgetEventsByScheme } = require('../../../app/data/events')
 
 const { FRN: FRN_VALUE } = require('../../mocks/values/frn')
 const { CORRELATION_ID: CORRELATION_ID_VALUE } = require('../../mocks/values/correlation-id')
@@ -35,7 +35,7 @@ describe('get data', () => {
 
   test('should get schemeId events for schemeId category', async () => {
     await getData(SCHEME_ID_CATEGORY, SCHEME_ID_VALUE)
-    expect(mockGetEventsBySchemeId).toHaveBeenCalledWith(SCHEME_ID_VALUE)
+    expect(mockgetEventsByScheme).toHaveBeenCalledWith()
   })
 
   test('should throw an error for unknown category', async () => {
