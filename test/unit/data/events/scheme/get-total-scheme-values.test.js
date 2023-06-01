@@ -1,5 +1,7 @@
-const { getTotalSchemeValues } = require('../../../../../app/data/events/scheme-id/get-total-scheme-values')
 const { BPS, CS } = require('../../../../../app/constants/schemes')
+
+const { getTotalSchemeValues } = require('../../../../../app/data/events/scheme-id/get-total-scheme-values')
+
 let submitted
 let bpsEvent
 let csEvent
@@ -54,7 +56,7 @@ describe('get events', () => {
     expect(result[0].schemeId).toBe(groupedEvents[0].schemeId)
   })
 
-  test('value should be equal to sum of events values when there are 3 events', () => {
+  test('value should be equal to sum of events values when there are multiple events', () => {
     const result = getTotalSchemeValues(groupedEvents)
     expect(result[0].value).toBe(300000)
   })

@@ -1,16 +1,13 @@
 jest.mock('../../../../../app/currency')
 const { convertToString } = require('../../../../../app/currency')
 
+const totalSchemeValues = require('../../../../mocks/total-scheme-values')
+
 const schemeNames = require('../../../../../app/constants/scheme-names')
+
 const { sanitiseSchemeData } = require('../../../../../app/data/events/scheme-id/sanitise-scheme-data')
 
-const totalSchemeValues = require('../../../../mocks/events/total-scheme-values')
-
 describe('get events by frn', () => {
-  beforeEach(() => {
-
-  })
-
   test('should map schemeId value to scheme name', async () => {
     const result = sanitiseSchemeData([totalSchemeValues])
     expect(result[0].scheme).toBe(schemeNames[1])

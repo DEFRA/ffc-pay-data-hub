@@ -1,9 +1,9 @@
-
-const { orderGroupedEventsByScheme } = require('../../../../../app/data/events/scheme-id/order-grouped-events-by-scheme')
 const { SFI, SFI_PILOT, LUMP_SUMS, VET_VISITS, CS, BPS, FDMR } = require('../../../../../app/constants/schemes')
 
-let groupedEvents
+const { orderGroupedEventsByScheme } = require('../../../../../app/data/events/scheme-id/order-grouped-events-by-scheme')
+
 let groupedEvent
+let groupedEvents
 
 let sfiEvent
 let sfiPilotEvent

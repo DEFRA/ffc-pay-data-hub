@@ -17,6 +17,7 @@ const { stringifyEventData } = require('../../../../helpers/stringify-event-data
 const { getSubmittedEvents } = require('../../../../../app/data/events/scheme-id/get-submitted-events')
 
 const category = 'schemeId'
+
 let extractedEvent
 let enrichedEvent
 let events

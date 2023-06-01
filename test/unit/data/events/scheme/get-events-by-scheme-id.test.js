@@ -13,10 +13,11 @@ const { getTotalSchemeValues: mockGetTotalSchemeValues } = require('../../../../
 jest.mock('../../../../../app/data/events/scheme-id/sanitise-scheme-data')
 const { sanitiseSchemeData: mockSanitiseSchemeData } = require('../../../../../app/data/events/scheme-id/sanitise-scheme-data')
 
-const { SCHEME_ID: SCHEME_ID_CATEGORY } = require('../../../../../app/constants/categories')
 const submitted = require('../../../../mocks/events/submitted')
 const groupedEvent = require('../../../../mocks/events/grouped-event')
-const totalSchemeValues = require('../../../../mocks/events/total-scheme-values')
+const totalSchemeValues = require('../../../../mocks/total-scheme-values')
+
+const { SCHEME_ID: SCHEME_ID_CATEGORY } = require('../../../../../app/constants/categories')
 
 const { getEventsBySchemeId } = require('../../../../../app/data/events/scheme-id/get-events-by-scheme-id')
 

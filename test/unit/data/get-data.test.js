@@ -28,7 +28,7 @@ describe('get data', () => {
     expect(mockGetEventsByCorrelationId).toHaveBeenCalledWith(CORRELATION_ID_VALUE)
   })
 
-  test('should get schemeId events for scheme category', async () => {
+  test('should get batch events for batch category', async () => {
     await getData(BATCH_CATEGORY, BATCH_VALUE)
     expect(mockGetEventsByBatch).toHaveBeenCalledWith(BATCH_VALUE)
   })

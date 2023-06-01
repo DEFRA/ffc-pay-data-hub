@@ -1,9 +1,8 @@
 const { FRN } = require('../../../../../mocks/values/frn')
 const { INVOICE_NUMBER } = require('../../../../../mocks/values/invoice-number')
 const { BPS, CS, SFI } = require('../../../../../../app/constants/schemes')
-const schemeNames = require('../../../../../../app/constants/scheme-names')
-
 const { PAYMENT_EVENT, HOLD_EVENT, BATCH_EVENT, WARNING_EVENT } = require('../../../../../../app/constants/event-types')
+const schemeNames = require('../../../../../../app/constants/scheme-names')
 
 const { getEventsBySchemeId } = require('../../../../../../app/data/events/scheme-id/get-events-by-scheme-id')
 const { initialise: initialiseTables, getClient } = require('../../../../../../app/storage')
@@ -31,6 +30,7 @@ const formatAndAddEvent = async (tableClient, event, schemeId) => {
 
 beforeAll(async () => {
   await initialiseTables()
+
   paymentClient = getClient(PAYMENT_EVENT)
   holdClient = getClient(HOLD_EVENT)
   batchClient = getClient(BATCH_EVENT)
@@ -73,50 +73,50 @@ beforeEach(async () => {
 })
 
 describe('get events by schemeId', () => {
-  test('should return data for SFI scheme only', async () => {
+  test('should return data for SFI only', async () => {
     const result = await getEventsBySchemeId(SFI)
     console.log(result)
     expect(result[0].scheme).toBe(schemeNames[SFI])
   })
 
-  test('should return total number of submitted payment request events for SFI scheme only', async () => {
+  test('should return total number of submitted payment request events for SFI only', async () => {
     const result = await getEventsBySchemeId(SFI)
     expect(result[0].paymentRequests).toBe(2)
   })
 
-  test('should return total value of payment requests for SFI scheme only', async () => {
+  test('should return total value of payment requests for SFI only', async () => {
     const result = await getEventsBySchemeId(SFI)
     expect(result[0].value).toBe('£2,000.00')
   })
 
-  test('should return data for CS scheme only', async () => {
+  test('should return data for CS only', async () => {
     const result = await getEventsBySchemeId(CS)
     console.log(result)
     expect(result[1].scheme).toBe(schemeNames[CS])
   })
 
-  test('should return total number of submitted payment request events for CS scheme only', async () => {
+  test('should return total number of submitted payment request events for CS only', async () => {
     const result = await getEventsBySchemeId(CS)
     expect(result[1].paymentRequests).toBe(2)
   })
 
-  test('should return total value of payment requests for CS scheme only', async () => {
+  test('should return total value of payment requests for CS only', async () => {
     const result = await getEventsBySchemeId(CS)
     expect(result[1].value).toBe('£2,000.00')
   })
 
-  test('should return data for BPS scheme only', async () => {
+  test('should return data for BPS only', async () => {
     const result = await getEventsBySchemeId(BPS)
     console.log(result)
     expect(result[2].scheme).toBe(schemeNames[BPS])
   })
 
-  test('should return total number of submitted payment request events for BPS scheme only', async () => {
+  test('should return total number of submitted payment request events for BPS only', async () => {
     const result = await getEventsBySchemeId(BPS)
     expect(result[2].paymentRequests).toBe(2)
   })
 
-  test('should return total value of payment requests for BPS scheme only', async () => {
+  test('should return total value of payment requests for BPS only', async () => {
     const result = await getEventsBySchemeId(BPS)
     expect(result[2].value).toBe('£2,000.00')
   })
