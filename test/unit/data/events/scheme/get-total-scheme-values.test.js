@@ -61,7 +61,7 @@ describe('get events', () => {
     expect(result[0].value).toBe(300000)
   })
 
-  test('value should be equal to sum of events values when there is only one event', () => {
+  test('value should be equal to sum of events values when there is only one event in the first element of groupedEvents', () => {
     groupedEvents[0].events.pop()
     groupedEvents[0].events.pop()
     const result = getTotalSchemeValues(groupedEvents)

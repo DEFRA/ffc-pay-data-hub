@@ -26,7 +26,7 @@ describe('order grouped events', () => {
     groupedEvents = [bpsEvent, vetEvent, sfiEvent, sfiPilotEvent, lumpSumsEvent, csEvent, fdmrEvent]
   })
 
-  test('should order grouped events into sequence by schemeId when all schemes present', () => {
+  test('should sort grouped events into ascending order by schemeId when all schemes present', () => {
     const orderedGroupedEvents = orderGroupedEventsByScheme(groupedEvents)
     expect(orderedGroupedEvents[0].schemeId).toEqual(SFI)
     expect(orderedGroupedEvents[1].schemeId).toEqual(SFI_PILOT)
@@ -37,7 +37,7 @@ describe('order grouped events', () => {
     expect(orderedGroupedEvents[6].schemeId).toEqual(FDMR)
   })
 
-  test('should order grouped events into sequence by schemeId when only two schemes present', () => {
+  test('should sort grouped events into ascending order by schemeId when only two schemes present', () => {
     groupedEvents = [fdmrEvent, lumpSumsEvent]
     const orderedGroupedEvents = orderGroupedEventsByScheme(groupedEvents)
     expect(orderedGroupedEvents[0].schemeId).toEqual(LUMP_SUMS)
