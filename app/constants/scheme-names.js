@@ -5,7 +5,11 @@ const {
   VET_VISITS,
   CS,
   BPS,
-  FDMR
+  FDMR,
+  MANUAL,
+  ES,
+  FC,
+  IMPS
 } = require('./schemes')
 
 module.exports = {
@@ -15,5 +19,9 @@ module.exports = {
   [VET_VISITS]: 'Vet Visits',
   [CS]: 'CS',
   [BPS]: 'BPS',
-  [FDMR]: 'FDMR'
+  [FDMR]: 'FDMR',
+  [MANUAL]: 'Manual',
+  [ES]: 'ES',
+  [FC]: 'FC',
+  [IMPS]: 'IMPS'
 }
