@@ -25,7 +25,7 @@
     "@azure/storage-blob": "12.13.0",
     "@hapi/hoek": "11.0.2",
     "applicationinsights": "2.5.1",
-    "ffc-messaging": "2.6.5",
+    "ffc-messaging": "2.7.0",
     "joi": "17.7.1",
     "log-timestamp": "0.3.0",
     "moment": "2.29.4",
