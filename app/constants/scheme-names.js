@@ -9,7 +9,8 @@ const {
   MANUAL,
   ES,
   FC,
-  IMPS
+  IMPS,
+  SFI23
 } = require('./schemes')
 
 module.exports = {
@@ -23,5 +24,6 @@ module.exports = {
   [MANUAL]: 'Manual',
   [ES]: 'ES',
   [FC]: 'FC',
-  [IMPS]: 'IMPS'
+  [IMPS]: 'IMPS',
+  [SFI23]: 'SFI23'
 }
