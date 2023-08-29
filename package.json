@@ -1,6 +1,6 @@
 {
   "name": "ffc-pay-data-hub",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Data hub for FFC Payments",
   "homepage": "https://github.com/DEFRA/ffc-pay-data-hub",
   "main": "app/index.js",

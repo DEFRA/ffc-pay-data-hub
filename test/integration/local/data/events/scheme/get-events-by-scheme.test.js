@@ -18,11 +18,13 @@ let paymentProcessedEvent
 let paymentEnrichedEvent
 let paymentExtractedEvent
 
+let nextEventId
+
 const formatAndAddEvent = async (tableClient, event, schemeId) => {
   const formattedEvent = {
     ...event,
     partitionKey: schemeId.toString(),
-    rowKey: `${FRN}|${INVOICE_NUMBER}|157070221${Math.round(Math.random() * 10000)}`,
+    rowKey: `${FRN}|${INVOICE_NUMBER}|157070221${nextEventId++}`,
     data: JSON.stringify(event.data),
     category: 'schemeId'
   }
@@ -53,6 +55,8 @@ beforeEach(async () => {
   paymentProcessedEvent = JSON.parse(JSON.stringify(require('../../../../../mocks/events/processed')))
   paymentEnrichedEvent = JSON.parse(JSON.stringify(require('../../../../../mocks/events/enriched')))
   paymentExtractedEvent = JSON.parse(JSON.stringify(require('../../../../../mocks/events/extracted')))
+
+  nextEventId = 1
 
   await formatAndAddEvent(paymentClient, paymentSubmittedEvent, SFI)
   await formatAndAddEvent(paymentClient, paymentSubmittedEvent, SFI)
