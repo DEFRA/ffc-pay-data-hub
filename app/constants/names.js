@@ -13,5 +13,5 @@ module.exports = {
   PAYMENT_SUBMITTED_NAME: 'Submitted to payment ledger',
   PAYMENT_ACKNOWLEDGED_NAME: 'Acknowledged',
   PAYMENT_SETTLED_NAME: 'Settled',
-  PAYMENT_SUPPRESSED_NAME: 'Accounts repayable suppressed'
+  PAYMENT_SUPPRESSED_NAME: 'AR suppressed due to closure'
 }
