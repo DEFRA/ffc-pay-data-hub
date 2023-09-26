@@ -1,7 +1,7 @@
 const { FRN } = require('../../../../../mocks/values/frn')
 const { INVOICE_NUMBER } = require('../../../../../mocks/values/invoice-number')
 
-const { BPS, CS, SFI } = require('../../../../../../app/constants/schemes')
+const { BPS, CS, SFI, SFI23 } = require('../../../../../../app/constants/schemes')
 const { PAYMENT_EVENT, HOLD_EVENT, BATCH_EVENT, WARNING_EVENT } = require('../../../../../../app/constants/event-types')
 const schemeNames = require('../../../../../../app/constants/scheme-names')
 
@@ -18,11 +18,13 @@ let paymentProcessedEvent
 let paymentEnrichedEvent
 let paymentExtractedEvent
 
+let nextEventId
+
 const formatAndAddEvent = async (tableClient, event, schemeId) => {
   const formattedEvent = {
     ...event,
     partitionKey: schemeId.toString(),
-    rowKey: `${FRN}|${INVOICE_NUMBER}|157070221${Math.round(Math.random() * 10000)}`,
+    rowKey: `${FRN}|${INVOICE_NUMBER}|157070221${nextEventId++}`,
     data: JSON.stringify(event.data),
     category: 'schemeId'
   }
@@ -54,6 +56,8 @@ beforeEach(async () => {
   paymentEnrichedEvent = JSON.parse(JSON.stringify(require('../../../../../mocks/events/enriched')))
   paymentExtractedEvent = JSON.parse(JSON.stringify(require('../../../../../mocks/events/extracted')))
 
+  nextEventId = 1
+
   await formatAndAddEvent(paymentClient, paymentSubmittedEvent, SFI)
   await formatAndAddEvent(paymentClient, paymentSubmittedEvent, SFI)
   await formatAndAddEvent(paymentClient, paymentProcessedEvent, SFI)
@@ -71,6 +75,12 @@ beforeEach(async () => {
   await formatAndAddEvent(paymentClient, paymentProcessedEvent, BPS)
   await formatAndAddEvent(paymentClient, paymentEnrichedEvent, BPS)
   await formatAndAddEvent(paymentClient, paymentExtractedEvent, BPS)
+
+  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, SFI23)
+  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, SFI23)
+  await formatAndAddEvent(paymentClient, paymentProcessedEvent, SFI23)
+  await formatAndAddEvent(paymentClient, paymentEnrichedEvent, SFI23)
+  await formatAndAddEvent(paymentClient, paymentExtractedEvent, SFI23)
 })
 
 describe('get events by scheme', () => {
@@ -122,10 +132,27 @@ describe('get events by scheme', () => {
     expect(result[2].value).toBe('£2,000.00')
   })
 
+  test('should return data for SFI23 only', async () => {
+    const result = await getEventsByScheme()
+    console.log(result)
+    expect(result[3].scheme).toBe(schemeNames[SFI23])
+  })
+
+  test('should return total number of submitted payment request events for SFI23 only', async () => {
+    const result = await getEventsByScheme()
+    expect(result[3].paymentRequests).toBe(2)
+  })
+
+  test('should return total value of payment requests for SFI23 only', async () => {
+    const result = await getEventsByScheme()
+    expect(result[3].value).toBe('£2,000.00')
+  })
+
   test('should order scheme data by schemeId', async () => {
     const result = await getEventsByScheme()
     expect(result[0].scheme).toBe(schemeNames[SFI])
     expect(result[1].scheme).toBe(schemeNames[CS])
     expect(result[2].scheme).toBe(schemeNames[BPS])
+    expect(result[3].scheme).toBe(schemeNames[SFI23])
   })
 })
