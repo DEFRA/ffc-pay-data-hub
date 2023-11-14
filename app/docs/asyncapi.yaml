@@ -1,29 +1,44 @@
-asyncapi: 2.6.0
+asyncapi: 3.0.0
 info:
   title: Payment Hub Data Hub
   version: 1.0.0
   description: Data hub for FFC Payments
 channels:
   ffc-pay-data-request:
-  subscribe:
-    message:
-      $ref: "#/components/messages/DataRequest"
+    address: ffc-pay-data-request
+    messages:
+      subscribe.message:
+        $ref: '#/components/messages/DataRequest'
   ffc-pay-data-request-response:
-  publish:
-    message:
-      $ref: "#/components/messages/DataResponse"
+    address: ffc-pay-data-request-response
+    messages:
+      publish.message:
+        $ref: '#/components/messages/DataResponse'
+operations:
+  ffc-pay-data-request.subscribe:
+    action: send
+    channel:
+      $ref: '#/channels/ffc-pay-data-request'
+    messages:
+      - $ref: '#/components/messages/DataRequest'
+  ffc-pay-data-request-response.publish:
+    action: receive
+    channel:
+      $ref: '#/channels/ffc-pay-data-request-response'
+    messages:
+      - $ref: '#/components/messages/DataResponse'
 components:
   messages:
     DataRequest:
       name: Data request
       contentType: application/json
       payload:
-        $ref: "#/components/schemas/DataRequest"
+        $ref: '#/components/schemas/DataRequest'
     DataResponse:
       name: Data response
       contentType: application/json
       payload:
-        $ref: "#/components/schemas/DataResponse"
+        $ref: '#/components/schemas/DataResponse'
   schemas:
     DataRequest:
       type: object
@@ -32,61 +47,61 @@ components:
         - value
       properties:
         category:
-          $ref: "#/components/schemas/Category"
+          $ref: '#/components/schemas/Category'
         value:
-          $ref: "#/components/schemas/ValueInteger"
+          $ref: '#/components/schemas/ValueInteger'
     DataResponse:
       type: object
       required:
         - data
       properties:
         data:
-          $ref: "#/components/schemas/ResponseBody"
+          $ref: '#/components/schemas/ResponseBody'
     ResponseBody:
       type: array
       description: List of data returned in the data response
       items:
-        $ref: "#/components/schemas/ResponseBodyLine"
+        $ref: '#/components/schemas/ResponseBodyLine'
     ResponseBodyLine:
       type: object
       properties:
         frn:
-          $ref: "#/components/schemas/FRN"
+          $ref: '#/components/schemas/FRN'
         correlationId:
-          $ref: "#/components/schemas/CorrelationId"
+          $ref: '#/components/schemas/CorrelationId'
         schemeId:
-          $ref: "#/components/schemas/SchemeId"
+          $ref: '#/components/schemas/SchemeId'
         paymentRequestNumber:
-          $ref: "#/components/schemas/PaymentRequestNumber"
+          $ref: '#/components/schemas/PaymentRequestNumber'
         agreementNumber:
-          $ref: "#/components/schemas/AgreementNumber"
+          $ref: '#/components/schemas/AgreementNumber'
         marketingYear:
-          $ref: "#/components/schemas/MarketingYear"
+          $ref: '#/components/schemas/MarketingYear'
         events:
-          $ref: "#/components/schemas/Events"
+          $ref: '#/components/schemas/Events'
         scheme:
-          $ref: "#/components/schemas/SchemeName"
+          $ref: '#/components/schemas/SchemeName'
         status:
-          $ref: "#/components/schemas/Status"
+          $ref: '#/components/schemas/Status'
         lastUpdated:
-          $ref: "#/components/schemas/Timestamp"
+          $ref: '#/components/schemas/Timestamp'
         originalValue:
-          $ref: "#/components/schemas/ValueInteger"
+          $ref: '#/components/schemas/ValueInteger'
         originalValueText:
-          $ref: "#/components/schemas/ValueText"
+          $ref: '#/components/schemas/ValueText'
         currentValue:
-          $ref: "#/components/schemas/ValueInteger"
+          $ref: '#/components/schemas/ValueInteger'
         currentValueText:
-          $ref: "#/components/schemas/ValueText"
+          $ref: '#/components/schemas/ValueText'
         paymentRequests:
-          $ref: "#/components/schemas/PaymentRequests"
+          $ref: '#/components/schemas/PaymentRequests'
         value:
-          $ref: "#/components/schemas/ValueText"
+          $ref: '#/components/schemas/ValueText'
     Events:
       type: array
       description: List of events returned in the data response
       items:
-        $ref: "#/components/schemas/EventLine"
+        $ref: '#/components/schemas/EventLine'
     EventLine:
       type: object
       required:
@@ -105,33 +120,33 @@ components:
         - status
       properties:
         etag:
-          $ref: "#/components/schemas/EventTag"
+          $ref: '#/components/schemas/EventTag'
         partitionKey:
-          $ref: "#/components/schemas/AgreementNumber"
-        rowKey: 
-          $ref: "#/components/schemas/RowKey"
-        category: 
-          $ref: "#/components/schemas/Category"
+          $ref: '#/components/schemas/AgreementNumber'
+        rowKey:
+          $ref: '#/components/schemas/RowKey'
+        category:
+          $ref: '#/components/schemas/Category'
         specversion:
-          $ref: "#/components/schemas/SpecVersion"
+          $ref: '#/components/schemas/SpecVersion'
         type:
-          $ref: "#/components/schemas/EventType"
+          $ref: '#/components/schemas/EventType'
         source:
-          $ref: "#/components/schemas/Source"
-        id: 
-          $ref: "#/components/schemas/CorrelationId"
+          $ref: '#/components/schemas/Source'
+        id:
+          $ref: '#/components/schemas/CorrelationId'
         time:
-          $ref: "#/components/schemas/Time"
+          $ref: '#/components/schemas/Time'
         subject:
-          $ref: "#/components/schemas/BatchName"
+          $ref: '#/components/schemas/BatchName'
         datacontenttype:
-          $ref: "#/components/schemas/DataContentType"
+          $ref: '#/components/schemas/DataContentType'
         data:
-          $ref: "#/components/schemas/EventData"
+          $ref: '#/components/schemas/EventData'
         timestamp:
-          $ref: "#/components/schemas/Timestamp"
+          $ref: '#/components/schemas/Timestamp'
         status:
-          $ref: "#/components/schemas/Status"
+          $ref: '#/components/schemas/Status'
     EventData:
       type: object
       description: Data for the given event.
@@ -155,80 +170,80 @@ components:
         - ledger
       properties:
         schemeId:
-          $ref: "#/components/schemas/SchemeId"
+          $ref: '#/components/schemas/SchemeId'
         sourceSystem:
-          $ref: "#/components/schemas/SourceSystem"
+          $ref: '#/components/schemas/SourceSystem'
         batch:
-          $ref: "#/components/schemas/BatchName"
+          $ref: '#/components/schemas/BatchName'
         deliveryBody:
-          $ref: "#/components/schemas/DeliveryBody"
+          $ref: '#/components/schemas/DeliveryBody'
         invoiceNumber:
-          $ref: "#/components/schemas/InvoiceNumber"
+          $ref: '#/components/schemas/InvoiceNumber'
         frn:
-          $ref: "#/components/schemas/FRN"
+          $ref: '#/components/schemas/FRN'
         marketingYear:
-          $ref: "#/components/schemas/MarketingYear"
+          $ref: '#/components/schemas/MarketingYear'
         paymentRequestNumber:
-          $ref: "#/components/schemas/PaymentRequestNumber"
+          $ref: '#/components/schemas/PaymentRequestNumber'
         agreementNumber:
-          $ref: "#/components/schemas/AgreementNumber"
+          $ref: '#/components/schemas/AgreementNumber'
         contractNumber:
-          $ref: "#/components/schemas/ContractNumber"
+          $ref: '#/components/schemas/ContractNumber'
         currency:
-          $ref: "#/components/schemas/Currency"
+          $ref: '#/components/schemas/Currency'
         schedule:
-          $ref: "#/components/schemas/Schedule"
+          $ref: '#/components/schemas/Schedule'
         dueDate:
-          $ref: "#/components/schemas/DueDate"
+          $ref: '#/components/schemas/DueDate'
         value:
-          $ref: "#/components/schemas/ValueInteger"
+          $ref: '#/components/schemas/ValueInteger'
         correlationId:
-          $ref: "#/components/schemas/CorrelationId"
+          $ref: '#/components/schemas/CorrelationId'
         invoiceLines:
-          $ref: "#/components/schemas/InvoiceLines"
+          $ref: '#/components/schemas/InvoiceLines'
         ledger:
-          $ref: "#/components/schemas/Ledger"
+          $ref: '#/components/schemas/Ledger'
         paymentRequestId:
-          $ref: "#/components/schemas/PaymentRequestId"
+          $ref: '#/components/schemas/PaymentRequestId'
         completedPaymentRequestId:
-          $ref: "#/components/schemas/PaymentRequestId"
+          $ref: '#/components/schemas/PaymentRequestId'
         invalid:
-          $ref: "#/components/schemas/Invalid"
+          $ref: '#/components/schemas/Invalid'
         batchId:
-          $ref: "#/components/schemas/BatchId"
+          $ref: '#/components/schemas/BatchId'
         sbi:
-          $ref: "#/components/schemas/SBI"
+          $ref: '#/components/schemas/SBI'
         vendor:
-          $ref: "#/components/schemas/Vendor"
+          $ref: '#/components/schemas/Vendor'
         trader:
-          $ref: "#/components/schemas/Trader"
+          $ref: '#/components/schemas/Trader'
         debtType:
-          $ref: "#/components/schemas/DebtType"
+          $ref: '#/components/schemas/DebtType'
         recoveryDate:
-          $ref: "#/components/schemas/RecoveryDate"
+          $ref: '#/components/schemas/RecoveryDate'
         pillar:
-          $ref: "#/components/schemas/Pillar"
+          $ref: '#/components/schemas/Pillar'
         originalInvoiceNumber:
-          $ref: "#/components/schemas/OriginalInvoiceNumber"
+          $ref: '#/components/schemas/OriginalInvoiceNumber'
         originalSettlementDate:
-          $ref: "#/components/schemas/OriginalSettlementDate"
+          $ref: '#/components/schemas/OriginalSettlementDate'
         invoiceCorrectionReference:
-          $ref: "#/components/schemas/InvoiceCorrectionReference"
+          $ref: '#/components/schemas/InvoiceCorrectionReference'
         received:
-          $ref: "#/components/schemas/Received"
+          $ref: '#/components/schemas/Received'
         referenceId:
-          $ref: "#/components/schemas/ReferenceId"
+          $ref: '#/components/schemas/ReferenceId'
         exchangeRate:
-          $ref: "#/components/schemas/ExchangeRate"
+          $ref: '#/components/schemas/ExchangeRate'
         eventDate:
-          $ref: "#/components/schemas/EventDate"
+          $ref: '#/components/schemas/EventDate'
         claimDate:
-          $ref: "#/components/schemas/ClaimDate"
+          $ref: '#/components/schemas/ClaimDate'
     InvoiceLines:
       type: array
       description: List of Invoice lines that make up request
       items:
-        $ref: "#/components/schemas/InvoiceLine"
+        $ref: '#/components/schemas/InvoiceLine'
     InvoiceLine:
       type: object
       required:
@@ -237,47 +252,47 @@ components:
         - schemeCode
       properties:
         value:
-          $ref: "#/components/schemas/ValueInteger"
+          $ref: '#/components/schemas/ValueInteger'
         description:
-          $ref: "#/components/schemas/Description"
+          $ref: '#/components/schemas/Description'
         schemeCode:
-          $ref: "#/components/schemas/SchemeCode"
+          $ref: '#/components/schemas/SchemeCode'
         standardCode:
-          $ref: "#/components/schemas/StandardCode"
+          $ref: '#/components/schemas/StandardCode'
         accountCode:
-          $ref: "#/components/schemas/AccountCode"
+          $ref: '#/components/schemas/AccountCode'
         fundCode:
-          $ref: "#/components/schemas/FundCode"
+          $ref: '#/components/schemas/FundCode'
         deliveryBody:
-          $ref: "#/components/schemas/DeliveryBody"
+          $ref: '#/components/schemas/DeliveryBody'
         marketingYear:
-          $ref: "#/components/schemas/MarketingYear"
+          $ref: '#/components/schemas/MarketingYear'
         convergence:
-          $ref: "#/components/schemas/Convergence"
+          $ref: '#/components/schemas/Convergence'
         stateAid:
-          $ref: "#/components/schemas/StateAid"
+          $ref: '#/components/schemas/StateAid'
         agreementNumber:
-          $ref: "#/components/schemas/AgreementNumber"
+          $ref: '#/components/schemas/AgreementNumber'
         paymentRequestId:
-          $ref: "#/components/schemas/PaymentRequestId"
+          $ref: '#/components/schemas/PaymentRequestId'
         completedPaymentRequestId:
-          $ref: "#/components/schemas/PaymentRequestId"
+          $ref: '#/components/schemas/PaymentRequestId'
         completedInvoiceLineId:
-          $ref: "#/components/schemas/InvoiceLineId"
+          $ref: '#/components/schemas/InvoiceLineId'
         paymentType:
-          $ref: "#/components/schemas/PaymentType"
+          $ref: '#/components/schemas/PaymentType'
     Status:
       type: object
       description: The status of the payment request at time of event
       properties:
         name:
-          $ref: "#/components/schemas/StatusName"
+          $ref: '#/components/schemas/StatusName'
         detail:
-          $ref: "#/components/schemas/StatusDetail"
+          $ref: '#/components/schemas/StatusDetail'
         state:
-          $ref: "#/components/schemas/StatusState"
+          $ref: '#/components/schemas/StatusState'
         default:
-          $ref: "#/components/schemas/StatusDefault"
+          $ref: '#/components/schemas/StatusDefault'
     Category:
       type: string
       description: The category of the data request.
@@ -289,7 +304,9 @@ components:
     ValueInteger:
       type: number
       format: integer
-      description: value of request or invoice line after enrichment with main and fractional currency combined
+      description: >-
+        value of request or invoice line after enrichment with main and
+        fractional currency combined
       minimum: 0
       maximum: 999999999999
       example: 50000
@@ -301,7 +318,7 @@ components:
     FRN:
       type: string
       description: Firm Reference Number.
-      example: 1000000006 
+      example: 1000000006
     SchemeId:
       type: integer
       format: int32
@@ -309,13 +326,15 @@ components:
       example: 1
     PaymentRequestNumber:
       type: number
-      description: Version of payment request starting with 1, anything greater than 1 is an adjustment
+      description: >-
+        Version of payment request starting with 1, anything greater than 1 is
+        an adjustment
       minimum: 1
       maximum: 99
       example: 1
     AgreementNumber:
       type: string
-      description:  Unique reference number for agreement/application,
+      description: 'Unique reference number for agreement/application,'
       example: AHWR12345678
     MarketingYear:
       type: number
@@ -334,7 +353,7 @@ components:
     SpecVersion:
       type: string
       description: Spec version.
-      example: 1.0
+      example: 1
     EventType:
       type: string
       description: The type of event.
@@ -382,28 +401,32 @@ components:
       default: GBP
     Schedule:
       type: string
-      description: Payment frequency instruction for DAX, eg Q4 for quarterly payments
+      description: 'Payment frequency instruction for DAX, eg Q4 for quarterly payments'
       enum:
-      - Q4
-      - M12
-      - T4
+        - Q4
+        - M12
+        - T4
     DueDate:
       type: string
-      format: DD/MM/YYYY, YYYY/MM/DD, DD-MM-YYYY or YYYY-MM-DD
-      description: Date request should be issued from.  If not supplied will default to current date.
+      format: 'DD/MM/YYYY, YYYY/MM/DD, DD-MM-YYYY or YYYY-MM-DD'
+      description: >-
+        Date request should be issued from.  If not supplied will default to
+        current date.
       example: 09/11/2022
       default: Current date
     ValueDecimal:
       type: number
       format: decimal
-      description: Decimal net value of request before enrichment, ie decimal value in specified currency
-      minimum: 0.00
+      description: >-
+        Decimal net value of request before enrichment, ie decimal value in
+        specified currency
+      minimum: 0
       maximum: 999999999999.99
-      example: 500.00
+      example: 500
     Description:
       type: string
-      description: Description of invoice line item,
-      patten: ^[A-Z]\d{2} - .*$
+      description: 'Description of invoice line item,'
+      patten: '^[A-Z]\d{2} - .*$'
       example: G00 - Gross value of claim
     SchemeCode:
       type: string
@@ -417,10 +440,6 @@ components:
       type: string
       description: Unique account code for budgeting
       example: SOS123
-    DeliveryBody:
-      type: string
-      description: Delivery body responsible for payment
-      example: RP00
     Convergence:
       type: boolean
       description: Whether the invoice line is for convergence funding
@@ -452,7 +471,9 @@ components:
       example: DRD10
     Ledger:
       type: string
-      description: Target ledger for settlement, AP for Accounts Payable and AR for Accounts Receivable
+      description: >-
+        Target ledger for settlement, AP for Accounts Payable and AR for
+        Accounts Receivable
       enum:
         - AP
         - AR
@@ -491,15 +512,17 @@ components:
       example: 123456A
     DebtType:
       type: string
-      description: Only for recoveries, reason for recovery. adm for administrative and irr for irregular debt
+      description: >-
+        Only for recoveries, reason for recovery. adm for administrative and irr
+        for irregular debt
       enum:
         - irr
         - adm
       example: irr
     RecoveryDate:
       type: string
-      format: DD/MM/YYYY, YYYY/MM/DD, DD-MM-YYYY or YYYY-MM-DD
-      description: Only for recoveries, date debt was discovered
+      format: 'DD/MM/YYYY, YYYY/MM/DD, DD-MM-YYYY or YYYY-MM-DD'
+      description: 'Only for recoveries, date debt was discovered'
       example: 09/11/2021
     OriginalInvoiceNumber:
       type: string
@@ -507,11 +530,13 @@ components:
       example: S1234567S1234567V001
     InvoiceCorrectionReference:
       type: string
-      description: The invoice number used for the correction (only present in manual invoices).
+      description: >-
+        The invoice number used for the correction (only present in manual
+        invoices).
       example: S1234567S1234567V001
     OriginalSettlementDate:
       type: string
-      format: DD/MM/YYYY, YYYY/MM/DD, DD-MM-YYYY or YYYY-MM-DD
+      format: 'DD/MM/YYYY, YYYY/MM/DD, DD-MM-YYYY or YYYY-MM-DD'
       description: The original date of settlement (only present in manual invoices).
       example: 09/11/2021
     Pillar:
@@ -538,13 +563,13 @@ components:
       description: Rate of exchange for payment request
     EventDate:
       type: string
-      format: DD/MM/YYYY, YYYY/MM/DD, DD-MM-YYYY or YYYY-MM-DD
+      format: 'DD/MM/YYYY, YYYY/MM/DD, DD-MM-YYYY or YYYY-MM-DD'
       description: Date of event.  If not supplied will default to current date.
       example: 09/11/2022
       default: Current date
     ClaimDate:
       type: string
-      format: DD/MM/YYYY, YYYY/MM/DD, DD-MM-YYYY or YYYY-MM-DD
+      format: 'DD/MM/YYYY, YYYY/MM/DD, DD-MM-YYYY or YYYY-MM-DD'
       description: Date claim should be made.
       example: 09/11/2022
       default: Current date
@@ -555,7 +580,7 @@ components:
     ValueText:
       type: string
       description: value of request or invoice line in plain text
-      example: £1,000.00
+      example: '£1,000.00'
     PaymentRequests:
       type: number
       description: Defines number of payment requestsagainst given scheme
