@@ -12,7 +12,6 @@ const processDataMessage = async (message, receiver) => {
     console.log('Data request received:', util.inspect(message.body, false, null, true))
 
     validateMessage(message)
-
     const { body, messageId } = message
     const { category, value } = body
 
