@@ -1,7 +1,7 @@
 const { FRN } = require('../../../../../mocks/values/frn')
 const { INVOICE_NUMBER } = require('../../../../../mocks/values/invoice-number')
 
-const { BPS, CS, SFI, SFI23 } = require('../../../../../../app/constants/schemes')
+const { BPS, CS, SFI, SFI23, DELINKED } = require('../../../../../../app/constants/schemes')
 const { PAYMENT_EVENT, HOLD_EVENT, BATCH_EVENT, WARNING_EVENT } = require('../../../../../../app/constants/event-types')
 const schemeNames = require('../../../../../../app/constants/scheme-names')
 
@@ -81,6 +81,12 @@ beforeEach(async () => {
   await formatAndAddEvent(paymentClient, paymentProcessedEvent, SFI23)
   await formatAndAddEvent(paymentClient, paymentEnrichedEvent, SFI23)
   await formatAndAddEvent(paymentClient, paymentExtractedEvent, SFI23)
+
+  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, DELINKED)
+  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, DELINKED)
+  await formatAndAddEvent(paymentClient, paymentProcessedEvent, DELINKED)
+  await formatAndAddEvent(paymentClient, paymentEnrichedEvent, DELINKED)
+  await formatAndAddEvent(paymentClient, paymentExtractedEvent, DELINKED)
 })
 
 describe('get events by scheme', () => {
@@ -134,7 +140,6 @@ describe('get events by scheme', () => {
 
   test('should return data for SFI23 only', async () => {
     const result = await getEventsByScheme()
-    console.log(result)
     expect(result[3].scheme).toBe(schemeNames[SFI23])
   })
 
@@ -148,11 +153,27 @@ describe('get events by scheme', () => {
     expect(result[3].value).toBe('£2,000.00')
   })
 
+  test('should return data for Delinked only', async () => {
+    const result = await getEventsByScheme()
+    expect(result[4].scheme).toBe(schemeNames[DELINKED])
+  })
+
+  test('should return total number of submitted payment request events for Delinked only', async () => {
+    const result = await getEventsByScheme()
+    expect(result[4].paymentRequests).toBe(2)
+  })
+
+  test('should return total value of payment requests for Delinked only', async () => {
+    const result = await getEventsByScheme()
+    expect(result[4].value).toBe('£2,000.00')
+  })
+
   test('should order scheme data by schemeId', async () => {
     const result = await getEventsByScheme()
     expect(result[0].scheme).toBe(schemeNames[SFI])
     expect(result[1].scheme).toBe(schemeNames[CS])
     expect(result[2].scheme).toBe(schemeNames[BPS])
     expect(result[3].scheme).toBe(schemeNames[SFI23])
+    expect(result[4].scheme).toBe(schemeNames[DELINKED])
   })
 })
