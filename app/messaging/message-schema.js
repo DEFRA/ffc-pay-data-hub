@@ -3,7 +3,7 @@ const { FRN, CORRELATION_ID, BATCH, INVOICE_NUMBER, AGREEMENT_NUMBER, CLAIM_NUMB
 
 module.exports = Joi.object({
   body: Joi.object({
-    category: Joi.string().valid(FRN, CORRELATION_ID, BATCH, INVOICE_NUMBER, AGREEMENT_NUMBER, CLAIM_NUMBER).required(),
+    category: Joi.string().allow(FRN, CORRELATION_ID, BATCH, INVOICE_NUMBER, AGREEMENT_NUMBER, CLAIM_NUMBER).required(),
     value: Joi.string().required()
   }).required()
 }).required()
