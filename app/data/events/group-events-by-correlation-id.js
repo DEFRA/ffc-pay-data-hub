@@ -1,12 +1,11 @@
-const groupEventsByFrn = (events) => {
+const groupEventsByCorrelationId = (events) => {
   return [...events.reduce((x, y) => {
-    const correlationId = y.rowKey.split('|')[0]
-    const key = `${y.partitionKey}-${correlationId}`
+    const key = y.correlationId
 
     const item = x.get(key) || {
       ...{
-        frn: y.partitionKey,
-        correlationId,
+        frn: y.data.frn,
+        correlationId: y.partitionKey,
         schemeId: y.data.schemeId,
         paymentRequestNumber: y.data.paymentRequestNumber,
         agreementNumber: y.data.agreementNumber,
@@ -21,5 +20,5 @@ const groupEventsByFrn = (events) => {
 }
 
 module.exports = {
-  groupEventsByFrn
+  groupEventsByCorrelationId
 }
