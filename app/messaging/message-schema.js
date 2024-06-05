@@ -1,9 +1,9 @@
 const Joi = require('joi')
-const { FRN, CORRELATION_ID, BATCH, INVOICE_NUMBER, AGREEMENT_NUMBER, CLAIM_NUMBER } = require('../constants/categories')
+const { FRN, CORRELATION_ID, BATCH } = require('../constants/categories')
 
 module.exports = Joi.object({
   body: Joi.object({
-    category: Joi.string().allow(FRN, CORRELATION_ID, BATCH, INVOICE_NUMBER, AGREEMENT_NUMBER, CLAIM_NUMBER).required(),
+    category: Joi.string().allow(FRN, CORRELATION_ID, BATCH).required(),
     value: Joi.string().required()
   }).required()
 }).required()
