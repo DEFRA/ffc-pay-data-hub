@@ -1,4 +1,5 @@
 const eventDetails = require('../../constants/event-details')
+const { PAYMENT_PROCESSED_NO_FURTHER_ACTION_STATUS } = require('../../constants/statuses')
 
 const createPendingEvents = () => {
   return Object.entries(eventDetails)
@@ -10,11 +11,13 @@ const filterPendingEvents = (events, pendingEvents) => {
 }
 
 const addPendingEventsToGroup = (group, events) => {
-  const pendingEvents = createPendingEvents()
-  const filteredEvents = filterPendingEvents(events, pendingEvents)
-  group.events = group.events.concat(filteredEvents.map(event => ({
-    status: eventDetails[event.type]
-  })))
+  if (events[events.length - 1]?.status?.detail !== PAYMENT_PROCESSED_NO_FURTHER_ACTION_STATUS) {
+    const pendingEvents = createPendingEvents()
+    const filteredEvents = filterPendingEvents(events, pendingEvents)
+    group.events = group.events.concat(filteredEvents.map(event => ({
+      status: eventDetails[event.type]
+    })))
+  }
 }
 
 const addPendingEvents = (events) => {

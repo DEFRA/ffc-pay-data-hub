@@ -10,6 +10,7 @@ module.exports = {
   PAYMENT_QUALITY_CHECK_FAILED_NAME: 'Quality check failed',
   PAYMENT_QUALITY_CHECK_PASSED_NAME: 'Quality check passed',
   PAYMENT_RESET_NAME: 'Reset to be recalculated',
+  PAYMENT_PROCESSED_NO_FURTHER_ACTION_NAME: 'Payment processed, no updates to send to D365',
   PAYMENT_PROCESSED_NAME: 'Final state calculated',
   PAYMENT_SUBMITTED_NAME: 'Submitted to payment ledger',
   PAYMENT_ACKNOWLEDGED_NAME: 'Acknowledged',

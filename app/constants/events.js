@@ -10,6 +10,7 @@ module.exports = {
   PAYMENT_QUALITY_CHECK_FAILED: 'uk.gov.defra.ffc.pay.payment.ledger.quality-check.failed',
   PAYMENT_QUALITY_CHECK_PASSED: 'uk.gov.defra.ffc.pay.payment.ledger.quality-check.passed',
   PAYMENT_RESET: 'uk.gov.defra.ffc.pay.payment.reset',
+  PAYMENT_PROCESSED_NO_FURTHER_ACTION: 'uk.gov.defra.ffc.pay.payment.processed.no.further.action',
   PAYMENT_PROCESSED: 'uk.gov.defra.ffc.pay.payment.processed',
   PAYMENT_SUBMITTED: 'uk.gov.defra.ffc.pay.payment.submitted',
   PAYMENT_ACKNOWLEDGED: 'uk.gov.defra.ffc.pay.payment.acknowledged',
