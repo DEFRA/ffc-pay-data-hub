@@ -10,6 +10,7 @@ const {
   PAYMENT_QUALITY_CHECK_FAILED,
   PAYMENT_QUALITY_CHECK_PASSED,
   PAYMENT_RESET,
+  PAYMENT_PROCESSED_NO_FURTHER_ACTION,
   PAYMENT_PROCESSED,
   PAYMENT_SUBMITTED,
   PAYMENT_ACKNOWLEDGED,
@@ -74,23 +75,28 @@ describe('get event order', () => {
     expect(eventOrder).toEqual(11)
   })
 
-  test('should return 12 for payment processed event', () => {
-    const eventOrder = getEventOrder(PAYMENT_PROCESSED)
+  test('should return 12 for payment processed no further action event', () => {
+    const eventOrder = getEventOrder(PAYMENT_PROCESSED_NO_FURTHER_ACTION)
     expect(eventOrder).toEqual(12)
   })
 
-  test('should return 13 for payment submitted event', () => {
-    const eventOrder = getEventOrder(PAYMENT_SUBMITTED)
+  test('should return 13 for payment processed event', () => {
+    const eventOrder = getEventOrder(PAYMENT_PROCESSED)
     expect(eventOrder).toEqual(13)
   })
 
-  test('should return 14 for payment acknowledged event', () => {
-    const eventOrder = getEventOrder(PAYMENT_ACKNOWLEDGED)
+  test('should return 14 for payment submitted event', () => {
+    const eventOrder = getEventOrder(PAYMENT_SUBMITTED)
     expect(eventOrder).toEqual(14)
   })
 
-  test('should return 15 for payment settled event', () => {
-    const eventOrder = getEventOrder(PAYMENT_SETTLED)
+  test('should return 15 for payment acknowledged event', () => {
+    const eventOrder = getEventOrder(PAYMENT_ACKNOWLEDGED)
     expect(eventOrder).toEqual(15)
+  })
+
+  test('should return 16 for payment settled event', () => {
+    const eventOrder = getEventOrder(PAYMENT_SETTLED)
+    expect(eventOrder).toEqual(16)
   })
 })

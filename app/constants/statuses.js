@@ -10,6 +10,7 @@ module.exports = {
   PAYMENT_QUALITY_CHECK_FAILED_STATUS: 'Ledger assignment quality check failed, waiting for correction',
   PAYMENT_QUALITY_CHECK_PASSED_STATUS: 'Ledger assignment quality check passed',
   PAYMENT_RESET_STATUS: 'Reset to be recalculated',
+  PAYMENT_PROCESSED_NO_FURTHER_ACTION_STATUS: 'Payment processed with no identified updates to send to D365',
   PAYMENT_PROCESSED_STATUS: 'Calculation of final state completed',
   PAYMENT_SUBMITTED_STATUS: 'Submitted to payment ledger',
   PAYMENT_ACKNOWLEDGED_STATUS: 'Acknowledged by payment ledger',
