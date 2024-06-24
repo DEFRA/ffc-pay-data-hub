@@ -1,4 +1,4 @@
-const { SFI, SFI_PILOT, LUMP_SUMS, VET_VISITS, CS, BPS, FDMR, SFI23, DELINKED } = require('../../../../../app/constants/schemes')
+const { SFI, SFI_PILOT, LUMP_SUMS, VET_VISITS, CS, BPS, FDMR, SFI23, DELINKED, SFI_EXPANDED } = require('../../../../../app/constants/schemes')
 
 const { orderGroupedEventsByScheme } = require('../../../../../app/data/events/scheme-id/order-grouped-events-by-scheme')
 
@@ -14,6 +14,7 @@ let bpsEvent
 let fdmrEvent
 let sfi23Event
 let delinkedEvent
+let esfioEvent
 
 describe('order grouped events', () => {
   beforeEach(() => {
@@ -27,7 +28,8 @@ describe('order grouped events', () => {
     fdmrEvent = { ...groupedEvent, schemeId: FDMR }
     sfi23Event = { ...groupedEvent, schemeId: SFI23 }
     delinkedEvent = { ...groupedEvent, schemeId: DELINKED }
-    groupedEvents = [bpsEvent, vetEvent, sfiEvent, sfiPilotEvent, lumpSumsEvent, csEvent, fdmrEvent, sfi23Event, delinkedEvent]
+    esfioEvent = { ...groupedEvent, schemeId: SFI_EXPANDED }
+    groupedEvents = [bpsEvent, vetEvent, sfiEvent, sfiPilotEvent, lumpSumsEvent, csEvent, fdmrEvent, sfi23Event, delinkedEvent, esfioEvent]
   })
 
   test('should sort grouped events into ascending order by schemeId when all schemes present', () => {
@@ -41,6 +43,7 @@ describe('order grouped events', () => {
     expect(orderedGroupedEvents[6].schemeId).toEqual(FDMR)
     expect(orderedGroupedEvents[7].schemeId).toEqual(SFI23)
     expect(orderedGroupedEvents[8].schemeId).toEqual(DELINKED)
+    expect(orderedGroupedEvents[9].schemeId).toEqual(SFI_EXPANDED)
   })
 
   test('should sort grouped events into ascending order by schemeId when only two schemes present', () => {
