@@ -18,17 +18,17 @@ containerSecret:
   name: ffc-pay-data-hub-container-secret
   type: Opaque
 
-deployment: 
+deployment:
   minReplicas: 1
   maxReplicas: 4
   cpuThreshold: 70
   memoryThreshold: 70
 
 container:
-  requestMemory: 140Mi
-  requestCpu: 140m
-  limitMemory: 200Mi
-  limitCpu: 200m
+  requestMemory: 150Mi
+  requestCpu: 150m
+  limitMemory: 300Mi
+  limitCpu: 300m
   messageQueueHost: namespace.servicebus.windows.net
   dataTopicAddress: ffc-pay-data-request
   dataSubscriptionAddress: ffc-pay-data-hub
