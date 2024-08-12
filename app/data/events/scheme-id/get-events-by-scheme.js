@@ -5,8 +5,8 @@ const { getTotalSchemeValues } = require('./get-total-scheme-values')
 const { orderGroupedEventsByScheme } = require('./order-grouped-events-by-scheme')
 const { sanitiseSchemeData } = require('./sanitise-scheme-data')
 
-const getEventsByScheme = async () => {
-  const events = await getSubmittedEvents(SCHEME_ID)
+const getEventsByScheme = async (schemeId) => {
+  const events = await getSubmittedEvents(schemeId, SCHEME_ID)
   const groupedEvents = groupEventsByScheme(events)
   const totalSchemeValues = getTotalSchemeValues(groupedEvents)
   const orderedSchemeData = orderGroupedEventsByScheme(totalSchemeValues)

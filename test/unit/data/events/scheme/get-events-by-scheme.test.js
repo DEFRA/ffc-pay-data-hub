@@ -20,6 +20,7 @@ const totalSchemeValues = require('../../../../mocks/total-scheme-values')
 const { SCHEME_ID: SCHEME_ID_CATEGORY } = require('../../../../../app/constants/categories')
 
 const { getEventsByScheme } = require('../../../../../app/data/events/scheme-id/get-events-by-scheme')
+const { SFI } = require('../../../../../app/constants/schemes')
 
 describe('get events by frn', () => {
   beforeEach(() => {
@@ -31,28 +32,27 @@ describe('get events by frn', () => {
   })
 
   test('should get events for schemeId', async () => {
-    await getEventsByScheme()
-    console.log(mockGetSubmittedEvents.mockResolvedValue)
-    expect(mockGetSubmittedEvents).toHaveBeenCalledWith(SCHEME_ID_CATEGORY)
+    await getEventsByScheme(SFI)
+    expect(mockGetSubmittedEvents).toHaveBeenCalledWith(SFI, SCHEME_ID_CATEGORY)
   })
 
   test('should group events by scheme', async () => {
-    await getEventsByScheme()
+    await getEventsByScheme(SFI)
     expect(mockGroupEventsByScheme).toHaveBeenCalledWith([submitted])
   })
 
   test('should get total values for scheme', async () => {
-    await getEventsByScheme()
+    await getEventsByScheme(SFI)
     expect(mockGetTotalSchemeValues).toHaveBeenCalledWith([groupedEvent])
   })
 
   test('should order grouped events', async () => {
-    await getEventsByScheme()
+    await getEventsByScheme(SFI)
     expect(mockOrderGroupedEventsByScheme).toHaveBeenCalledWith([totalSchemeValues])
   })
 
   test('should sanitise events', async () => {
-    await getEventsByScheme()
+    await getEventsByScheme(SFI)
     expect(mockSanitiseSchemeData).toHaveBeenCalledWith([totalSchemeValues])
   })
 })
