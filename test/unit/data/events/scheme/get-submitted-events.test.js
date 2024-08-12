@@ -58,9 +58,14 @@ describe('get events', () => {
     expect(mockListEntities).toHaveBeenCalledTimes(1)
   })
 
-  test('should get payment events with correlation id category', async () => {
+  test('should get payment events with category only when partitionKey is not provided', async () => {
+    await getSubmittedEvents(undefined, category)
+    expect(mockListEntities).toHaveBeenCalledWith({ queryOptions: { filter: mockOdata`category eq '${category}' and type eq '${PAYMENT_SUBMITTED}'` } })
+  })
+
+  test('should get payment events with partitionKey and category when partitionKey is provided', async () => {
     await getSubmittedEvents(PARTITION_KEY, category)
-    expect(mockListEntities).toHaveBeenCalledWith({ queryOptions: { filter: mockOdata`category eq 'correlationId' and type eq 'uk.gov.defra.ffc.pay.payment.submitted'` } })
+    expect(mockListEntities).toHaveBeenCalledWith({ queryOptions: { filter: mockOdata`PartitionKey eq '${PARTITION_KEY}' and category eq '${category}' and type eq '${PAYMENT_SUBMITTED}'` } })
   })
 
   test('should return all payment events', async () => {
@@ -80,8 +85,8 @@ describe('get events', () => {
     expect(result.length).toBe(0)
   })
 
-  test('should call mockListEntities with type of submitted ', async () => {
+  test('should call mockListEntities with type of submitted', async () => {
     await getSubmittedEvents(PARTITION_KEY, category)
-    expect(mockTableClient.listEntities).toHaveBeenCalledWith({ queryOptions: { filter: mockOdata`category eq '${category}' and type eq '${PAYMENT_SUBMITTED}'` } })
+    expect(mockTableClient.listEntities).toHaveBeenCalledWith({ queryOptions: { filter: mockOdata`PartitionKey eq '${PARTITION_KEY}' and category eq '${category}' and type eq '${PAYMENT_SUBMITTED}'` } })
   })
 })
