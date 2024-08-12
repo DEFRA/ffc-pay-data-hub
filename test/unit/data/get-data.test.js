@@ -32,7 +32,7 @@ describe('get data', () => {
 
   test('should get scheme events for schemeId category', async () => {
     await getData(SCHEME_ID_CATEGORY, SCHEME_ID)
-    expect(mockgetEventsByScheme).toHaveBeenCalledWith()
+    expect(mockgetEventsByScheme).toHaveBeenCalledWith(SCHEME_ID)
   })
 
   test('should throw an error for unknown category', async () => {
