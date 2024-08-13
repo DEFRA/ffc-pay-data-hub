@@ -8,7 +8,7 @@ const getData = async (category, value) => {
     case CORRELATION_ID:
       return getEventsByCorrelationId(value)
     case SCHEME_ID:
-      return getEventsByScheme()
+      return getEventsByScheme(value)
     case BATCH:
       return getEventsByBatch(value)
     default:
