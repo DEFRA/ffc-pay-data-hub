@@ -32,7 +32,7 @@
     "log-timestamp": "0.3.0",
     "moment": "2.29.4",
     "moment-timezone": "0.5.43",
-    "redis": "4.6.5"
+    "redis": "4.7.0"
   },
   "devDependencies": {
     "jest": "29.2.2",
