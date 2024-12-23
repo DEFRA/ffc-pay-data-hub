@@ -24,7 +24,7 @@
   "dependencies": {
     "@azure/data-tables": "13.1.2",
     "@azure/identity": "4.3.0",
-    "@azure/storage-blob": "12.13.0",
+    "@azure/storage-blob": "12.26.0",
     "@hapi/hoek": "11.0.2",
     "applicationinsights": "2.9.6",
     "ffc-messaging": "2.9.1",
