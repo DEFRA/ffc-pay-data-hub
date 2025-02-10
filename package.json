@@ -23,7 +23,7 @@
   "license": "OGL-UK-3.0",
   "dependencies": {
     "@azure/data-tables": "13.1.2",
-    "@azure/identity": "4.3.0",
+    "@azure/identity": "4.6.0",
     "@azure/storage-blob": "12.13.0",
     "@hapi/hoek": "11.0.2",
     "applicationinsights": "2.9.6",
