@@ -1,0 +1,3 @@
+container.applyQueueAddress: queue:ffc-pay-data-request-response
+container.applySubscriptionAddress: queue:ffc-pay-data-hub
+container.applyTopicAddress: queue:ffc-pay-data-request
