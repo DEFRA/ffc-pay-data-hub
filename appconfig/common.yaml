@@ -1,3 +1,2 @@
 container.dataResponseQueueAddress: queue:ffc-pay-data-request-response
-container.dataSubscriptionAddress: queue:ffc-pay-data-hub
 container.dataTopicAddress: queue:ffc-pay-data-request
