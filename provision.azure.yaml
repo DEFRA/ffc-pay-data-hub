@@ -4,7 +4,7 @@ resources:
     - name: ffc-pay-data-request
       role: receiver
       subscriptions:
-        - ffc-pay-data-hub
+        -name: ffc-pay-data-hub
   queues:
     - name: ffc-pay-data-request-response
       role: sender
