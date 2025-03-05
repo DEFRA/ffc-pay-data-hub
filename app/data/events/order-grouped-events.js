@@ -1,4 +1,3 @@
-
 const { getEventOrder } = require('./get-event-order')
 
 const orderGroupedEvents = (events) => {

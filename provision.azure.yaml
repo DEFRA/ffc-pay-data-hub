@@ -1,6 +1,11 @@
 resources:
+  identity: pay-data-hub
   topics:
-    - name: data
+    - name: ffc-pay-data-request
+      role: receiver
+      subscriptions:
+        -name: ffc-pay-data-hub
   queues:
-    - name: dataResponse
-      enableSessions: true
+    - name: ffc-pay-data-request-response
+      role: sender
+      session: true
