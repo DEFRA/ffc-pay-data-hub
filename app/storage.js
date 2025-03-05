@@ -21,10 +21,10 @@ const initialise = async () => {
     blobServiceClient = BlobServiceClient.fromConnectionString(storageConfig.connectionString)
   } else {
     console.log('Using DefaultAzureCredential for Table Client')
-    paymentClient = new TableClient(`https://${storageConfig.account}.table.core.windows.net`, storageConfig.paymentTable, new DefaultAzureCredential())
-    holdClient = new TableClient(`https://${storageConfig.account}.table.core.windows.net`, storageConfig.holdTable, new DefaultAzureCredential())
-    warningClient = new TableClient(`https://${storageConfig.account}.table.core.windows.net`, storageConfig.warningTable, new DefaultAzureCredential())
-    batchClient = new TableClient(`https://${storageConfig.account}.table.core.windows.net`, storageConfig.batchTable, new DefaultAzureCredential())
+    paymentClient = new TableClient(`https://${storageConfig.account}.table.core.windows.net`, storageConfig.paymentTable, new DefaultAzureCredential({ managedIdentityClientId: storageConfig.managedIdentityClientId }))
+    holdClient = new TableClient(`https://${storageConfig.account}.table.core.windows.net`, storageConfig.holdTable, new DefaultAzureCredential({ managedIdentityClientId: storageConfig.managedIdentityClientId }))
+    warningClient = new TableClient(`https://${storageConfig.account}.table.core.windows.net`, storageConfig.warningTable, new DefaultAzureCredential({ managedIdentityClientId: storageConfig.managedIdentityClientId }))
+    batchClient = new TableClient(`https://${storageConfig.account}.table.core.windows.net`, storageConfig.batchTable, new DefaultAzureCredential({ managedIdentityClientId: storageConfig.managedIdentityClientId }))
     blobServiceClient = new BlobServiceClient(`https://${storageConfig.storageAccount}.blob.core.windows.net`, new DefaultAzureCredential({ managedIdentityClientId: storageConfig.managedIdentityClientId }))
   }
   container = blobServiceClient.getContainerClient(storageConfig.container)
