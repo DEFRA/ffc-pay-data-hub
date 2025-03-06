@@ -10,6 +10,9 @@ const { sendMessage: mockSendMessage } = require('../../../app/messaging/send-me
 jest.mock('../../../app/data')
 const { getData: mockGetData } = require('../../../app/data')
 
+jest.mock('../../../app/storage')
+const { writeDataRequestFile: mockWriteDataRequestFile } = require('../../../app/storage')
+
 const { cacheConfig, messageConfig } = require('../../../app/config')
 
 const { REQUEST_MESSAGE } = require('../../mocks/messaging/message')
@@ -31,6 +34,7 @@ describe('process data message', () => {
     jest.clearAllMocks()
     mockGetCacheKey.mockReturnValue(KEY)
     mockGetCachedResponse.mockResolvedValue(RESPONSE)
+    mockWriteDataRequestFile.mockResolvedValue({ url: 'http://example.com/blob' })
     receiver = {
       completeMessage: jest.fn(),
       abandonMessage: jest.fn(),
@@ -65,9 +69,14 @@ describe('process data message', () => {
     expect(mockSetCachedResponse).toHaveBeenCalledWith(cacheConfig.cache, KEY, REQUEST, RESPONSE)
   })
 
-  test('should send response message', async () => {
+  test('should write data request file and get blob URI', async () => {
     await processDataMessage(REQUEST_MESSAGE, receiver)
-    expect(mockSendMessage).toHaveBeenCalledWith(RESPONSE, TYPE, messageConfig.dataQueue, { sessionId: REQUEST_MESSAGE.messageId })
+    expect(mockWriteDataRequestFile).toHaveBeenCalledWith(`${REQUEST_MESSAGE.messageId}.json`, JSON.stringify(RESPONSE))
+  })
+
+  test('should send response message with blob URI', async () => {
+    await processDataMessage(REQUEST_MESSAGE, receiver)
+    expect(mockSendMessage).toHaveBeenCalledWith({ uri: 'http://example.com/blob' }, TYPE, messageConfig.dataQueue, { sessionId: REQUEST_MESSAGE.messageId })
   })
 
   test('should complete message if message successfully processed', async () => {

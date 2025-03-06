@@ -6,6 +6,7 @@ const { getData } = require('../data')
 const { sendMessage } = require('./send-message')
 const { TYPE } = require('../constants/type')
 const { VALIDATION } = require('../constants/errors')
+const { writeDataRequestFile } = require('../storage')
 
 const processDataMessage = async (message, receiver) => {
   try {
@@ -23,7 +24,11 @@ const processDataMessage = async (message, receiver) => {
       await setCachedResponse(cacheConfig.cache, key, body, response)
     }
 
-    await sendMessage(response, TYPE, messageConfig.dataQueue, { sessionId: messageId })
+    const filename = `${messageId}.json`
+    const blobClient = await writeDataRequestFile(filename, JSON.stringify(response))
+    const blobUri = blobClient.url
+
+    await sendMessage({ uri: blobUri }, TYPE, messageConfig.dataQueue, { sessionId: messageId })
     await receiver.completeMessage(message)
     console.log('Data request completed:', util.inspect(response, false, null, true))
   } catch (err) {

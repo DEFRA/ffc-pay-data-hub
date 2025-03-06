@@ -10,6 +10,7 @@ let warningClient
 let batchClient
 let blobServiceClient
 let container
+let dataRequestContainer
 
 const initialise = async () => {
   if (storageConfig.useConnectionString) {
@@ -28,6 +29,7 @@ const initialise = async () => {
     blobServiceClient = new BlobServiceClient(`https://${storageConfig.storageAccount}.blob.core.windows.net`, new DefaultAzureCredential({ managedIdentityClientId: storageConfig.managedIdentityClientId }))
   }
   container = blobServiceClient.getContainerClient(storageConfig.container)
+  dataRequestContainer = blobServiceClient.getContainerClient(storageConfig.dataRequestContainer)
   if (storageConfig.createEntities) {
     console.log('Making sure tables exist')
     await paymentClient.createTable(storageConfig.paymentTable)
@@ -36,6 +38,7 @@ const initialise = async () => {
     await batchClient.createTable(storageConfig.batchTable)
     console.log('Making sure blob containers exist')
     await container.createIfNotExists()
+    await dataRequestContainer.createIfNotExists()
     console.log('Storage ready')
   }
 }
@@ -60,9 +63,16 @@ const writeFile = async (filename, content) => {
   await blob.upload(content, content.length)
 }
 
+const writeDataRequestFile = async (filename, content) => {
+  const blob = dataRequestContainer.getBlockBlobClient(filename)
+  await blob.upload(content, content.length)
+  return blob
+}
+
 module.exports = {
   initialise,
   getClient,
   writeFile,
+  writeDataRequestFile,
   odata
 }
