@@ -1,0 +1,2 @@
+container.dataResponseQueueAddress: queue:ffc-pay-data-request-response
+container.dataTopicAddress: queue:ffc-pay-data-request
