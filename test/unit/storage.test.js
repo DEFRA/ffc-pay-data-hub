@@ -21,7 +21,7 @@ describe('Storage initialization and functionality', () => {
         getContainerClient: getContainerClientMock
       })
       const BlobServiceClientMock = jest.fn().mockImplementation(() => ({
-        getContainerClient: getContainerClientMock,
+        getContainerClient: getContainerClientMock
       }))
       BlobServiceClientMock.fromConnectionString = fromConnectionStringMock
       return { BlobServiceClient: BlobServiceClientMock }
@@ -52,9 +52,9 @@ describe('Storage initialization and functionality', () => {
 
     storageConfig = require('../../app/config/storage')
     consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => { })
-      ;  ({ BlobServiceClient } = require('@azure/storage-blob'))
-      ; ({ DefaultAzureCredential } = require('@azure/identity'))
-      ;  ({ TableClient } = require('@azure/data-tables'))
+    ; ({ BlobServiceClient } = require('@azure/storage-blob'))
+    ; ({ DefaultAzureCredential } = require('@azure/identity'))
+    ; ({ TableClient } = require('@azure/data-tables'))
     storage = require('../../app/storage')
   })
 
