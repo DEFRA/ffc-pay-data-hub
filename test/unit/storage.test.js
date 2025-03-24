@@ -138,4 +138,17 @@ describe('Storage initialization and functionality', () => {
     expect(containerClient.getBlockBlobClient).toHaveBeenCalledWith(filename)
     expect(containerClient.getBlockBlobClient().upload).toHaveBeenCalledWith(content, content.length)
   })
+
+  describe('writeDataRequestFile', () => {
+    test('should write data request file to blob storage and return blob client', async () => {
+      await storage.initialise()
+
+      const filename = 'datarequest.json'
+      const content = JSON.stringify({ data: 'test data' })
+      const blobClient = await storage.writeDataRequestFile(filename, content)
+
+      expect(blobClient.upload).toHaveBeenCalledWith(content, content.length)
+      expect(blobClient).toBeDefined()
+    })
+  })
 })
