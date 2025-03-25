@@ -14,19 +14,19 @@ let dataRequestContainer
 
 const initialise = async () => {
   if (storageConfig.useConnectionString) {
-    console.log('Using connection string for Table Client')
+    console.log('Using connection string for Table & Storage Clients')
     paymentClient = TableClient.fromConnectionString(storageConfig.connectionString, storageConfig.paymentTable, { allowInsecureConnection: true })
     holdClient = TableClient.fromConnectionString(storageConfig.connectionString, storageConfig.holdTable, { allowInsecureConnection: true })
     warningClient = TableClient.fromConnectionString(storageConfig.connectionString, storageConfig.warningTable, { allowInsecureConnection: true })
     batchClient = TableClient.fromConnectionString(storageConfig.connectionString, storageConfig.batchTable, { allowInsecureConnection: true })
     blobServiceClient = BlobServiceClient.fromConnectionString(storageConfig.connectionString)
   } else {
-    console.log('Using DefaultAzureCredential for Table Client')
+    console.log('Using DefaultAzureCredential for Table & Storage Clients')
     paymentClient = new TableClient(`https://${storageConfig.account}.table.core.windows.net`, storageConfig.paymentTable, new DefaultAzureCredential({ managedIdentityClientId: storageConfig.managedIdentityClientId }))
     holdClient = new TableClient(`https://${storageConfig.account}.table.core.windows.net`, storageConfig.holdTable, new DefaultAzureCredential({ managedIdentityClientId: storageConfig.managedIdentityClientId }))
     warningClient = new TableClient(`https://${storageConfig.account}.table.core.windows.net`, storageConfig.warningTable, new DefaultAzureCredential({ managedIdentityClientId: storageConfig.managedIdentityClientId }))
     batchClient = new TableClient(`https://${storageConfig.account}.table.core.windows.net`, storageConfig.batchTable, new DefaultAzureCredential({ managedIdentityClientId: storageConfig.managedIdentityClientId }))
-    blobServiceClient = new BlobServiceClient(`https://${storageConfig.storageAccount}.blob.core.windows.net`, new DefaultAzureCredential({ managedIdentityClientId: storageConfig.managedIdentityClientId }))
+    blobServiceClient = new BlobServiceClient(`https://${storageConfig.account}.blob.core.windows.net`, new DefaultAzureCredential({ managedIdentityClientId: storageConfig.managedIdentityClientId }))
   }
   container = blobServiceClient.getContainerClient(storageConfig.container)
   dataRequestContainer = blobServiceClient.getContainerClient(storageConfig.dataRequestContainer)

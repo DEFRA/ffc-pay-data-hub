@@ -69,7 +69,7 @@ describe('Storage initialization and functionality', () => {
 
     await storage.initialise()
 
-    expect(consoleLogSpy).toHaveBeenCalledWith('Using connection string for Table Client')
+    expect(consoleLogSpy).toHaveBeenCalledWith('Using connection string for Table & Storage Clients')
     expect(BlobServiceClient.fromConnectionString).toHaveBeenCalledWith(storageConfig.connectionString)
     expect(TableClient.fromConnectionString).toHaveBeenCalledTimes(4)
   })
@@ -77,15 +77,14 @@ describe('Storage initialization and functionality', () => {
   test('should use DefaultAzureCredential when storageConfig.useConnectionString is false', async () => {
     storageConfig.useConnectionString = false
     storageConfig.account = 'fakeaccount'
-    storageConfig.storageAccount = 'fakestorageaccount'
     storageConfig.managedIdentityClientId = 'fake-managed-id'
 
     await storage.initialise()
 
-    const expectedBlobUri = `https://${storageConfig.storageAccount}.blob.core.windows.net`
+    const expectedBlobUri = `https://${storageConfig.account}.blob.core.windows.net`
     const expectedTableUri = `https://${storageConfig.account}.table.core.windows.net`
 
-    expect(consoleLogSpy).toHaveBeenCalledWith('Using DefaultAzureCredential for Table Client')
+    expect(consoleLogSpy).toHaveBeenCalledWith('Using DefaultAzureCredential for Table & Storage Clients')
     expect(DefaultAzureCredential).toHaveBeenCalledWith({ managedIdentityClientId: storageConfig.managedIdentityClientId })
     expect(BlobServiceClient).toHaveBeenCalledWith(expectedBlobUri, expect.any(Object))
     expect(TableClient).toHaveBeenCalledTimes(4)
