@@ -7,8 +7,6 @@ const addValues = (events) => {
     // FC does not have a top level PR value after batch processing, only after enrichment. This allows us to catch the enrichment value
     if (event.events[0]?.data.schemeId === FC && !originalValue) {
       originalValue = event.events[1]?.data.value
-      console.log(originalValue)
-
     }
 
     return {
