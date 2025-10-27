@@ -1,6 +1,6 @@
 const submitted = require('../../../../mocks/events/submitted')
 
-const { BPS, CS, SFI, SFI23, DELINKED, SFI_EXPANDED } = require('../../../../../app/constants/schemes')
+const { BPS, CS, SFI, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL } = require('../../../../../app/constants/schemes')
 
 const { groupEventsByScheme } = require('../../../../../app/data/events/scheme-id/group-events-by-scheme')
 
@@ -11,6 +11,8 @@ let sfiEvents
 let sfi23Events
 let delinkedEvents
 let esfioEvents
+let cohtREvents
+let cohtCEvents
 let mixedSchemeEvents
 
 describe('group events by FRN', () => {
@@ -29,7 +31,9 @@ describe('group events by FRN', () => {
     sfi23Events = createEventsForScheme(SFI23, events)
     delinkedEvents = createEventsForScheme(DELINKED, events)
     esfioEvents = createEventsForScheme(SFI_EXPANDED, events)
-    mixedSchemeEvents = [...bpsEvents, ...csEvents, ...sfiEvents, ...sfi23Events, ...delinkedEvents, ...esfioEvents]
+    cohtREvents = createEventsForScheme(COHT_REVENUE, events)
+    cohtCEvents = createEventsForScheme(COHT_CAPITAL, events)
+    mixedSchemeEvents = [...bpsEvents, ...csEvents, ...sfiEvents, ...sfi23Events, ...delinkedEvents, ...esfioEvents, ...cohtREvents, ...cohtCEvents]
   })
 
   test('should return schemeId equal to partitionKey for all events in eventGroup', () => {

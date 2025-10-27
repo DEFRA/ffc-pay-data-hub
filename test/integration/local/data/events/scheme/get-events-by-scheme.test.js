@@ -1,7 +1,7 @@
 const { FRN } = require('../../../../../mocks/values/frn')
 const { INVOICE_NUMBER } = require('../../../../../mocks/values/invoice-number')
 
-const { BPS, CS, SFI, SFI23, DELINKED, SFI_EXPANDED } = require('../../../../../../app/constants/schemes')
+const { BPS, CS, SFI, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL } = require('../../../../../../app/constants/schemes')
 const { PAYMENT_EVENT, HOLD_EVENT, BATCH_EVENT, WARNING_EVENT } = require('../../../../../../app/constants/event-types')
 const schemeNames = require('../../../../../../app/constants/scheme-names')
 
@@ -93,6 +93,18 @@ beforeEach(async () => {
   await formatAndAddEvent(paymentClient, paymentProcessedEvent, SFI_EXPANDED)
   await formatAndAddEvent(paymentClient, paymentEnrichedEvent, SFI_EXPANDED)
   await formatAndAddEvent(paymentClient, paymentExtractedEvent, SFI_EXPANDED)
+
+  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, COHT_REVENUE)
+  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, COHT_REVENUE)
+  await formatAndAddEvent(paymentClient, paymentProcessedEvent, COHT_REVENUE)
+  await formatAndAddEvent(paymentClient, paymentEnrichedEvent, COHT_REVENUE)
+  await formatAndAddEvent(paymentClient, paymentExtractedEvent, COHT_REVENUE)
+
+  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, COHT_CAPITAL)
+  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, COHT_CAPITAL)
+  await formatAndAddEvent(paymentClient, paymentProcessedEvent, COHT_CAPITAL)
+  await formatAndAddEvent(paymentClient, paymentEnrichedEvent, COHT_CAPITAL)
+  await formatAndAddEvent(paymentClient, paymentExtractedEvent, COHT_CAPITAL)
 })
 
 describe('get events by scheme', () => {
@@ -189,6 +201,36 @@ describe('get events by scheme', () => {
     expect(result[5].value).toBe('£2,000.00')
   })
 
+  test('should return data for COHT Revenue only', async () => {
+    const result = await getEventsByScheme()
+    expect(result[6].scheme).toBe(schemeNames[COHT_REVENUE])
+  })
+
+  test('should return total number of submitted payment request events for COHT Revenue only', async () => {
+    const result = await getEventsByScheme()
+    expect(result[6].paymentRequests).toBe(2)
+  })
+
+  test('should return total value of payment requests for COHT Revenue only', async () => {
+    const result = await getEventsByScheme()
+    expect(result[6].value).toBe('£2,000.00')
+  })
+
+  test('should return data for COHT Capital only', async () => {
+    const result = await getEventsByScheme()
+    expect(result[7].scheme).toBe(schemeNames[COHT_CAPITAL])
+  })
+
+  test('should return total number of submitted payment request events for COHT Capital only', async () => {
+    const result = await getEventsByScheme()
+    expect(result[7].paymentRequests).toBe(2)
+  })
+
+  test('should return total value of payment requests for COHT Capital only', async () => {
+    const result = await getEventsByScheme()
+    expect(result[7].value).toBe('£2,000.00')
+  })
+
   test('should order scheme data by schemeId', async () => {
     const result = await getEventsByScheme()
     expect(result[0].scheme).toBe(schemeNames[SFI])
@@ -197,5 +239,7 @@ describe('get events by scheme', () => {
     expect(result[3].scheme).toBe(schemeNames[SFI23])
     expect(result[4].scheme).toBe(schemeNames[DELINKED])
     expect(result[5].scheme).toBe(schemeNames[SFI_EXPANDED])
+    expect(result[6].scheme).toBe(schemeNames[COHT_REVENUE])
+    expect(result[7].scheme).toBe(schemeNames[COHT_CAPITAL])
   })
 })

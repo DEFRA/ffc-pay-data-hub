@@ -12,7 +12,9 @@ const {
   IMPS,
   SFI23,
   DELINKED,
-  SFI_EXPANDED
+  SFI_EXPANDED,
+  COHT_REVENUE,
+  COHT_CAPITAL
 } = require('./schemes')
 
 module.exports = {
@@ -29,5 +31,7 @@ module.exports = {
   [IMPS]: 'IMPS',
   [SFI23]: 'SFI23',
   [DELINKED]: 'Delinked',
-  [SFI_EXPANDED]: 'Expanded SFI Offer'
+  [SFI_EXPANDED]: 'Expanded SFI Offer',
+  [COHT_REVENUE]: 'COHT Revenue',
+  [COHT_CAPITAL]: 'COHT Capital'
 }
