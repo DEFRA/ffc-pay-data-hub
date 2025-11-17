@@ -1,5 +1,4 @@
 const { BPS, CS } = require('../../../../../app/constants/schemes')
-
 const { getTotalSchemeValues } = require('../../../../../app/data/events/scheme-id/get-total-scheme-values')
 
 let submitted
@@ -7,32 +6,19 @@ let bpsEvent
 let csEvent
 let groupedEvents
 
-describe('get events', () => {
+describe('getTotalSchemeValues', () => {
   beforeEach(() => {
     submitted = require('../../../../mocks/events/submitted')
-    bpsEvent = {
-      ...submitted,
-      partitionKey: BPS
-    }
-
-    csEvent = {
-      ...submitted,
-      partitionKey: CS
-    }
+    bpsEvent = { ...submitted, partitionKey: BPS }
+    csEvent = { ...submitted, partitionKey: CS }
 
     groupedEvents = [
-      {
-        schemeId: CS.toString(),
-        events: [csEvent, csEvent, csEvent]
-      },
-      {
-        schemeId: BPS.toString(),
-        events: [bpsEvent, bpsEvent, bpsEvent]
-      }
+      { schemeId: CS.toString(), events: [csEvent, csEvent, csEvent] },
+      { schemeId: BPS.toString(), events: [bpsEvent, bpsEvent, bpsEvent] }
     ]
   })
 
-  test('should return an array with two elements when groupedEvents has a length of two', () => {
+  test('should return an array with correct length', () => {
     const result = getTotalSchemeValues(groupedEvents)
     expect(result.length).toBe(2)
   })
@@ -46,33 +32,21 @@ describe('get events', () => {
     })
   })
 
-  test('total paymentRequests should equal number of events in each groupedEvent', () => {
-    const result = getTotalSchemeValues(groupedEvents)
-    expect(result[0].paymentRequests).toBe(groupedEvents[0].events.length)
-  })
+  test('should correctly handle multiple scenarios', () => {
+    const scenarios = [
+      ['total paymentRequests equals number of events', 0, { paymentRequests: groupedEvents[0].events.length }],
+      ['schemeId equals groupedEvents schemeId', 0, { schemeId: groupedEvents[0].schemeId }],
+      ['value equals sum of events values when there are multiple events', 0, { value: 300000 }],
+      ['value equals sum of events values when there is only one event', 0, { value: 100000 }, () => groupedEvents[0].events.splice(1, 2)],
+      ['value is 0 if event value is 0', 0, { value: 0 }, () => { groupedEvents[0].events.splice(1, 2); groupedEvents[0].events[0].data.value = 0 }]
+    ]
 
-  test('schemeId should be equal to groupedEvents schemeId ', () => {
-    const result = getTotalSchemeValues(groupedEvents)
-    expect(result[0].schemeId).toBe(groupedEvents[0].schemeId)
-  })
-
-  test('value should be equal to sum of events values when there are multiple events', () => {
-    const result = getTotalSchemeValues(groupedEvents)
-    expect(result[0].value).toBe(300000)
-  })
-
-  test('value should be equal to sum of events values when there is only one event in the first element of groupedEvents', () => {
-    groupedEvents[0].events.pop()
-    groupedEvents[0].events.pop()
-    const result = getTotalSchemeValues(groupedEvents)
-    expect(result[0].value).toBe(100000)
-  })
-
-  test('value shold be 0 when there is a value of 0', () => {
-    groupedEvents[0].events.pop()
-    groupedEvents[0].events.pop()
-    groupedEvents[0].events[0].data.value = 0
-    const result = getTotalSchemeValues(groupedEvents)
-    expect(result[0].value).toBe(0)
+    scenarios.forEach(([name, index, expected, setup]) => {
+      if (setup) setup()
+      const result = getTotalSchemeValues(groupedEvents)
+      Object.entries(expected).forEach(([key, value]) => {
+        expect(result[index][key]).toBe(value)
+      })
+    })
   })
 })

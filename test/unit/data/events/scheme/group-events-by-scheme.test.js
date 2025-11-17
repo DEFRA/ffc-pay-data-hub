@@ -1,45 +1,31 @@
 const submitted = require('../../../../mocks/events/submitted')
-
-const { BPS, CS, SFI, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL } = require('../../../../../app/constants/schemes')
-
+const {
+  BPS, CS, SFI, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL
+} = require('../../../../../app/constants/schemes')
 const { groupEventsByScheme } = require('../../../../../app/data/events/scheme-id/group-events-by-scheme')
 
-let events
-let bpsEvents
-let csEvents
-let sfiEvents
-let sfi23Events
-let delinkedEvents
-let esfioEvents
-let cohtREvents
-let cohtCEvents
 let mixedSchemeEvents
 
-describe('group events by FRN', () => {
+describe('group events by scheme', () => {
   beforeEach(() => {
-    const createEventsForScheme = (scheme, events) => events.map((event) => {
-      return {
-        ...event,
-        partitionKey: scheme
-      }
-    })
+    const createEventsForScheme = (scheme) => [submitted, submitted].map(e => ({ ...e, partitionKey: scheme }))
 
-    events = [submitted, submitted]
-    bpsEvents = createEventsForScheme(BPS, events)
-    csEvents = createEventsForScheme(CS, events)
-    sfiEvents = createEventsForScheme(SFI, events)
-    sfi23Events = createEventsForScheme(SFI23, events)
-    delinkedEvents = createEventsForScheme(DELINKED, events)
-    esfioEvents = createEventsForScheme(SFI_EXPANDED, events)
-    cohtREvents = createEventsForScheme(COHT_REVENUE, events)
-    cohtCEvents = createEventsForScheme(COHT_CAPITAL, events)
-    mixedSchemeEvents = [...bpsEvents, ...csEvents, ...sfiEvents, ...sfi23Events, ...delinkedEvents, ...esfioEvents, ...cohtREvents, ...cohtCEvents]
+    mixedSchemeEvents = [
+      ...createEventsForScheme(BPS),
+      ...createEventsForScheme(CS),
+      ...createEventsForScheme(SFI),
+      ...createEventsForScheme(SFI23),
+      ...createEventsForScheme(DELINKED),
+      ...createEventsForScheme(SFI_EXPANDED),
+      ...createEventsForScheme(COHT_REVENUE),
+      ...createEventsForScheme(COHT_CAPITAL)
+    ]
   })
 
-  test('should return schemeId equal to partitionKey for all events in eventGroup', () => {
+  test('all events in each group have schemeId equal to partitionKey', () => {
     const groupedEvents = groupEventsByScheme(mixedSchemeEvents)
-    groupedEvents.forEach(eventGroup => {
-      eventGroup.events.forEach(event => expect(eventGroup.schemeId).toBe(event.partitionKey))
-    })
+    groupedEvents.forEach(group =>
+      group.events.forEach(event => expect(group.schemeId).toBe(event.partitionKey))
+    )
   })
 })

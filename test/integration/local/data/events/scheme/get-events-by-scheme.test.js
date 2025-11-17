@@ -1,24 +1,21 @@
 const { FRN } = require('../../../../../mocks/values/frn')
 const { INVOICE_NUMBER } = require('../../../../../mocks/values/invoice-number')
 
-const { BPS, CS, SFI, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL } = require('../../../../../../app/constants/schemes')
+const {
+  BPS, CS, SFI, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL
+} = require('../../../../../../app/constants/schemes')
+
 const { PAYMENT_EVENT, HOLD_EVENT, BATCH_EVENT, WARNING_EVENT } = require('../../../../../../app/constants/event-types')
 const schemeNames = require('../../../../../../app/constants/scheme-names')
-
 const { getEventsByScheme } = require('../../../../../../app/data/events/scheme-id/get-events-by-scheme')
 const { initialise: initialiseTables, getClient } = require('../../../../../../app/storage')
 
-let paymentClient
-let holdClient
-let batchClient
-let warningClient
-
-let paymentSubmittedEvent
-let paymentProcessedEvent
-let paymentEnrichedEvent
-let paymentExtractedEvent
-
+let clients = {}
+let events = {}
 let nextEventId
+
+const SCHEMES = [SFI, CS, BPS, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL]
+const EVENT_TYPES = [PAYMENT_EVENT, HOLD_EVENT, BATCH_EVENT, WARNING_EVENT]
 
 const formatAndAddEvent = async (tableClient, event, schemeId) => {
   const formattedEvent = {
@@ -33,213 +30,56 @@ const formatAndAddEvent = async (tableClient, event, schemeId) => {
 
 beforeAll(async () => {
   await initialiseTables()
-
-  paymentClient = getClient(PAYMENT_EVENT)
-  holdClient = getClient(HOLD_EVENT)
-  batchClient = getClient(BATCH_EVENT)
-  warningClient = getClient(WARNING_EVENT)
+  clients = EVENT_TYPES.reduce((acc, type) => {
+    acc[type] = getClient(type)
+    return acc
+  }, {})
 })
 
 beforeEach(async () => {
-  paymentClient.deleteTable()
-  holdClient.deleteTable()
-  batchClient.deleteTable()
-  warningClient.deleteTable()
-
-  paymentClient.createTable()
-  holdClient.createTable()
-  batchClient.createTable()
-  warningClient.createTable()
-
-  paymentSubmittedEvent = JSON.parse(JSON.stringify(require('../../../../../mocks/events/submitted')))
-  paymentProcessedEvent = JSON.parse(JSON.stringify(require('../../../../../mocks/events/processed')))
-  paymentEnrichedEvent = JSON.parse(JSON.stringify(require('../../../../../mocks/events/enriched')))
-  paymentExtractedEvent = JSON.parse(JSON.stringify(require('../../../../../mocks/events/extracted')))
-
   nextEventId = 1
 
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, SFI)
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, SFI)
-  await formatAndAddEvent(paymentClient, paymentProcessedEvent, SFI)
-  await formatAndAddEvent(paymentClient, paymentEnrichedEvent, SFI)
-  await formatAndAddEvent(paymentClient, paymentExtractedEvent, SFI)
+  for (const client of Object.values(clients)) {
+    await client.deleteTable()
+    await client.createTable()
+  }
 
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, CS)
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, CS)
-  await formatAndAddEvent(paymentClient, paymentProcessedEvent, CS)
-  await formatAndAddEvent(paymentClient, paymentEnrichedEvent, CS)
-  await formatAndAddEvent(paymentClient, paymentExtractedEvent, CS)
+  // Deep copy events to avoid mutation
+  events = {
+    submitted: structuredClone(require('../../../../../mocks/events/submitted')),
+    processed: structuredClone(require('../../../../../mocks/events/processed')),
+    enriched: structuredClone(require('../../../../../mocks/events/enriched')),
+    extracted: structuredClone(require('../../../../../mocks/events/extracted'))
+  }
 
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, BPS)
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, BPS)
-  await formatAndAddEvent(paymentClient, paymentProcessedEvent, BPS)
-  await formatAndAddEvent(paymentClient, paymentEnrichedEvent, BPS)
-  await formatAndAddEvent(paymentClient, paymentExtractedEvent, BPS)
-
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, SFI23)
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, SFI23)
-  await formatAndAddEvent(paymentClient, paymentProcessedEvent, SFI23)
-  await formatAndAddEvent(paymentClient, paymentEnrichedEvent, SFI23)
-  await formatAndAddEvent(paymentClient, paymentExtractedEvent, SFI23)
-
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, DELINKED)
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, DELINKED)
-  await formatAndAddEvent(paymentClient, paymentProcessedEvent, DELINKED)
-  await formatAndAddEvent(paymentClient, paymentEnrichedEvent, DELINKED)
-  await formatAndAddEvent(paymentClient, paymentExtractedEvent, DELINKED)
-
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, SFI_EXPANDED)
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, SFI_EXPANDED)
-  await formatAndAddEvent(paymentClient, paymentProcessedEvent, SFI_EXPANDED)
-  await formatAndAddEvent(paymentClient, paymentEnrichedEvent, SFI_EXPANDED)
-  await formatAndAddEvent(paymentClient, paymentExtractedEvent, SFI_EXPANDED)
-
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, COHT_REVENUE)
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, COHT_REVENUE)
-  await formatAndAddEvent(paymentClient, paymentProcessedEvent, COHT_REVENUE)
-  await formatAndAddEvent(paymentClient, paymentEnrichedEvent, COHT_REVENUE)
-  await formatAndAddEvent(paymentClient, paymentExtractedEvent, COHT_REVENUE)
-
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, COHT_CAPITAL)
-  await formatAndAddEvent(paymentClient, paymentSubmittedEvent, COHT_CAPITAL)
-  await formatAndAddEvent(paymentClient, paymentProcessedEvent, COHT_CAPITAL)
-  await formatAndAddEvent(paymentClient, paymentEnrichedEvent, COHT_CAPITAL)
-  await formatAndAddEvent(paymentClient, paymentExtractedEvent, COHT_CAPITAL)
+  // Add events for all schemes and all event types
+  for (const scheme of SCHEMES) {
+    for (const type of EVENT_TYPES) {
+      await formatAndAddEvent(clients[type], events.submitted, scheme)
+      await formatAndAddEvent(clients[type], events.submitted, scheme)
+      await formatAndAddEvent(clients[type], events.processed, scheme)
+      await formatAndAddEvent(clients[type], events.enriched, scheme)
+      await formatAndAddEvent(clients[type], events.extracted, scheme)
+    }
+  }
 })
 
 describe('get events by scheme', () => {
-  test('should return data for SFI only', async () => {
-    const result = await getEventsByScheme()
-    console.log(result)
-    expect(result[0].scheme).toBe(schemeNames[SFI])
-  })
-
-  test('should return total number of submitted payment request events for SFI only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[0].paymentRequests).toBe(2)
-  })
-
-  test('should return total value of payment requests for SFI only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[0].value).toBe('£2,000.00')
-  })
-
-  test('should return data for CS only', async () => {
-    const result = await getEventsByScheme()
-    console.log(result)
-    expect(result[1].scheme).toBe(schemeNames[CS])
-  })
-
-  test('should return total number of submitted payment request events for CS only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[1].paymentRequests).toBe(2)
-  })
-
-  test('should return total value of payment requests for CS only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[1].value).toBe('£2,000.00')
-  })
-
-  test('should return data for BPS only', async () => {
-    const result = await getEventsByScheme()
-    console.log(result)
-    expect(result[2].scheme).toBe(schemeNames[BPS])
-  })
-
-  test('should return total number of submitted payment request events for BPS only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[2].paymentRequests).toBe(2)
-  })
-
-  test('should return total value of payment requests for BPS only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[2].value).toBe('£2,000.00')
-  })
-
-  test('should return data for SFI23 only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[3].scheme).toBe(schemeNames[SFI23])
-  })
-
-  test('should return total number of submitted payment request events for SFI23 only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[3].paymentRequests).toBe(2)
-  })
-
-  test('should return total value of payment requests for SFI23 only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[3].value).toBe('£2,000.00')
-  })
-
-  test('should return data for Delinked only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[4].scheme).toBe(schemeNames[DELINKED])
-  })
-
-  test('should return total number of submitted payment request events for Delinked only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[4].paymentRequests).toBe(2)
-  })
-
-  test('should return total value of payment requests for Delinked only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[4].value).toBe('£2,000.00')
-  })
-
-  test('should return data for SFI Expanded only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[5].scheme).toBe(schemeNames[SFI_EXPANDED])
-  })
-
-  test('should return total number of submitted payment request events for SFI expanded only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[5].paymentRequests).toBe(2)
-  })
-
-  test('should return total value of payment requests for SFI expanded only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[5].value).toBe('£2,000.00')
-  })
-
-  test('should return data for COHT Revenue only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[6].scheme).toBe(schemeNames[COHT_REVENUE])
-  })
-
-  test('should return total number of submitted payment request events for COHT Revenue only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[6].paymentRequests).toBe(2)
-  })
-
-  test('should return total value of payment requests for COHT Revenue only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[6].value).toBe('£2,000.00')
-  })
-
-  test('should return data for COHT Capital only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[7].scheme).toBe(schemeNames[COHT_CAPITAL])
-  })
-
-  test('should return total number of submitted payment request events for COHT Capital only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[7].paymentRequests).toBe(2)
-  })
-
-  test('should return total value of payment requests for COHT Capital only', async () => {
-    const result = await getEventsByScheme()
-    expect(result[7].value).toBe('£2,000.00')
-  })
+  test.each(SCHEMES.map((scheme, i) => [i, scheme]))(
+    'should return correct data for scheme %s',
+    async (_, scheme) => {
+      const result = await getEventsByScheme()
+      const schemeData = result.find(r => r.scheme === schemeNames[scheme])
+      expect(schemeData.scheme).toBe(schemeNames[scheme])
+      expect(schemeData.paymentRequests).toBe(2)
+      expect(schemeData.value).toBe('£2,000.00')
+    }
+  )
 
   test('should order scheme data by schemeId', async () => {
     const result = await getEventsByScheme()
-    expect(result[0].scheme).toBe(schemeNames[SFI])
-    expect(result[1].scheme).toBe(schemeNames[CS])
-    expect(result[2].scheme).toBe(schemeNames[BPS])
-    expect(result[3].scheme).toBe(schemeNames[SFI23])
-    expect(result[4].scheme).toBe(schemeNames[DELINKED])
-    expect(result[5].scheme).toBe(schemeNames[SFI_EXPANDED])
-    expect(result[6].scheme).toBe(schemeNames[COHT_REVENUE])
-    expect(result[7].scheme).toBe(schemeNames[COHT_CAPITAL])
+    SCHEMES.forEach((scheme, i) => {
+      expect(result[i].scheme).toBe(schemeNames[scheme])
+    })
   })
 })

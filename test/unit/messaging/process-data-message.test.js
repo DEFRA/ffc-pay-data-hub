@@ -1,35 +1,30 @@
 jest.mock('../../../app/messaging/validate-message')
-const { validateMessage: mockValidateMessage } = require('../../../app/messaging/validate-message')
-
 jest.mock('../../../app/cache')
-const { getCachedResponse: mockGetCachedResponse, setCachedResponse: mockSetCachedResponse, getCacheKey: mockGetCacheKey } = require('../../../app/cache')
-
 jest.mock('../../../app/messaging/send-message')
-const { sendMessage: mockSendMessage } = require('../../../app/messaging/send-message')
-
 jest.mock('../../../app/data')
-const { getData: mockGetData } = require('../../../app/data')
-
 jest.mock('../../../app/storage')
+
+const { validateMessage: mockValidateMessage } = require('../../../app/messaging/validate-message')
+const { getCachedResponse: mockGetCachedResponse, setCachedResponse: mockSetCachedResponse, getCacheKey: mockGetCacheKey } = require('../../../app/cache')
+const { sendMessage: mockSendMessage } = require('../../../app/messaging/send-message')
+const { getData: mockGetData } = require('../../../app/data')
 const { writeDataRequestFile: mockWriteDataRequestFile } = require('../../../app/storage')
 
 const { cacheConfig, messageConfig } = require('../../../app/config')
-
 const { REQUEST_MESSAGE } = require('../../mocks/messaging/message')
 const { CATEGORY } = require('../../mocks/values/category')
 const { REQUEST_VALUE } = require('../../mocks/cache/request-value')
 const { REQUEST } = require('../../mocks/request')
 const { RESPONSE } = require('../../mocks/values/response')
 const { KEY } = require('../../mocks/cache/key')
-
 const { TYPE } = require('../../../app/constants/type')
 const { VALIDATION } = require('../../../app/constants/errors')
 
 const { processDataMessage } = require('../../../app/messaging/process-data-message')
 
-let receiver
+describe('processDataMessage', () => {
+  let receiver
 
-describe('process data message', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockGetCacheKey.mockReturnValue(KEY)
@@ -42,59 +37,50 @@ describe('process data message', () => {
     }
   })
 
-  test('should validate message', async () => {
+  test('should validate the message', async () => {
     await processDataMessage(REQUEST_MESSAGE, receiver)
     expect(mockValidateMessage).toHaveBeenCalledWith(REQUEST_MESSAGE)
   })
 
-  test('should get cache key from message category and value', async () => {
-    await processDataMessage(REQUEST_MESSAGE, receiver)
-    expect(mockGetCacheKey).toHaveBeenCalledWith(CATEGORY, REQUEST_VALUE)
-  })
-
-  test('should get cached response for request', async () => {
+  test('should retrieve cached response if available', async () => {
     await processDataMessage(REQUEST_MESSAGE, receiver)
     expect(mockGetCachedResponse).toHaveBeenCalledWith(cacheConfig.cache, REQUEST, KEY)
   })
 
-  test('should get data for request if no cached response', async () => {
+  test('should get data if no cached response and set cache', async () => {
     mockGetCachedResponse.mockResolvedValue(null)
     await processDataMessage(REQUEST_MESSAGE, receiver)
     expect(mockGetData).toHaveBeenCalledWith(CATEGORY, REQUEST_VALUE)
-  })
-
-  test('should set cached response for request if no cached response', async () => {
-    mockGetCachedResponse.mockResolvedValue(null)
-    await processDataMessage(REQUEST_MESSAGE, receiver)
     expect(mockSetCachedResponse).toHaveBeenCalledWith(cacheConfig.cache, KEY, REQUEST, RESPONSE)
   })
 
-  test('should write data request file and get blob URI', async () => {
+  test('should write data request file and send response message', async () => {
     await processDataMessage(REQUEST_MESSAGE, receiver)
     expect(mockWriteDataRequestFile).toHaveBeenCalledWith(`${REQUEST_MESSAGE.messageId}.json`, JSON.stringify(RESPONSE))
+    expect(mockSendMessage).toHaveBeenCalledWith(
+      { uri: 'http://example.com/blob' },
+      TYPE,
+      messageConfig.dataQueue,
+      { sessionId: REQUEST_MESSAGE.messageId }
+    )
   })
 
-  test('should send response message with blob URI', async () => {
-    await processDataMessage(REQUEST_MESSAGE, receiver)
-    expect(mockSendMessage).toHaveBeenCalledWith({ uri: 'http://example.com/blob' }, TYPE, messageConfig.dataQueue, { sessionId: REQUEST_MESSAGE.messageId })
-  })
-
-  test('should complete message if message successfully processed', async () => {
+  test('should complete the message if processing succeeds', async () => {
     await processDataMessage(REQUEST_MESSAGE, receiver)
     expect(receiver.completeMessage).toHaveBeenCalledWith(REQUEST_MESSAGE)
   })
 
-  test('should abandon message if message processing fails and not validation error', async () => {
-    mockGetCachedResponse.mockRejectedValue(new Error('Unable to get cached response'))
+  test('should abandon message on non-validation errors', async () => {
+    mockGetCachedResponse.mockRejectedValue(new Error('Unexpected error'))
     await processDataMessage(REQUEST_MESSAGE, receiver)
     expect(receiver.abandonMessage).toHaveBeenCalledWith(REQUEST_MESSAGE)
   })
 
-  test('should dead letter message if message processing fails and validation error', async () => {
+  test('should dead-letter message on validation errors', async () => {
     mockValidateMessage.mockImplementation(() => {
-      const error = new Error('Validation error')
-      error.category = VALIDATION
-      throw error
+      const err = new Error('Validation error')
+      err.category = VALIDATION
+      throw err
     })
     await processDataMessage(REQUEST_MESSAGE, receiver)
     expect(receiver.deadLetterMessage).toHaveBeenCalledWith(REQUEST_MESSAGE)

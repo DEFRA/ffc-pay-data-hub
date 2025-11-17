@@ -1,16 +1,13 @@
 jest.mock('../../../../../app/data/events/get-events')
-const { getEvents: mockGetEvents } = require('../../../../../app/data/events/get-events')
-
 jest.mock('../../../../../app/data/events/group-events-by-correlation-id')
-const { groupEventsByCorrelationId: mockGroupEventsByCorrelationId } = require('../../../../../app/data/events/group-events-by-correlation-id')
-
 jest.mock('../../../../../app/data/events/correlation-id/order-grouped-events')
-const { orderGroupedEvents: mockOrderGroupedEvents } = require('../../../../../app/data/events/correlation-id/order-grouped-events')
-
 jest.mock('../../../../../app/data/events/sanitise-events')
-const { sanitiseEvents: mockSanitiseEvents } = require('../../../../../app/data/events/sanitise-events')
-
 jest.mock('../../../../../app/data/events/add-pending-events')
+
+const { getEvents: mockGetEvents } = require('../../../../../app/data/events/get-events')
+const { groupEventsByCorrelationId: mockGroupEventsByCorrelationId } = require('../../../../../app/data/events/group-events-by-correlation-id')
+const { orderGroupedEvents: mockOrderGroupedEvents } = require('../../../../../app/data/events/correlation-id/order-grouped-events')
+const { sanitiseEvents: mockSanitiseEvents } = require('../../../../../app/data/events/sanitise-events')
 const { addPendingEvents: mockAddPendingEvents } = require('../../../../../app/data/events/add-pending-events')
 
 const { CORRELATION_ID: CORRELATION_ID_VALUE } = require('../../../../mocks/values/correlation-id')
@@ -20,7 +17,7 @@ const groupedEvent = require('../../../../mocks/events/grouped-event')
 
 const { getEventsByCorrelationId } = require('../../../../../app/data/events/correlation-id/get-events-by-correlation-id')
 
-describe('get events by correlation id', () => {
+describe('getEventsByCorrelationId', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockGetEvents.mockResolvedValue([enriched])
@@ -30,33 +27,14 @@ describe('get events by correlation id', () => {
     mockAddPendingEvents.mockReturnValue([groupedEvent])
   })
 
-  test('should get events for FRN', async () => {
-    await getEventsByCorrelationId(CORRELATION_ID_VALUE)
+  test('should fetch, process, and return events correctly', async () => {
+    const result = await getEventsByCorrelationId(CORRELATION_ID_VALUE)
+
     expect(mockGetEvents).toHaveBeenCalledWith(CORRELATION_ID_VALUE, CORRELATION_ID_CATEGORY)
-  })
-
-  test('should group events by FRN', async () => {
-    await getEventsByCorrelationId(CORRELATION_ID_VALUE)
     expect(mockGroupEventsByCorrelationId).toHaveBeenCalledWith([enriched])
-  })
-
-  test('should order grouped events', async () => {
-    await getEventsByCorrelationId(CORRELATION_ID_VALUE)
     expect(mockOrderGroupedEvents).toHaveBeenCalledWith(groupedEvent)
-  })
-
-  test('should sanitise events', async () => {
-    await getEventsByCorrelationId(CORRELATION_ID_VALUE)
     expect(mockSanitiseEvents).toHaveBeenCalledWith(groupedEvent)
-  })
-
-  test('should add pending events', async () => {
-    await getEventsByCorrelationId(CORRELATION_ID_VALUE)
     expect(mockAddPendingEvents).toHaveBeenCalledWith(groupedEvent)
-  })
-
-  test('should return first group event only', async () => {
-    const events = await getEventsByCorrelationId(CORRELATION_ID_VALUE)
-    expect(events).toEqual(groupedEvent)
+    expect(result).toEqual(groupedEvent)
   })
 })

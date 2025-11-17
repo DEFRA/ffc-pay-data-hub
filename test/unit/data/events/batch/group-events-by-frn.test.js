@@ -8,44 +8,29 @@ const acknowledged = require('../../../../mocks/events/acknowledged')
 const { groupEventsByFrn } = require('../../../../../app/data/events/batch/group-events-by-frn')
 
 let events
+let groupedEvents
 
-describe('group events by FRN', () => {
+describe('groupEventsByFrn', () => {
   beforeEach(() => {
     events = [enriched, processed, submitted, acknowledged]
+    groupedEvents = groupEventsByFrn(events)
   })
 
   test('should group events with partition key as batch name', () => {
-    const groupedEvents = groupEventsByFrn(events)
     expect(groupedEvents[0].batch).toBe(PARTITION_KEY)
   })
 
-  test('should include events with first element of row key as FRN', () => {
-    const groupedEvents = groupEventsByFrn(events)
-    expect(groupedEvents[0].frn).toBe(ROW_KEY.split('|')[0])
-  })
-
-  test('should include scheme id in group', () => {
-    const groupedEvents = groupEventsByFrn(events)
-    expect(groupedEvents[0].schemeId).toBe(enriched.data.schemeId)
-  })
-
-  test('should include payment request number in group', () => {
-    const groupedEvents = groupEventsByFrn(events)
-    expect(groupedEvents[0].paymentRequestNumber).toBe(enriched.data.paymentRequestNumber)
-  })
-
-  test('should include agreement number in group', () => {
-    const groupedEvents = groupEventsByFrn(events)
-    expect(groupedEvents[0].agreementNumber).toBe(enriched.data.agreementNumber)
-  })
-
-  test('should include marketing year in group', () => {
-    const groupedEvents = groupEventsByFrn(events)
-    expect(groupedEvents[0].marketingYear).toBe(enriched.data.marketingYear)
-  })
-
-  test('should include events in group', () => {
-    const groupedEvents = groupEventsByFrn(events)
+  test('should include events array in group', () => {
     expect(groupedEvents[0].events).toEqual(events)
+  })
+
+  test.each([
+    ['frn', ROW_KEY.split('|')[0]],
+    ['schemeId', enriched.data.schemeId],
+    ['paymentRequestNumber', enriched.data.paymentRequestNumber],
+    ['agreementNumber', enriched.data.agreementNumber],
+    ['marketingYear', enriched.data.marketingYear]
+  ])('should include %s in group', (field, expected) => {
+    expect(groupedEvents[0][field]).toBe(expected)
   })
 })

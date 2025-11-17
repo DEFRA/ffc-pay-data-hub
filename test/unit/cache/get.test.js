@@ -1,6 +1,4 @@
-const mockClient = {
-  get: jest.fn()
-}
+const mockClient = { get: jest.fn() }
 
 jest.mock('../../../app/cache/base')
 const { getClient: mockGetClient } = require('../../../app/cache/base')
@@ -23,18 +21,10 @@ describe('cache get', () => {
     mockClient.get.mockResolvedValue(VALUE_STRING)
   })
 
-  test('should get full key from cache with name and key', async () => {
-    await get(NAME, KEY)
-    expect(mockGetFullKey).toHaveBeenCalledWith(NAME, KEY)
-  })
-
-  test('should get full key from cache', async () => {
-    await get(NAME, KEY)
-    expect(mockClient.get).toHaveBeenCalledWith(PREFIX)
-  })
-
-  test('should return value from cache', async () => {
+  test('should get full key from cache and return value', async () => {
     const value = await get(NAME, KEY)
+    expect(mockGetFullKey).toHaveBeenCalledWith(NAME, KEY)
+    expect(mockClient.get).toHaveBeenCalledWith(PREFIX)
     expect(value).toEqual(VALUE)
   })
 

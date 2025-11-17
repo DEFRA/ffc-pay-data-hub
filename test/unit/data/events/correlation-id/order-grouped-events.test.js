@@ -9,7 +9,7 @@ let groupedEvent
 
 describe('order grouped events', () => {
   beforeEach(() => {
-    groupedEvent = JSON.parse(JSON.stringify(require('../../../../mocks/events/grouped-event')))
+    groupedEvent = structuredClone(require('../../../../mocks/events/grouped-event'))
     groupedEvent.events = [acknowledged, processed, enriched, submitted]
   })
 
