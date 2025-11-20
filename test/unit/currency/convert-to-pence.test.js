@@ -1,88 +1,35 @@
 const { convertToPence } = require('../../../app/currency/convert-to-pence')
 
-describe('convert to pence', () => {
-  test('converts 100 to pence', () => {
-    const result = convertToPence(100)
-    expect(result).toEqual(10000)
+describe('convertToPence', () => {
+  describe('valid numeric inputs', () => {
+    test.each([
+      [100, 10000],
+      [100.00, 10000],
+      [-100, -10000],
+      [100.10, 10010],
+      [100.1, 10010]
+    ])('converts %p to %p pence', (input, expected) => {
+      expect(convertToPence(input)).toEqual(expected)
+    })
   })
 
-  test('converts 100 to pence with no decimals', () => {
-    const result = convertToPence(100.00)
-    expect(result).toEqual(10000)
+  describe('valid string inputs', () => {
+    test.each([
+      ['100', 10000],
+      ['100.00', 10000],
+      ['100.10', 10010],
+      ['100.1', 10010]
+    ])('converts "%s" to %p pence', (input, expected) => {
+      expect(convertToPence(input)).toEqual(expected)
+    })
   })
 
-  test('converts -100 to pence', () => {
-    const result = convertToPence(-100)
-    expect(result).toEqual(-10000)
-  })
-
-  test('converts 100.10 to pence', () => {
-    const result = convertToPence(100.10)
-    expect(result).toEqual(10010)
-  })
-
-  test('converts 100.1 to pence', () => {
-    const result = convertToPence(100.1)
-    expect(result).toEqual(10010)
-  })
-
-  test('converts 100 to pence if string', () => {
-    const result = convertToPence('100')
-    expect(result).toEqual(10000)
-  })
-
-  test('converts 100 to pence if string with no decimals', () => {
-    const result = convertToPence('100.00')
-    expect(result).toEqual(10000)
-  })
-
-  test('converts 100.10 to pence if string', () => {
-    const result = convertToPence('100.10')
-    expect(result).toEqual(10010)
-  })
-
-  test('converts 100.1 to pence if string', () => {
-    const result = convertToPence('100.1')
-    expect(result).toEqual(10010)
-  })
-
-  test('returns undefined if no value', () => {
-    const result = convertToPence()
-    expect(result).toBeUndefined()
-  })
-
-  test('returns undefined if undefined', () => {
-    const result = convertToPence(undefined)
-    expect(result).toBeUndefined()
-  })
-
-  test('returns undefined if null', () => {
-    const result = convertToPence(null)
-    expect(result).toBeUndefined()
-  })
-
-  test('returns undefined if object', () => {
-    const result = convertToPence({})
-    expect(result).toBeUndefined()
-  })
-
-  test('returns undefined if array', () => {
-    const result = convertToPence([])
-    expect(result).toBeUndefined()
-  })
-
-  test('returns undefined if true', () => {
-    const result = convertToPence(true)
-    expect(result).toBeUndefined()
-  })
-
-  test('returns undefined if false', () => {
-    const result = convertToPence(false)
-    expect(result).toBeUndefined()
-  })
-
-  test('returns undefined if boolean', () => {
-    const result = convertToPence(Boolean())
-    expect(result).toBeUndefined()
+  describe('invalid inputs', () => {
+    test.each([undefined, null, {}, [], true, false, Boolean()])(
+      'returns undefined for %p',
+      input => {
+        expect(convertToPence(input)).toBeUndefined()
+      }
+    )
   })
 })

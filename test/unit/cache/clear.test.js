@@ -1,6 +1,4 @@
-const mockClient = {
-  del: jest.fn()
-}
+const mockClient = { del: jest.fn() }
 
 jest.mock('../../../app/cache/base')
 const { getClient: mockGetClient } = require('../../../app/cache/base')
@@ -21,13 +19,9 @@ describe('cache clear', () => {
     mockGetFullKey.mockReturnValue(PREFIX)
   })
 
-  test('should get full key from cache with name and key', async () => {
+  test('should get full key and delete it from cache', async () => {
     await clear(NAME, KEY)
     expect(mockGetFullKey).toHaveBeenCalledWith(NAME, KEY)
-  })
-
-  test('should delete full key from cache', async () => {
-    await clear(NAME, KEY)
     expect(mockClient.del).toHaveBeenCalledWith(PREFIX)
   })
 })

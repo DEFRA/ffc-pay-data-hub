@@ -1,33 +1,14 @@
 const { convertToPounds } = require('../../../app/currency/convert-to-pounds')
 
-describe('convert to pounds', () => {
-  test('converts 100 to pounds', () => {
-    const result = convertToPounds(100)
-    expect(result).toEqual('1.00')
-  })
-
-  test('converts 110 to pounds', () => {
-    const result = convertToPounds(110)
-    expect(result).toEqual('1.10')
-  })
-
-  test('converts -100 to pounds', () => {
-    const result = convertToPounds(-100)
-    expect(result).toEqual('-1.00')
-  })
-
-  test('converts 100 to pounds with no decimals', () => {
-    const result = convertToPounds(100.00)
-    expect(result).toEqual('1.00')
-  })
-
-  test('converts 100.10 to pounds ignoring decimal', () => {
-    const result = convertToPounds(100.10)
-    expect(result).toEqual('1.00')
-  })
-
-  test('converts -100.10 to pounds ignoring decimal', () => {
-    const result = convertToPounds(-100.10)
-    expect(result).toEqual('-1.00')
+describe('convertToPounds', () => {
+  test.each([
+    [100, '1.00'],
+    [110, '1.10'],
+    [-100, '-1.00'],
+    [100.00, '1.00'],
+    [100.10, '1.00'],
+    [-100.10, '-1.00']
+  ])('converts %p to "%s" pounds', (input, expected) => {
+    expect(convertToPounds(input)).toEqual(expected)
   })
 })

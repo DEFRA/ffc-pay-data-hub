@@ -7,45 +7,31 @@ const acknowledged = require('../../../../mocks/events/acknowledged')
 
 const { groupEventsByFrn } = require('../../../../../app/data/events/frn/group-events-by-frn')
 
-let events
-
 describe('group events by FRN', () => {
+  let events
+  let groupedEvents
+
   beforeEach(() => {
     events = [enriched, processed, submitted, acknowledged]
+    groupedEvents = groupEventsByFrn(events)
   })
 
-  test('should group events with partition key as FRN', () => {
-    const groupedEvents = groupEventsByFrn(events)
-    expect(groupedEvents[0].frn).toBe(PARTITION_KEY)
-  })
+  const cases = [
+    ['should group events with partition key as FRN', () => groupedEvents[0].frn, PARTITION_KEY],
+    ['should include events with first element of row key as correlation id', () => groupedEvents[0].correlationId, ROW_KEY.split('|')[0]],
+    ['should include scheme id in group', () => groupedEvents[0].schemeId, enriched.data.schemeId],
+    ['should include payment request number in group', () => groupedEvents[0].paymentRequestNumber, enriched.data.paymentRequestNumber],
+    ['should include agreement number in group', () => groupedEvents[0].agreementNumber, enriched.data.agreementNumber],
+    ['should include marketing year in group', () => groupedEvents[0].marketingYear, enriched.data.marketingYear]
+  ]
 
-  test('should include events with first element of row key as correlation id', () => {
-    const groupedEvents = groupEventsByFrn(events)
-    expect(groupedEvents[0].correlationId).toBe(ROW_KEY.split('|')[0])
-  })
-
-  test('should include scheme id in group', () => {
-    const groupedEvents = groupEventsByFrn(events)
-    expect(groupedEvents[0].schemeId).toBe(enriched.data.schemeId)
-  })
-
-  test('should include payment request number in group', () => {
-    const groupedEvents = groupEventsByFrn(events)
-    expect(groupedEvents[0].paymentRequestNumber).toBe(enriched.data.paymentRequestNumber)
-  })
-
-  test('should include agreement number in group', () => {
-    const groupedEvents = groupEventsByFrn(events)
-    expect(groupedEvents[0].agreementNumber).toBe(enriched.data.agreementNumber)
-  })
-
-  test('should include marketing year in group', () => {
-    const groupedEvents = groupEventsByFrn(events)
-    expect(groupedEvents[0].marketingYear).toBe(enriched.data.marketingYear)
+  test.each(cases)('%s', (_, actualFn, expected) => {
+    expect(actualFn()).toEqual(expected)
   })
 
   test('should include events in group', () => {
-    const groupedEvents = groupEventsByFrn(events)
-    expect(groupedEvents[0].events).toEqual(events)
+    const groupedEventIds = groupedEvents[0].events.map(e => e.id)
+    const originalEventIds = events.map(e => e.id)
+    expect(groupedEventIds).toEqual(originalEventIds)
   })
 })

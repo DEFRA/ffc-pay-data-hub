@@ -26,34 +26,36 @@ describe('get events by frn', () => {
     jest.clearAllMocks()
 
     mockGetEvents.mockResolvedValue([enriched])
-
     mockGroupEventsByFrn.mockReturnValue(groupedEvent)
     mockOrderGroupedEvents.mockReturnValue(groupedEvent)
     mockSanitiseEvents.mockReturnValue(groupedEvent)
+    mockAddValues.mockReturnValue(groupedEvent)
   })
 
-  test('should get events for FRN', async () => {
-    await getEventsByFrn(FRN_VALUE)
-    expect(mockGetEvents).toHaveBeenCalledWith(FRN_VALUE, FRN_CATEGORY)
-  })
+  const testCases = [
+    ['get events for FRN', async () => {
+      await getEventsByFrn(FRN_VALUE)
+      expect(mockGetEvents).toHaveBeenCalledWith(FRN_VALUE, FRN_CATEGORY)
+    }],
+    ['group events by FRN', async () => {
+      await getEventsByFrn(FRN_VALUE)
+      expect(mockGroupEventsByFrn).toHaveBeenCalledWith([enriched])
+    }],
+    ['order grouped events', async () => {
+      await getEventsByFrn(FRN_VALUE)
+      expect(mockOrderGroupedEvents).toHaveBeenCalledWith(groupedEvent)
+    }],
+    ['sanitise events', async () => {
+      await getEventsByFrn(FRN_VALUE)
+      expect(mockSanitiseEvents).toHaveBeenCalledWith(groupedEvent)
+    }],
+    ['add values to events', async () => {
+      await getEventsByFrn(FRN_VALUE)
+      expect(mockAddValues).toHaveBeenCalledWith(groupedEvent)
+    }]
+  ]
 
-  test('should group events by FRN', async () => {
-    await getEventsByFrn(FRN_VALUE)
-    expect(mockGroupEventsByFrn).toHaveBeenCalledWith([enriched])
-  })
-
-  test('should order grouped events', async () => {
-    await getEventsByFrn(FRN_VALUE)
-    expect(mockOrderGroupedEvents).toHaveBeenCalledWith(groupedEvent)
-  })
-
-  test('should sanitise events', async () => {
-    await getEventsByFrn(FRN_VALUE)
-    expect(mockSanitiseEvents).toHaveBeenCalledWith(groupedEvent)
-  })
-
-  test('should add values to events', async () => {
-    await getEventsByFrn(FRN_VALUE)
-    expect(mockAddValues).toHaveBeenCalledWith(groupedEvent)
+  test.each(testCases)('%s', async (_, fn) => {
+    await fn()
   })
 })

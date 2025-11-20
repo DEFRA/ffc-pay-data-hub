@@ -1,4 +1,6 @@
-const { PAYMENT_ENRICHED_NAME, PAYMENT_PROCESSED_NAME, PAYMENT_SUBMITTED_NAME, PAYMENT_ACKNOWLEDGED_NAME, PAYMENT_PROCESSED_NO_FURTHER_ACTION_NAME } = require('../../../../app/constants/names')
+const {
+  PAYMENT_ENRICHED_NAME, PAYMENT_PROCESSED_NAME, PAYMENT_SUBMITTED_NAME, PAYMENT_ACKNOWLEDGED_NAME, PAYMENT_PROCESSED_NO_FURTHER_ACTION_NAME
+} = require('../../../../app/constants/names')
 
 const enriched = require('../../../mocks/events/enriched')
 const processed = require('../../../mocks/events/processed')
@@ -13,59 +15,33 @@ let groupedEvent
 
 describe('add pending events', () => {
   beforeEach(() => {
-    groupedEvent = JSON.parse(JSON.stringify(require('../../../mocks/events/grouped-event')))
+    groupedEvent = structuredClone(require('../../../mocks/events/grouped-event'))
   })
 
-  test('should add all default events if no events', () => {
+  const eventsMap = [
+    { name: PAYMENT_ENRICHED_NAME, existingEvent: enriched },
+    { name: PAYMENT_PROCESSED_NAME, existingEvent: processed },
+    { name: PAYMENT_SUBMITTED_NAME, existingEvent: submitted },
+    { name: PAYMENT_ACKNOWLEDGED_NAME, existingEvent: acknowledged }
+  ]
+
+  test('should add all default events if no events exist', () => {
     const result = addPendingEvents([groupedEvent])
-    expect(result[0].events).toHaveLength(4)
+    expect(result[0].events).toHaveLength(eventsMap.length)
   })
 
-  test('should add enrichment event if no enrichment event exists', () => {
+  test.each(eventsMap)('should add %s event if not present', ({ name }) => {
     const result = addPendingEvents([groupedEvent])
-    expect(result[0].events[0].status.name).toBe(PAYMENT_ENRICHED_NAME)
+    expect(result[0].events.find(e => e.status.name === name)).toBeDefined()
   })
 
-  test('should not add enrichment event if enrichment event already exists', () => {
-    groupedEvent.events = [enriched]
+  test.each(eventsMap)('should not add %s event if it already exists', ({ existingEvent }) => {
+    groupedEvent.events = [existingEvent]
     const result = addPendingEvents([groupedEvent])
-    expect(result[0].events).toHaveLength(4)
+    expect(result[0].events).toHaveLength(eventsMap.length)
   })
 
-  test('should add processed event if no processed event exists', () => {
-    const result = addPendingEvents([groupedEvent])
-    expect(result[0].events[1].status.name).toBe(PAYMENT_PROCESSED_NAME)
-  })
-
-  test('should not add processed event if processed event already exists', () => {
-    groupedEvent.events = [processed]
-    const result = addPendingEvents([groupedEvent])
-    expect(result[0].events).toHaveLength(4)
-  })
-
-  test('should add submitted event if no submitted event exists', () => {
-    const result = addPendingEvents([groupedEvent])
-    expect(result[0].events[2].status.name).toBe(PAYMENT_SUBMITTED_NAME)
-  })
-
-  test('should not add submitted event if submitted event already exists', () => {
-    groupedEvent.events = [submitted]
-    const result = addPendingEvents([groupedEvent])
-    expect(result[0].events).toHaveLength(4)
-  })
-
-  test('should add acknowledged event if no acknowledged event exists', () => {
-    const result = addPendingEvents([groupedEvent])
-    expect(result[0].events[3].status.name).toBe(PAYMENT_ACKNOWLEDGED_NAME)
-  })
-
-  test('should not add acknowledged event if acknowledged event already exists', () => {
-    groupedEvent.events = [acknowledged]
-    const result = addPendingEvents([groupedEvent])
-    expect(result[0].events).toHaveLength(4)
-  })
-
-  test('should not add any events if the grouped event status has detail PAYMENT_PROCESSED_NO_FURTHER_ACTION_STATUS', () => {
+  test('should not add any events if grouped event has PAYMENT_PROCESSED_NO_FURTHER_ACTION_STATUS', () => {
     groupedEvent.events = [processedNoFurtherAction]
     groupedEvent.status = {
       detail: PAYMENT_PROCESSED_NO_FURTHER_ACTION_STATUS,

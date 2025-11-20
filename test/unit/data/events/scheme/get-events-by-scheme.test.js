@@ -22,7 +22,7 @@ const { SCHEME_ID: SCHEME_ID_CATEGORY } = require('../../../../../app/constants/
 const { getEventsByScheme } = require('../../../../../app/data/events/scheme-id/get-events-by-scheme')
 const { SFI } = require('../../../../../app/constants/schemes')
 
-describe('get events by frn', () => {
+describe('get events by scheme', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockGetSubmittedEvents.mockResolvedValue([submitted])
@@ -31,28 +31,16 @@ describe('get events by frn', () => {
     mockOrderGroupedEventsByScheme.mockReturnValue([totalSchemeValues])
   })
 
-  test('should get events for schemeId', async () => {
-    await getEventsByScheme(SFI)
-    expect(mockGetSubmittedEvents).toHaveBeenCalledWith(SFI, SCHEME_ID_CATEGORY)
-  })
+  const cases = [
+    ['should get events for schemeId', () => mockGetSubmittedEvents, [SFI, SCHEME_ID_CATEGORY]],
+    ['should group events by scheme', () => mockGroupEventsByScheme, [[submitted]]],
+    ['should get total values for scheme', () => mockGetTotalSchemeValues, [[groupedEvent]]],
+    ['should order grouped events', () => mockOrderGroupedEventsByScheme, [[totalSchemeValues]]],
+    ['should sanitise events', () => mockSanitiseSchemeData, [[totalSchemeValues]]]
+  ]
 
-  test('should group events by scheme', async () => {
+  test.each(cases)('%s', async (_, mockFnGetter, expectedArgs) => {
     await getEventsByScheme(SFI)
-    expect(mockGroupEventsByScheme).toHaveBeenCalledWith([submitted])
-  })
-
-  test('should get total values for scheme', async () => {
-    await getEventsByScheme(SFI)
-    expect(mockGetTotalSchemeValues).toHaveBeenCalledWith([groupedEvent])
-  })
-
-  test('should order grouped events', async () => {
-    await getEventsByScheme(SFI)
-    expect(mockOrderGroupedEventsByScheme).toHaveBeenCalledWith([totalSchemeValues])
-  })
-
-  test('should sanitise events', async () => {
-    await getEventsByScheme(SFI)
-    expect(mockSanitiseSchemeData).toHaveBeenCalledWith([totalSchemeValues])
+    expect(mockFnGetter()).toHaveBeenCalledWith(...expectedArgs)
   })
 })

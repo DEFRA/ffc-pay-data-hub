@@ -10,38 +10,25 @@ describe('Storage initialization and functionality', () => {
 
   beforeAll(() => {
     jest.doMock('@azure/storage-blob', () => {
-      const getBlockBlobClientMock = jest.fn().mockReturnValue({
-        upload: jest.fn().mockResolvedValue()
-      })
+      const getBlockBlobClientMock = jest.fn().mockReturnValue({ upload: jest.fn().mockResolvedValue() })
       const getContainerClientMock = jest.fn().mockReturnValue({
         createIfNotExists: jest.fn().mockResolvedValue(),
         getBlockBlobClient: getBlockBlobClientMock
       })
-      const fromConnectionStringMock = jest.fn().mockReturnValue({
-        getContainerClient: getContainerClientMock
-      })
-      const BlobServiceClientMock = jest.fn().mockImplementation(() => ({
-        getContainerClient: getContainerClientMock
-      }))
+      const fromConnectionStringMock = jest.fn().mockReturnValue({ getContainerClient: getContainerClientMock })
+      const BlobServiceClientMock = jest.fn().mockImplementation(() => ({ getContainerClient: getContainerClientMock }))
       BlobServiceClientMock.fromConnectionString = fromConnectionStringMock
       return { BlobServiceClient: BlobServiceClientMock }
     })
 
     jest.doMock('@azure/identity', () => ({
-      DefaultAzureCredential: jest.fn().mockImplementation((options) => ({
-        type: 'DefaultAzureCredential',
-        options
-      }))
+      DefaultAzureCredential: jest.fn().mockImplementation((options) => ({ type: 'DefaultAzureCredential', options }))
     }))
 
     jest.doMock('@azure/data-tables', () => {
       const createTableMock = jest.fn().mockResolvedValue()
-      const TableClientMock = jest.fn().mockImplementation(() => ({
-        createTable: createTableMock
-      }))
-      TableClientMock.fromConnectionString = jest.fn().mockReturnValue({
-        createTable: createTableMock
-      })
+      const TableClientMock = jest.fn().mockImplementation(() => ({ createTable: createTableMock }))
+      TableClientMock.fromConnectionString = jest.fn().mockReturnValue({ createTable: createTableMock })
       return { TableClient: TableClientMock, odata: {} }
     })
   })
@@ -49,19 +36,15 @@ describe('Storage initialization and functionality', () => {
   beforeEach(() => {
     jest.resetModules()
     jest.clearAllMocks()
-
     storageConfig = require('../../app/config/storage')
-    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => { })
-    ; ({ BlobServiceClient } = require('@azure/storage-blob'))
-    ; ({ DefaultAzureCredential } = require('@azure/identity'))
-    ; ({ TableClient } = require('@azure/data-tables'))
+    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
+    ;({ BlobServiceClient } = require('@azure/storage-blob'))
+    ;({ DefaultAzureCredential } = require('@azure/identity'))
+    ;({ TableClient } = require('@azure/data-tables'))
     storage = require('../../app/storage')
   })
 
-  afterEach(() => {
-    consoleLogSpy.mockRestore()
-    jest.clearAllMocks()
-  })
+  afterEach(() => consoleLogSpy.mockRestore())
 
   test('should use connection string when storageConfig.useConnectionString is true', async () => {
     storageConfig.useConnectionString = true
@@ -105,47 +88,42 @@ describe('Storage initialization and functionality', () => {
     expect(BlobServiceClient.fromConnectionString().getContainerClient().createIfNotExists).toHaveBeenCalled()
   })
 
-  test('should return correct client based on event type', async () => {
-    await storage.initialise()
+  describe('getClient', () => {
+    const events = [
+      [PAYMENT_EVENT, 'paymentClient'],
+      [HOLD_EVENT, 'holdClient'],
+      [WARNING_EVENT, 'warningClient'],
+      [BATCH_EVENT, 'batchClient']
+    ]
 
-    const paymentClient = storage.getClient(PAYMENT_EVENT)
-    const holdClient = storage.getClient(HOLD_EVENT)
-    const warningClient = storage.getClient(WARNING_EVENT)
-    const batchClient = storage.getClient(BATCH_EVENT)
+    test.each(events)('should return a client for %s', async (eventType) => {
+      await storage.initialise()
+      const client = storage.getClient(eventType)
+      expect(client).toBeDefined()
+    })
 
-    expect(paymentClient).toBeDefined()
-    expect(holdClient).toBeDefined()
-    expect(warningClient).toBeDefined()
-    expect(batchClient).toBeDefined()
+    test('should throw error for unknown event type', async () => {
+      await storage.initialise()
+      expect(() => storage.getClient('UNKNOWN_EVENT')).toThrow('Unknown event type: UNKNOWN_EVENT')
+    })
   })
 
-  test('should throw error for unknown event type', async () => {
-    await storage.initialise()
+  describe('writeFile and writeDataRequestFile', () => {
+    test('should write file to blob storage', async () => {
+      await storage.initialise()
+      const filename = 'test.txt'
+      const content = 'Hello, World!'
+      await storage.writeFile(filename, content)
+      const containerClient = BlobServiceClient.fromConnectionString().getContainerClient()
+      expect(containerClient.getBlockBlobClient).toHaveBeenCalledWith(filename)
+      expect(containerClient.getBlockBlobClient().upload).toHaveBeenCalledWith(content, content.length)
+    })
 
-    expect(() => storage.getClient('UNKNOWN_EVENT')).toThrow('Unknown event type: UNKNOWN_EVENT')
-  })
-
-  test('should write file to blob storage', async () => {
-    await storage.initialise()
-
-    const filename = 'test.txt'
-    const content = 'Hello, World!'
-
-    await storage.writeFile(filename, content)
-
-    const containerClient = BlobServiceClient.fromConnectionString().getContainerClient()
-    expect(containerClient.getBlockBlobClient).toHaveBeenCalledWith(filename)
-    expect(containerClient.getBlockBlobClient().upload).toHaveBeenCalledWith(content, content.length)
-  })
-
-  describe('writeDataRequestFile', () => {
     test('should write data request file to blob storage and return blob client', async () => {
       await storage.initialise()
-
       const filename = 'datarequest.json'
       const content = JSON.stringify({ data: 'test data' })
       const blobClient = await storage.writeDataRequestFile(filename, content)
-
       expect(blobClient.upload).toHaveBeenCalledWith(content, content.length)
       expect(blobClient).toBeDefined()
     })

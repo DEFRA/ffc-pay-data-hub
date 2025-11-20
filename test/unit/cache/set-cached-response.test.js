@@ -22,22 +22,14 @@ describe('set cached response', () => {
     mockGetRequestIndex.mockReturnValue(0)
   })
 
-  test('should get from cache with name and key', async () => {
+  test('should get cache, check request index, and update', async () => {
     await setCachedResponse(NAME, KEY, REQUEST, RESPONSE)
     expect(mockGet).toHaveBeenCalledWith(NAME, KEY)
-  })
-
-  test('should check if request already exists in cache', async () => {
-    await setCachedResponse(NAME, KEY, REQUEST, RESPONSE)
     expect(mockGetRequestIndex).toHaveBeenCalledWith(DATA, REQUEST)
-  })
-
-  test('should update existing request in cache if already exists', async () => {
-    await setCachedResponse(NAME, KEY, REQUEST, RESPONSE)
     expect(mockUpdate).toHaveBeenCalledWith(NAME, KEY, DATA)
   })
 
-  test('should add new request to cache if does not exist', async () => {
+  test('should add new request if not in cache', async () => {
     mockGetRequestIndex.mockReturnValue(-1)
     await setCachedResponse(NAME, KEY, REQUEST, RESPONSE)
     expect(mockUpdate).toHaveBeenCalledWith(NAME, KEY, DATA)
