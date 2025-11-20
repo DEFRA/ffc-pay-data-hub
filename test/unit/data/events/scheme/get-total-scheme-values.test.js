@@ -45,7 +45,7 @@ describe('getTotalSchemeValues', () => {
       if (setup) {
         setup()
       }
-      
+
       const result = getTotalSchemeValues(groupedEvents)
       Object.entries(expected).forEach(([key, value]) => {
         expect(result[index][key]).toBe(value)

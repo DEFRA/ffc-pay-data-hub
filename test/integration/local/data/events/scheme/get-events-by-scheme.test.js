@@ -44,7 +44,6 @@ beforeEach(async () => {
     await client.createTable()
   }
 
-  // Deep copy events to avoid mutation
   events = {
     submitted: structuredClone(require('../../../../../mocks/events/submitted')),
     processed: structuredClone(require('../../../../../mocks/events/processed')),
@@ -52,7 +51,6 @@ beforeEach(async () => {
     extracted: structuredClone(require('../../../../../mocks/events/extracted'))
   }
 
-  // Add events for all schemes and all event types
   for (const scheme of SCHEMES) {
     for (const type of EVENT_TYPES) {
       await formatAndAddEvent(clients[type], events.submitted, scheme)
