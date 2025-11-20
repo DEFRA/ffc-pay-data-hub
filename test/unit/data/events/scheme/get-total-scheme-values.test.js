@@ -42,7 +42,10 @@ describe('getTotalSchemeValues', () => {
     ]
 
     scenarios.forEach(([name, index, expected, setup]) => {
-      if (setup) setup()
+      if (setup) {
+        setup()
+      }
+      
       const result = getTotalSchemeValues(groupedEvents)
       Object.entries(expected).forEach(([key, value]) => {
         expect(result[index][key]).toBe(value)
