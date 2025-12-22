@@ -38,7 +38,11 @@ describe('order grouped events', () => {
   })
 
   test('should sort grouped events into ascending order by schemeId when only two schemes present', () => {
-    const groupedTwo = [{ ...groupedEvents[9] }, { ...groupedEvents[4] }]
+    const groupedTwo = [
+      { ...groupedEvents.find(e => e.schemeId === SFI_EXPANDED) },
+      { ...groupedEvents.find(e => e.schemeId === LUMP_SUMS) }
+    ]
+
     const orderedGroupedTwo = orderGroupedEventsByScheme(groupedTwo)
     const expectedOrder = [LUMP_SUMS, SFI_EXPANDED]
 
