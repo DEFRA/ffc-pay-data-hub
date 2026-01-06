@@ -1,5 +1,5 @@
 const {
-  SFI, SFI_PILOT, LUMP_SUMS, VET_VISITS, CS, BPS, FDMR, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL
+  SFI, SFI_PILOT, LUMP_SUMS, VET_VISITS, CS, BPS, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL
 } = require('../../../../../app/constants/schemes')
 
 const { orderGroupedEventsByScheme } = require('../../../../../app/data/events/scheme-id/order-grouped-events-by-scheme')
@@ -18,7 +18,6 @@ describe('order grouped events', () => {
       createEvent(SFI_PILOT),
       createEvent(LUMP_SUMS),
       createEvent(CS),
-      createEvent(FDMR),
       createEvent(SFI23),
       createEvent(DELINKED),
       createEvent(SFI_EXPANDED),
@@ -30,7 +29,7 @@ describe('order grouped events', () => {
   test('should sort grouped events into ascending order by schemeId when all schemes present', () => {
     const orderedGroupedEvents = orderGroupedEventsByScheme(groupedEvents)
     const expectedOrder = [
-      SFI, SFI_PILOT, LUMP_SUMS, VET_VISITS, CS, BPS, FDMR, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL
+      SFI, SFI_PILOT, LUMP_SUMS, VET_VISITS, CS, BPS, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL
     ]
 
     orderedGroupedEvents.forEach((group, index) => {
@@ -39,7 +38,11 @@ describe('order grouped events', () => {
   })
 
   test('should sort grouped events into ascending order by schemeId when only two schemes present', () => {
-    const groupedTwo = [{ ...groupedEvents[9] }, { ...groupedEvents[4] }]
+    const groupedTwo = [
+      { ...groupedEvents.find(e => e.schemeId === SFI_EXPANDED) },
+      { ...groupedEvents.find(e => e.schemeId === LUMP_SUMS) }
+    ]
+
     const orderedGroupedTwo = orderGroupedEventsByScheme(groupedTwo)
     const expectedOrder = [LUMP_SUMS, SFI_EXPANDED]
 
