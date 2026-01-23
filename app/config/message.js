@@ -2,6 +2,7 @@ const Joi = require('joi')
 const { PRODUCTION } = require('../constants/environments')
 
 const schema = Joi.object({
+  active: Joi.boolean().default(true),
   messageQueue: {
     host: Joi.string(),
     username: Joi.string(),
@@ -21,6 +22,7 @@ const schema = Joi.object({
 })
 
 const config = {
+  active: process.env.MESSAGING_ACTIVE,
   messageQueue: {
     host: process.env.MESSAGE_QUEUE_HOST,
     username: process.env.MESSAGE_QUEUE_USER,
