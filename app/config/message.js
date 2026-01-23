@@ -2,7 +2,7 @@ const Joi = require('joi')
 const { PRODUCTION } = require('../constants/environments')
 
 const schema = Joi.object({
-  active: Joi.boolean().default(true),
+  active: Joi.boolean().default(false),
   messageQueue: {
     host: Joi.string(),
     username: Joi.string(),
@@ -53,7 +53,7 @@ const dataSubscription = { ...result.value.messageQueue, ...result.value.dataSub
 const dataQueue = { ...result.value.messageQueue, ...result.value.dataQueue }
 
 module.exports = {
-  active: config.active,
+  active: result.value.active,
   dataSubscription,
   dataQueue
 }

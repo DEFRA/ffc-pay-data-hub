@@ -40,7 +40,7 @@ container:
   azureStorageConnectionString: dummy
   azureStorageUseConnectionString: false
   azureStorageAccountName: ffcpay
-  messagingActive: true
+  messagingActive: false
 
 workloadIdentity: true
 
