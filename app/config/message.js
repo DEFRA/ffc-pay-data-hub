@@ -1,5 +1,5 @@
-const Joi = require("joi");
-const { PRODUCTION } = require("../constants/environments");
+const Joi = require('joi')
+const { PRODUCTION } = require('../constants/environments')
 
 const schema = Joi.object({
   active: Joi.boolean().default(true),
@@ -8,18 +8,18 @@ const schema = Joi.object({
     username: Joi.string(),
     password: Joi.string(),
     useCredentialChain: Joi.bool().default(false),
-    appInsights: Joi.object(),
+    appInsights: Joi.object()
   },
   dataSubscription: {
     address: Joi.string(),
     topic: Joi.string(),
-    type: Joi.string().default("subscription"),
+    type: Joi.string().default('subscription')
   },
   dataQueue: {
-    address: Joi.string(),
+    address: Joi.string()
   },
-  managedIdentityClientId: Joi.string().optional(),
-});
+  managedIdentityClientId: Joi.string().optional()
+})
 
 const config = {
   active: process.env.MESSAGING_ACTIVE,
@@ -28,38 +28,32 @@ const config = {
     username: process.env.MESSAGE_QUEUE_USER,
     password: process.env.MESSAGE_QUEUE_PASSWORD,
     useCredentialChain: process.env.NODE_ENV === PRODUCTION,
-    appInsights:
-      process.env.NODE_ENV === PRODUCTION
-        ? require("applicationinsights")
-        : undefined,
+    appInsights: process.env.NODE_ENV === PRODUCTION ? require('applicationinsights') : undefined
   },
   dataSubscription: {
     address: process.env.DATA_SUBSCRIPTION_ADDRESS,
     topic: process.env.DATA_TOPIC_ADDRESS,
-    type: "subscription",
+    type: 'subscription'
   },
   dataQueue: {
-    address: process.env.DATARESPONSE_QUEUE_ADDRESS,
+    address: process.env.DATARESPONSE_QUEUE_ADDRESS
   },
-  managedIdentityClientId: process.env.AZURE_CLIENT_ID,
-};
-
-const result = schema.validate(config, {
-  abortEarly: false,
-});
-
-if (result.error) {
-  throw new Error(`The message config is invalid. ${result.error.message}`);
+  managedIdentityClientId: process.env.AZURE_CLIENT_ID
 }
 
-const dataSubscription = {
-  ...result.value.messageQueue,
-  ...result.value.dataSubscription,
-};
-const dataQueue = { ...result.value.messageQueue, ...result.value.dataQueue };
+const result = schema.validate(config, {
+  abortEarly: false
+})
+
+if (result.error) {
+  throw new Error(`The message config is invalid. ${result.error.message}`)
+}
+
+const dataSubscription = { ...result.value.messageQueue, ...result.value.dataSubscription }
+const dataQueue = { ...result.value.messageQueue, ...result.value.dataQueue }
 
 module.exports = {
   active: config.active,
   dataSubscription,
-  dataQueue,
-};
+  dataQueue
+}
