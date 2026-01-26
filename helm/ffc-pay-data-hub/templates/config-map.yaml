@@ -24,4 +24,5 @@ data:
   {{ else }}
   REDIS_PARTITION: {{ quote .Values.container.redisPartition }}
   {{- end }}
+  MESSAGING_ACTIVE: {{ quote .Values.container.messagingActive }}
 {{- end -}}
