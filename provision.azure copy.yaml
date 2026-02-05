@@ -1,0 +1,9 @@
+resources:
+  identity: pay-alerting
+  postgreSql:
+    name: ffc-pay-data-hub
+  topics:
+    - name: ffc-pay-alert
+      role: receiver
+      subscriptions:
+        - name: ffc-pay-data-hub
