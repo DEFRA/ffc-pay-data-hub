@@ -4,7 +4,6 @@ environmentCode: pre
 container:
   messageQueueHost: PREFFCINFSB1001.servicebus.windows.net
   azureStorageAccountName: preffcpayst1001
-  endpointEnabled: true
   redisHostname: PREFFCINFRD1001.redis.cache.windows.net
   redisPort: 6380
 secretProviderClass:
