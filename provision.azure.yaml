@@ -1,11 +1,20 @@
 resources:
   identity: pay-data-hub
-  topics:
-    - name: ffc-pay-data-request
-      role: receiver
-      subscriptions:
-        - name: ffc-pay-data-hub
-  queues:
-    - name: ffc-pay-data-request-response
-      role: sender
-      session: true
+  service_bus:
+    topics:
+      - name: ffc-pay-data-request
+        defaultMessageTimeToLive: P3650D
+        duplicateDetectionHistoryTimeWindow: PT10M30S
+        requiresDuplicateDetection: true
+        roles: 
+        - name: receiver
+        subscriptions:
+          - name: ffc-pay-data-hub
+            deadLetteringOnMessageExpiration: true
+            defaultMessageTimeToLive: P3650D
+            lockDuration: PT5M
+            maxDeliveryCount: 2000
+    queues:
+      - name: ffc-pay-data-request-response
+        roles: 
+        - name: sender
