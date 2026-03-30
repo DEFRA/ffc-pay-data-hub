@@ -2,7 +2,7 @@ const { FRN } = require('../../../../../mocks/values/frn')
 const { INVOICE_NUMBER } = require('../../../../../mocks/values/invoice-number')
 
 const {
-  BPS, CS, SFI, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL
+  BPS, CS, SFI, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL, FPTT
 } = require('../../../../../../app/constants/schemes')
 
 const { PAYMENT_EVENT, HOLD_EVENT, BATCH_EVENT, WARNING_EVENT } = require('../../../../../../app/constants/event-types')
@@ -14,7 +14,7 @@ let clients = {}
 let events = {}
 let nextEventId
 
-const SCHEMES = [SFI, CS, BPS, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL]
+const SCHEMES = [SFI, CS, BPS, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL, FPTT]
 const EVENT_TYPES = [PAYMENT_EVENT, HOLD_EVENT, BATCH_EVENT, WARNING_EVENT]
 
 const formatAndAddEvent = async (tableClient, event, schemeId) => {
