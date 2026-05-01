@@ -1,5 +1,5 @@
 const {
-  SFI, SFI_PILOT, LUMP_SUMS, VET_VISITS, CS, BPS, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL
+  SFI, SFI_PILOT, LUMP_SUMS, VET_VISITS, CS, BPS, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL, FPTT
 } = require('../../../../../app/constants/schemes')
 
 const { orderGroupedEventsByScheme } = require('../../../../../app/data/events/scheme-id/order-grouped-events-by-scheme')
@@ -22,14 +22,15 @@ describe('order grouped events', () => {
       createEvent(DELINKED),
       createEvent(SFI_EXPANDED),
       createEvent(COHT_REVENUE),
-      createEvent(COHT_CAPITAL)
+      createEvent(COHT_CAPITAL),
+      createEvent(FPTT)
     ]
   })
 
   test('should sort grouped events into ascending order by schemeId when all schemes present', () => {
     const orderedGroupedEvents = orderGroupedEventsByScheme(groupedEvents)
     const expectedOrder = [
-      SFI, SFI_PILOT, LUMP_SUMS, VET_VISITS, CS, BPS, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL
+      SFI, SFI_PILOT, LUMP_SUMS, VET_VISITS, CS, BPS, SFI23, DELINKED, SFI_EXPANDED, COHT_REVENUE, COHT_CAPITAL, FPTT
     ]
 
     orderedGroupedEvents.forEach((group, index) => {
