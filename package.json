@@ -20,7 +20,8 @@
     "John Watson john.watson1@defra.gov.uk",
     "Simon Dunn simon.dunn1@defra.gov.uk",
     "Sam Plackett samuel.plackett@atos.net",
-    "Leigh Godson leigh.godson@atos.net"
+    "Leigh Godson leigh.godson@atos.net",
+    "Alistair Wishart alistair.wishart@atos.ai"
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
