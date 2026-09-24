@@ -1,5 +1,7 @@
 # FFC Pay Data Hub
 
+As of 24/09/2026 this service is being decommissioned. All functionality of this service has been migrated to the ffc-pay-event-hub service.
+
 ## Prerequisites
 
 - Docker
